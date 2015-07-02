@@ -1,0 +1,39 @@
+
+body {
+	background-color: rgba(0,0,0,1);
+	height: 100%;
+	color: white;
+}
+
+input.form-control {
+	background-color: rgba(0,0,0,1);
+	color: white;
+}
+
+img{
+	max-height: 100%;
+	max-width: 100%;
+}
+	
+
+
+.btn{
+	background: #545454;
+	color: white;
+	border-color: white;
+}
+.btn:hover{
+	background: #b8b8b8;
+	color: black;
+	border-color: white;
+}
+.btn:disabled{
+	background: #5b2b2b;
+	color: grey;
+	border-color: #5b2b2b;
+}
+.btn:focus{
+	background: #545454;
+	color: white;
+	border-color: white;
+}

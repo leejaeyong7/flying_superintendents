@@ -1,0 +1,24 @@
+	.modal-content{
+		background: #313131;
+		color: white;
+	}
+	.modal-body > h4{
+		background: #313131;
+		color: orange;
+	}
+	.close-button{
+		background: #313131;
+		color: orange;
+		padding: 0;	
+		border: none;
+		background: none;	
+	}
+	
+	.modal-title{
+		color: orange;
+	}
+	
+	
+	.upload-table{
+		max-height: 200px;	
+	}

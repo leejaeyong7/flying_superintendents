@@ -1,0 +1,32 @@
+
+.top {
+    overflow: auto;
+    display: inline-block;
+    width: 700px;
+    margin-bottom: 0;
+}
+
+.table-style {
+    width: 700px;
+}
+
+.hl {
+    float: left;
+    width: 500px;
+}
+
+.hb {
+    float: right;
+    margin-top: 20px;
+    width: 150px;
+    height: 40px;
+}
+
+.header {
+    font-family: Arial;
+    
+}
+
+.border {
+    padding: 10px;
+}

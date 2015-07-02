@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+
+    <title>Account Settings</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/commons.css" rel="stylesheet">
+    <link href="/static/css/sidebar.css" rel="stylesheet">
+    <link href="/static/css/account.css" rel="stylesheet">
+    
+    </head>
+    <body>
+        <!--div id="wrapper">
+            <div class="overlay"></div>
+                <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+                    <ul class="nav sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a href="#">
+                               Flying Superintendents
+                            </a>
+                        </li>
+                        <li>
+                            <a id="main-account" href="account">Account manage</a>
+                        </li>
+                        <li>
+                            <a id="main-scheduler" href="scheduler">BIM</a>
+                        </li>
+                        <li>
+                            <a id="main-menu" href="menu">File Viewer</a>
+                        </li>
+                        <li>
+                            <a id="main-viewer" href="viewer">Model Viewer</a>
+                        </li>
+                        <li>
+                            <a id="main-dashboard" href="board">Dashboard</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div id="page-content-wrapper">
+                    <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+                        <span class="hamb-top"></span>
+                        <span class="hamb-middle"></span>
+                        <span class="hamb-bottom"></span>
+                    </button>
+                    <div id = "container" >
+                        <div id = "contents" class="col-md-11">
+                            <div class="account-contents">
+                                <div class="content-header">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="modal-title" id="account-modal">Account Setting for </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-body">
+                                    <form id="password-form">
+                                        <h4>Current password</h4>
+                                            <input type="password" name="oldPassword" id="oldPassword" class="form-control passwordValue" placeholder="Current Password" required autofocus></input>
+                                        <h4>New Password</h4>
+                                            <input type="password" name="password" id="password" class="form-control passwordValue" placeholder="New Password" required></input>
+                                        <div class = "row" style="margin-top: 10px;">
+                                            <div class = "col-md-offset-8 col-md-4 col-sm-offset-8 col-sm-4 col-xs-offset-8 col-xs-4" style="text-align: right;">
+                                                <button type="submit" class="btn btn-sm btn-primary" id="password-submit">request change</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div-->
+
+
+        <div id="container-fluid">
+            <div id="wrapper">
+                <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+                    <ul class="nav sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a href="#">
+                               Flying Superintendents
+                            </a>
+                        </li>
+                        <li>
+                            <a id="main-account" href="account">Account manage</a>
+                        </li>
+                        <li>
+                            <a id="main-scheduler" href="scheduler">BIM</a>
+                        </li>
+                        <li>
+                            <a id="main-menu" href="menu">File Viewer</a>
+                        </li>
+                        <li>
+                            <a id="main-viewer" href="viewer">Model Viewer</a>
+                        </li>
+                        <li>
+                            <a id="main-dashboard" href="board">Dashboard</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="overlay"></div>
+                
+                <!--Main menu -->
+                <div class="page-header row">
+                    <div class="col-md-1 col-sm-1 col-xs-1">
+                        <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+                            <span class="hamb-top"></span>
+                            <span class="hamb-middle"></span>
+                            <span class="hamb-bottom"></span>
+                        </button>
+                    </div>
+                    <div class="col-md-11 col-sm-11 col-xs-11"></div>
+                </div>
+                <!-- header ends-->
+                <!-- file list -->
+                <div class="account-contents">
+                    <div class="content-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="modal-title" id="account-modal">Account Setting for </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-body">
+                        <form id="password-form">
+                            <h4>Current password</h4>
+                                <input type="password" name="oldPassword" id="oldPassword" class="form-control passwordValue" placeholder="Current Password" required autofocus></input>
+                            <h4>New Password</h4>
+                                <input type="password" name="password" id="password" class="form-control passwordValue" placeholder="New Password" required></input>
+                            <div class = "row" style="margin-top: 10px;">
+                                <div class = "col-md-offset-8 col-md-4 col-sm-offset-8 col-sm-4 col-xs-offset-8 col-xs-4" style="text-align: right;">
+                                    <button type="submit" class="btn btn-sm btn-primary" id="password-submit">request change</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <script src="/static/js/jquery.js"></script>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script-->
+    <!--<script src="/static/js/modal.js"></script>-->
+    <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/account.js"></script>
+    <script language="javascript" type="text/javascript" ></script>
+    </body>
+    
+</html>

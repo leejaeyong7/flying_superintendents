@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <script>
+    function clicked()
+    {
+        document.location.href = "/login";
+    }
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+
+    <title>login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/login.css" rel="stylesheet">
+	
+  </head>
+	
+	<body>
+		<div align="center" class="embed-responsive embed-responsive-16by9">
+		    <video id="videoId" autoplay preload="automatic" class="embed-responsive-item">
+		        <source src=/static/img/login.mp4 type="video/mp4">
+			</video>			
+		</div>
+		<div class="container">
+				<form action="/login" method="POST" class="form-signin" >
+					<h2 class="form-heading">Please sign in</h2>
+					<label for="inputEmail" class="sr-only">Email address</label>
+					<input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="email" required autofocus>
+					
+					<label for="inputPassword" class="sr-only">Password</label>
+					<input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="password" required>
+					
+					<button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+					<div class="row links">
+						<a class="col-md-6 stopv" href="/request-access-page">Request access</a>
+						<a class="col-md-6 tester" data-toggle="modal" data-target="#forgotModal">Forgot password</a>
+					</div>
+				</form>
+		</div>
+		<!-- /container -->
+		<div class="modal fade" id="forgotModal" role="dialog" aria-labelledby="forgotModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Forgot password</h4>
+				</div>
+				<div class="modal-body">
+					<h4>Send password to email?</h4>
+					<form method="post" enctype="multipart/form-data" id="js-newfolder-form">
+						<div class="form-inline">
+							<input type="text" name="forgot_id" id="forgot_input">
+							<button type="submit" class="btn btn-sm btn-primary" id="js-password-forgot-submit">Enter</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	<script src="/static/js/jquery.js"></script>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script-->
+	<script src="/static/js/modal.js"></script>
+	<script src="/static/js/login.js"></script>
+	<script src="/static/js/jquery.js"></script>
+    <script language="javascript" type="text/javascript" ></script>
+	</body>
+	
+</html>

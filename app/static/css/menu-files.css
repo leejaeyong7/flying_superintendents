@@ -1,0 +1,238 @@
+/* layout.css Style */
+
+/*
+	header and body 
+
+*/
+.hidden{
+	display: none;
+}
+.header-buttons button{
+	background: black;
+	color: white;
+}
+#data-search-box{
+	background: black;
+	color: white;
+	z-index: 0;
+}
+.input-group-addon{
+	background: black;
+	color: white;
+}
+/*
+
+	file browser header
+	
+*/
+
+.browser-header{
+	text-align: center;
+	
+	position: relative;
+	width: auto;
+	height: 40px;
+	max-height: 40px;
+	
+}
+#account-dropdown{
+	background: black;
+	color: white;
+}
+
+
+.username-input{
+	color: orange;
+	padding-top: 20px;
+}
+
+#browser-header-filetype{
+	padding-left:50px;	
+}
+#browser-header-filename{
+	text-align: left;
+	padding-left:35px;	
+}
+#browser-header-filedate{
+}
+/*
+
+	file browser
+
+
+*/
+#file-lister{
+	padding-left: 3px;
+}
+.browser-body{
+	height: 550px;
+	list-style-position:inside; 
+	position: relative;
+	overflow-y: scroll;
+}
+
+li.browser-files {
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-right-style: solid;
+	
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	
+	border-top-color: grey;
+	border-bottom-color: grey;
+	border-right-color: grey;
+	
+	border-left-width: 3px;
+	border-left-style: solid;
+	
+	
+	height: auto;
+	
+	background-color: black;
+	text-align: center;
+	color: white;
+	list-style-type: none;
+	
+}
+
+li.browser-files:hover {
+	background-color: #474747;
+}
+
+li.filetype-Image {
+	border-left-color: green;
+}
+li.filetype-File {
+	border-left-color: white;
+}
+li.filetype-Video {
+	border-left-color: red;
+}
+li.filetype-Folder{
+	border-left-color: yellow;
+}
+
+
+li.browser-focused.browser-clicked{
+	background-color: #4436b3;
+}
+
+li.browser-focused:hover{
+	background-color: #4436b3;
+}
+
+li.browser-clicked:hover{
+	background-color: #7690dd;
+}
+li.browser-clicked{
+	background-color: #234dcb;
+}
+
+
+li.browser-move-folder{
+	background-color: #f19148;
+}
+
+
+li.browser-focused{
+	background-color: #4436b3;
+}
+
+li.browser-focused:hover{
+	background-color: #4436b3;
+}
+.browser-files.viewmode0{
+	margin-left:3px;
+}
+.browser-files-file.viewmode0{
+	padding-left: 20px;
+	text-align: left;
+	margin-top:	10px;
+	margin-bottom: 10px;
+}
+.browser-files-icon.viewmode0{
+	margin-top:	10px;
+	margin-bottom: 10px;
+}
+.browser-files-time.viewmode0{
+	margin-top:	10px;
+	margin-bottom: 10px;
+}
+
+
+.browser-files.viewmode1{
+	text-align: center;
+}
+
+.browser-files-image.viewmode1{	
+	height:180px;
+	margin-top: -40px;
+}
+
+.browser-files-icon.viewmode1{
+	font-size: 150px;
+	height: 200px;
+}
+
+
+.browser-files.viewmode2{
+	text-align: center;
+}
+
+.browser-files-image.viewmode2{
+	height: 90px;
+	margin-top: -10px;
+}
+.browser-files-icon.viewmode2{
+	height: 100px;
+	font-size: 80px;
+}
+/*
+	right-click button 
+
+*/
+.rcmenu{
+	display: none;
+	width: 70px;
+}
+.dropdown-menu{
+	background: #313131;
+	padding: 0px;
+	overflow: hidden;
+}
+.dropdown-menu > li>a{
+	color: orange;
+}
+#rename-text{
+	display: none;
+}
+#rename-text-input{
+	position: absolute;
+	padding: 0;	
+	border: none;
+	background: none;	
+	background-color: black;
+	color: white;
+	
+}
+#rename-text-submit{
+	display: none;
+}
+
+#newFolder-text{
+	display: none;
+}
+#newFolder-text-input{
+	position: absolute;
+	padding: 0;	
+	border: none;
+	background: none;	
+	background-color: black;
+	color: white;
+	
+}
+#newFolder-text-submit{
+	display: none;
+}

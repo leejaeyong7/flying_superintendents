@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Point Cloud Storage</title>
+		<!-- Bootstrap -->
+		<link href="static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="static/css/bootstrap-table.css" rel="stylesheet">
+
+
+	    <!-- All other includes-->
+		<!-- CSS-->
+		<link href="static/css/commons.css" rel="stylesheet"></link>
+		<link href="static/css/sidebar.css" rel="stylesheet"></link>
+		<link href="static/css/menu-modals.css" rel="stylesheet"></link>
+		<link href="static/css/menu-files.css" rel="stylesheet"></link>
+		<script type=text/javascript>
+			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		</script>
+
+
+
+	</head>
+	<body>
+		<div id="container-fluid">
+			<div id="wrapper">
+				<nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+					<ul class="nav sidebar-nav">
+						<li class="sidebar-brand">
+							<a href="#">
+							   Flying Superintendents
+							</a>
+						</li>
+						<li>
+							<a id="main-account" href="account">Account manage</a>
+						</li>
+						<li>
+							<a id="main-scheduler" href="scheduler">BIM</a>
+						</li>
+						<li>
+							<a id="main-menu" href="menu">File Viewer</a>
+						</li>
+						<li>
+							<a id="main-viewer" href="viewer">Model Viewer</a>
+						</li>
+						<li>
+						    <a id="main-dashboard" href="board">Dashboard</a>
+						</li>
+					</ul>
+				</nav>
+				<div class="overlay"></div>
+				
+				<!--Main menu -->
+				<div class="page-header row">
+					<div class="col-md-1 col-sm-1 col-xs-1">
+						<button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+			                <span class="hamb-top"></span>
+			    			<span class="hamb-middle"></span>
+							<span class="hamb-bottom"></span>
+			            </button>
+			        </div>
+		  			
+		  			<div id="button-form" class="col-md-6 col-sm-6 col-xs-6">
+		  				<div id="buttons" class="header-buttons" align=right>
+				  			<button type="button" class="btn btn-default btn-sm home-button">
+								<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default btn-sm levelup-button">
+								<span class="glyphicon glyphicon-level-up" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default btn-sm transform-button">
+								<span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
+							</button>
+				  			<button type="button" class="btn btn-default btn-sm upload-button" data-toggle="modal" data-backdrop="static" data-target="#uploadModal">
+								<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+							</button>
+				  			<button type="button" class="btn btn-default btn-sm delete-button" id="delete-button">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default btn-sm help-button" data-toggle="modal" data-target="#helpModal">
+								<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+								
+							</button>
+		  				</div>
+			  		</div>
+					<div class="col-md-4 col-sm-4 col-xs-4">
+			  			<div class="input-group">
+							<input id="data-search-box" type="text" class="form-control" placeholder="Search for...">
+								<span class="input-group-addon">
+										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								</span>
+							</input>
+						</div>
+		  			</div>
+		  		</div>
+			  	<!-- header ends-->
+				<!-- file list -->
+				<div id="file-lister">
+					<div id="browser-header" class="row browser-header">
+					</div>
+					<div id="browser-body" class="row browser-body">
+						<ol id="browser" class="browser-body mouse-active col-md-12 col-sm-12 col-xs-12"></ol>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	
+  	
+	  	<!-- right click menues -->
+		<div id="folderMenu" class="rcmenu dropdown clearfix closeAtClick">
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+				<li><a tabindex="-1" data-toggle="modal" data-target="#progressModal">Reconstruct</a></li> 
+				<li><a tabindex="-1" class="visualize-button" >Visualize</a></li>
+				<li class="divider"></li>
+				<li><a class="newfolder-button" tabindex="-1">New Folder</a></li>
+				<li><a class="delete-button" tabindex="-1">Delete</a></li>
+				<li><a class="rename-button" tabindex="-1">Rename</a></li>
+				<li class="divider"></li>
+				<li><a tabindex="-1" data-toggle="modal" data-target="#helpModal">Help</a></li>
+			</ul>
+		</div>
+		<div id="fileMenu" class="rcmenu dropdown clearfix closeAtClick">
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+				<li><a class="newfolder-button" tabindex="-1">New Folder</a></li>
+				<li><a tabindex="-1" class="delete-button">Delete</a></li>
+				<li><a class="rename-button" tabindex="-1">Rename</a></li>
+				<li class="divider"></li>
+				<li><a tabindex="-1" data-toggle="modal" data-target="#helpModal">Help</a></li>
+			</ul>
+		</div>
+	  	
+	  	<div id="videoMenu" class="rcmenu dropdown clearfix closeAtClick">
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+				<li><a tabindex="-1" href="#" class="convert-video-button">Convert to Images</a></li>
+				<li class="divider"></li>
+				<li><a class="newfolder-button" tabindex="-1">New Folder</a></li>
+				<li><a tabindex="-1" class="delete-button" >Delete</a></li>
+				<li><a class="rename-button" tabindex="-1">Rename</a></li>
+				<li class="divider"></li>
+				<li><a tabindex="-1" data-toggle="modal" data-target="#helpModal">Help</a></li>
+			</ul>
+		</div>
+	  	<div id="imageMenu" class="rcmenu dropdown clearfix closeAtClick">
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+				<li><a tabindex="-1" href="#" data-toggle="modal" data-target="#imageModal">View Image</a></li>
+				<li class="divider"></li>
+				<li><a class="newfolder-button" tabindex="-1">New Folder</a></li>
+				<li><a tabindex="-1" class="delete-button" >Delete</a></li>
+				<li><a class="rename-button" tabindex="-1">Rename</a></li>
+				<li class="divider"></li>
+				<li><a tabindex="-1" data-toggle="modal" data-target="#helpModal">Help</a></li>
+			</ul>
+		</div>
+	  	
+	  	
+	  	
+	  	<!-- upload modal -->
+		<div class="modal fade" id="uploadModal"  role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-11">
+								<h4 class="modal-title" id="file-modal">File/Folder Upload</h4>
+							</div>
+							<div class="col-md-1">
+								<button id="upload-close" type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+									<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-body">
+						<h4>Select files from your computer</h4>
+						<form method="post" enctype="multipart/form-data" id="upload-form">
+							<div class="form-inline row">
+								<div class="col-md-9 col-sm-9 col-xs-9">
+									<div class="form-group" >
+										<input type="file" class="files" name="file_id" id="file_input" multiple>
+									</div>
+								</div>
+								<div class="col-md-3 col-sm-3 col-xs-3" style="padding-right:3px">
+									<button type="submit" class="btn btn-sm btn-primary" id="upload-submit">Upload files</button>
+								</div>
+							</div>
+						</form>
+						<h4>Allowed Extension: </h4>
+						<div class="allowed-extension"> 
+						</div>
+						<div class="divider" style="margin-bottom: 40px; margin-left: 20px">
+						</div>
+						<div class="upload-table" style="overflow-y: auto">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="imageModal"  role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-11">
+								<h4 class="modal-title" id="image-modal">Image Viewer</h4>
+							</div>
+							<div class="col-md-1">
+								<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+									<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-body">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Help modal -->
+		<div class="modal fade" id="helpModal"  role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-11">
+								<h4 class="modal-title" id="myModalLabel">Help</h4>
+							</div>
+							<div class="col-md-1">
+								<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+									<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-body">
+						<h4>How to Use</h4>
+							<p>1. To create new folder, simply click right button, new folder button and type in new name</p>
+							<p>2. To upload, press upload button, choose files and press upload button</p>
+							<p>3. To traverse, double click. For images, viewer with arrow traversal will be opened</p>
+							<p>4. To change viewmode, press transform button. </p>
+							<p>5. To move file, drag clicked files to destination folder, drop when highlights to orange</p>
+							<p>6. To delete, highlight files to delete, press delete button or right click, and delete</p>
+							<p>7. To Visualize, right click on folder for reconstruct button to begin reconstruction then right click on same folder for visualization</p>
+						<h4>Button Usage</h4>
+							<p><span class="glyphicon glyphicon-home"></span>: Home button. When clicked, brings you to home folder.</p>
+							<p><span class="glyphicon glyphicon-level-up"></span>: Up button. When clicked, brings you to one folder up.</p>
+							<p><span class="glyphicon glyphicon-resize-full"></span>: Transform button.</p>
+							<p><span class="glyphicon glyphicon-plus-sign"></span>: Upload button. When clicked, shows upload modal</p>
+							<p><span class="glyphicon glyphicon-trash"></span>: Delete button. When clicked, deletes all active file/folders</p>
+							<p><span class="glyphicon glyphicon-question-sign"></span>: Help button. Button you've just clicked.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Progress modal -->
+		<div class="modal fade" id="progressModal"  role="dialog" aria-labelledby="progressModalLabel"  data-backdrop="static" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-11">
+								<h4 class="modal-title" id="visualize-modal">Run Visualization</h4>
+							</div>
+							<div class="col-md-1">
+								<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+									<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-body">
+						<h4>Progress</h4>
+						<!-- progress -->
+						<div class = "row" style="margin-bottom: 20px;">
+							<div class="col-md-8 col-sm-8 col-xs-8">
+						  		<div class="progress">
+									<div  id ="progress-sparse" class="progress-bar progress-bar-success progress-sparse" style="width: 0%">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+									<button class="btn btn-sm btn-primary sparse-button" style="width:160px">Sparse Reconstruction</button>
+							</div>
+						</div>
+
+						<div class = "row" style="margin-bottom: 20px;">
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<div class="progress">
+									<div id ="progress-dense" class="progress-bar progress-bar-info progress-dense" style="width: 0%">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<button class="btn btn-sm btn-primary dense-button" style="width:160px">Dense Reconstruction</button>
+							</div>
+						</div>
+
+						<div class = "row" style="margin-bottom: 20px;">
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<div class="progress">
+									<div id ="progress-process" class="progress-bar progress-bar-warning progress-process" style="width: 0%">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<button class="btn btn-sm btn-primary process-button" style="width:160px">Process</button>
+							</div>
+						</div>
+
+						<div class = "row" style="margin-bottom: 20px;">
+							<div class="col-md-8 col-sm-8 col-xs-8">
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-4">
+								<button class="btn btn-sm btn-primary visualize-button" style="width:160px">Visualize</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!--<div aria-hidden="true"><img id="imagekk" class="fade" src="get_imgs?type=1"/></div>-->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
+	<script src="/static/js/jquery.js"></script>
+
+    <!-- bootstrap-->
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap-table.js"></script>
+	<!-- JS-->
+    <script src="static/js/menu-common.js"></script>
+    <script src="static/js/menu-events.js"></script>
+    <script src="static/js/menu-buttons.js"></script>
+    <script src="static/js/menu-modals.js"></script>
+    <script src="static/js/menu-files.js"></script>
+    <script src="static/js/sidebar.js"></script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,109 @@
+body {
+	background-color: #000000;
+}
+video{
+	max-height: none;
+	max-width: 100%;
+	position: relative;
+}
+
+.form-signin {
+  /*position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%; -50%);*/
+  width: 380px;
+  height: 280px;
+  padding: 15px 35px 45px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+
+  .form-signin-heading,
+	.checkbox {
+	  margin-bottom: 30px;
+	}
+
+	.checkbox {
+	  font-weight: normal;
+	}
+
+	input[type="text"] {
+	  margin-bottom: -1px;
+	  border-bottom-left-radius: 0;
+	  border-bottom-right-radius: 0;
+	}
+
+	input[type="password"] {
+	  margin-bottom: 20px;
+	  border-top-left-radius: 0;
+	  border-top-right-radius: 0;
+	}
+}
+
+.form-heading {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 36px;
+}
+
+.form-request {
+  width: 380px;
+  height: 320px;
+  padding: 15px 35px 45px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+}
+
+.form-control {
+	  position: relative;
+	  font-size: 16px;
+	  height: auto;
+	  padding: 10px;
+      border-spacing: 50px;
+      margin-top: 0px;
+      margin-bottom: 10px;
+      display: inline-block;
+		@include box-sizing(border-box);
+
+		&:focus {
+		  z-index: 2;
+		}
+}
+
+.test {
+      color: red;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      display: inline-block;
+}
+
+.textarea {
+	  position: relative;
+      width: 309px;
+	  font-size: 16px;
+	  padding: 10px;
+      border-spacing: 50px;
+      margin-top: 0px;
+      margin-bottom: 10px;
+      resize: none;
+}
+
+.link {
+	  font-size: 14px;
+	  padding-top: 10px;
+      border-spacing: 10px;
+      margin-top: 0px;
+      margin-bottom: 10px;
+}
