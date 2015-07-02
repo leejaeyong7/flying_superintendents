@@ -142,7 +142,8 @@ def create_user():
     file.close()
     curr_dir += '/data/'
     os.makedirs(curr_dir)
-    return 'success'
+    return render_template('request-sent.html')
+
 
 @app.route('/create-firm', methods = ['POST'])
 def create_firm():
