@@ -135,6 +135,7 @@ def create_user():
     email_name = request.form["inputEmail"]
     password = request.form["inputPassword"]
     db.session.add(User(email_name,password))
+    db.session.commit()
     curr_dir = os.getcwd()
     curr_dir += '/app/static/user_data/' + str(email_name)
     os.makedirs(curr_dir)
