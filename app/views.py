@@ -7,6 +7,7 @@ from app import app, mail
 from database import *
 from login import login_manager
 from app import files
+from collections import OrderedDict
 import json
 import database
 import subprocess
@@ -642,6 +643,25 @@ def get_db():
                 return json.dumps({i:dbDict[i] for i in dbDict if i[0]!='_'})
 
         #return jsonify(dbDict)
+@app.route('/get-db-columns', methods = ['GET'])
+@login_required
+def get_db_columns():
+    if request.method == 'GET':
+        dbName = request.args.get('table')
+        table = eval(dbName)
+        if dbName == "User":
+            return "failure"
+        tableDict = OrderedDict()
+        for i in table.__table__.columns:
+            if i.name is not 'id':
+                if i.foreign_keys:
+                    for j in i.foreign_keys:
+                        tableDict[j.parent.name] = j.target_fullname
+                else:
+                    tableDict[i.name] = str(i.type)
+#        print tableDict
+        return json.dumps(tableDict)
+#        return "success"
 
 
 

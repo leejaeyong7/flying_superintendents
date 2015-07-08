@@ -53,6 +53,9 @@ class User(db.Model, UserMixin):
         db.session.add(targetTable(**tableValues))
         db.session.commit()
 
+    def getColumns(self, tableName):
+        targetTable = eval(tableName)
+        print targetTable.values()
 
 class Project(db.Model):
     __tablename__ = 'project'
