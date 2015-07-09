@@ -1,3 +1,23 @@
+#myScheduler, 
+.yui3-widget-bd,
+.button,
+.yui3-widget-bd scheduler-view-scrollable,
+.scheduler-view-table-row-container,
+.yui3-widget-hd,
+.scheduler-view-table-container,
+.scheduler-view-table-lasso,
+.scheduler-view-table-grid-container scheduler-view-table-grid-first,
+.yui3-widget-bd scheduler-view-noscroll,
+.scheduler-view-agenda-header clearfix scheduler-view-agenda-header-first 
+{
+	background-color: black;
+}
+
+.hidden-xs scheduler-base-view scheduler-base-view-month btn-default btn 
+{
+	background-color: transparent;
+}
+
 input{
     color: black;
 }
