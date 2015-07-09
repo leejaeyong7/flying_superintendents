@@ -629,9 +629,9 @@ def get_db():
         if dbName == "User":
             return "failure"
         if(objectID == None):
-            print table.__table__.foreign_keys
+            #print table.__table__.foreign_keys
             dbDict =  [(v.__dict__) for v in table.query.all()]
-            dbTable = {dbName:{counter+1:{k:v for (k,v) in dbd.iteritems()  if '_' not in k} for counter, dbd in enumerate(dbDict)}}
+            dbTable = {dbName:{counter+1:{k:str(v) for (k,v) in dbd.iteritems()  if '_' not in k} for counter, dbd in enumerate(dbDict)}}
             return json.dumps(dbTable)
         else:
             dbData = table.query.filter_by(id= objectID).all()

@@ -37,6 +37,7 @@ function getTableColumns(table){
 
 
 function getTable(table){
+    var retval = {};
     $.ajax({
 	    type: 'GET',	   
 	    url: '/get-db',    
@@ -48,12 +49,16 @@ function getTable(table){
                 //			alert("fail!")
 		    }
 		    else{
-                //			alert(data);
-		    }
+                $.extend(true,retval,JSON.parse(data));//			alert(data);
+                //console.log(retval)
+            }
 		    //$('.scheduler-contents').text(data);
 
 	    }
 	});
+    //console.log(retval)
+  //  alert(retval);
+    return retval;
 }
 
 function getData(table, id){
@@ -93,31 +98,189 @@ function getData(table, id){
 	
 */
 function dbParameterFormatter(table, columnData){
+    var inputForm = '';
+    inputForm += '<form id ="DBContainer" class ="">'
+
     for (var key in columnData){
         if(columnData.hasOwnProperty(key)){
             var obj = columnData[key];
-            console.log(key)
-            console.log(obj)
+            //key = columnName
+            //obj = type or foreignkeyref
             switch(obj){
             case "INTEGER":
+                if(key == "projectFaxNumber" || key == "projectPhoneNumber" || key == "phoneNumber" )
+                {
+                    inputForm += integerInputForm(key, true);
+                }
+                else
+                {
+                    inputForm += integerInputForm(key, false);
+                }
                 break;
             case "FLOAT":
+                inputForm += floatInputForm(key);
                 break;
             case "DATETIME":
+                inputForm += dateInputForm(key);
                 break;
             default:
                 if(obj.substring(0,7)=="VARCHAR"){
-                    console.log("string...")
-                    console.log(parseInt(obj.replace ( /[^\d.]/g, '' )));
+                    inputForm += stringInputForm(key,parseInt(obj.replace ( /[^\d.]/g, '' )), key=="emailAddress");
                 }
                 else{
-                    
+                    inputForm += foreignKeyInputForm(key,obj);
                 }
-                    break;
+                break;
             }
-            console.log("----------------")
         }
     }
+    inputForm += '</form>'
+    document.getElementById('scheduler-contents').innerHTML = inputForm;
+    $('.phoneNumber').mask("(999) 999-9999");
+    $('.dateTime').mask("99/99/9999",{placeholder:"mm/dd/yyyy"});
+   // console.log(inputForm);
+}
+
+
+function integerInputForm(columnName, isPhone){
+    var inputForm  = '';
+    inputForm += '<div id = "inputrow" class = "row">'
+        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+            inputForm += columnName
+        inputForm += '</div>'
+        inputForm += '<div id = "integerInput">'
+    if (isPhone)
+    {
+        inputForm += '<input type="text" name='+columnName+' class = "phoneNumber">';
+    }
+    else
+    {
+        inputForm += '<input type="text" name='+columnName+'>';
+    }
+    inputForm += "</div>"
+    inputForm += "</div>"
+    return inputForm
+}
+function floatInputForm(columnName){
+    var inputForm  = '';
+    inputForm += '<div id = "inputrow" class = "row">'
+        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+            inputForm += columnName
+        inputForm += '</div>'
+        inputForm += '<div id = "floatInput">'
+            inputForm += '<input type="text" name='+columnName+' class="floatNumber">';
+        inputForm += "</div>"
+    inputForm += "</div>"
+    return inputForm
+
+}
+function dateInputForm(columnName){
+    var inputForm  = '';
+    inputForm += '<div id = "inputrow" class = "row">'
+        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+            inputForm += columnName
+        inputForm += '</div>'
+        inputForm += '<div id = "dateInput">'
+            inputForm += '<input type="text" name='+columnName+' class= "dateTime">';
+        inputForm += "</div>"
+    inputForm += "</div>"
+    return inputForm
+
+}
+function stringInputForm(columnName, stringLength, isEmail){
+    var inputForm  = '';
+    inputForm += '<div id = "inputrow" class = "row">'
+        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+            inputForm += columnName
+        inputForm += '</div>'
+        inputForm += '<div id = "stringInput">'
+    if (isEmail)
+    {
+        inputForm += '<input type="text" name='+columnName+' class = "emailAddress"  maxlength='+stringLength +'>';
+    }
+    else
+    {
+        inputForm += '<input type="text" name='+columnName+' maxlength='+stringLength +'>';
+    }
+    inputForm += "</div>"
+    inputForm += "</div>"
+    return inputForm
+
+}
+function foreignKeyInputForm(columnName,foreignKeyReference){
+    var inputForm  = '';
+    inputForm += '<div id = "inputrow" class = "row">'
+        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+            inputForm += columnName
+        inputForm += '</div>'
+    
+    var foreignTableName = foreignKeyReference.substr(0,foreignKeyReference.indexOf('.'));
+    foreignTableName = foreignTableName.charAt(0).toUpperCase() + foreignTableName.slice(1);
+        inputForm += '<div id = "foreignKeyInput" class='+columnName+ '-'+foreignTableName+'>';
+
+
+    //addy.substr(0, addy.indexOf(',')); 
+        inputForm += "</div>"
+    inputForm += "</div>"
+    
+    $.ajax({
+	    type: 'GET',	   
+	    url: '/get-db',    
+	    data: "table="+foreignTableName,
+	    success: function(data){
+		    if(data == "failure")
+		    {
+			    //when querying has no result
+                //			alert("fail!")
+		    }
+		    else{
+                var foreignTable = JSON.parse(data);
+                var foreignTableDropDown = '';
+                foreignTableDropDown += '<select id="foreignTableDropDown" class = foreignDD-'+foreignTableName+'>'
+                if(Object.keys(foreignTable).length != 0){
+                    for (var rows in foreignTable)
+                    {
+                        if(foreignTable.hasOwnProperty(rows))
+                        {
+                            var rowData = foreignTable[rows]
+                            foreignTableDropDown += '<option value=0>None </option>'
+
+                            for(var rowID in rowData)
+                            {
+                                //console.log(rowID)
+                                //console.log(rowData[rowID])
+                                foreignTableDropDown += '<option value='+rowID+'>';
+                                if(rowData.hasOwnProperty(rowID))
+                                {
+                                    var row = rowData[rowID]
+                                    for(var col in row )
+                                    {
+                                        console.log(col)
+                                        //console.log(row[col])
+                                        if(col=="name" || col=="description" || col=="ppc")
+                                        {
+                                            foreignTableDropDown+= col + ' : '+ row[col]
+                                        //                                    foreignTableDropDown +=
+                                        }
+                                    }
+                                }
+                                foreignTableDropDown += '</option>'
+                            }
+                        }
+                    }
+                    foreignTableDropDown += '</select>'
+                }
+                else
+                {
+                    foreignTableDropDown = 'None'
+                }    
+                $('.'+columnName+'-'+foreignTableName).append(foreignTableDropDown)
+                //console.log(foreignTableDropDown)
+            }
+	    }
+	});
+    return inputForm
+
 }
 /*
   Funtion to set data
@@ -131,6 +294,7 @@ function setData(){
 /* contents */
 
 //initialize AlloyUI and load the Scheduler module.
+/*
 YUI().use(
   'aui-scheduler',
   function(Y) {
@@ -195,12 +359,14 @@ YUI().use(
       }
     );
   }
-);
+);*/
 
 
 $(document).ready(function() {
     //    getTable("Project")
-    getTableColumns("Project");
+    getTableColumns("Task");
+    
+   // $('.phoneNumber').mask("(999) 999-9999")
 //    setData();
 })
 
