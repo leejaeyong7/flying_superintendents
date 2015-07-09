@@ -294,7 +294,7 @@ function setData(){
 /* contents */
 
 //initialize AlloyUI and load the Scheduler module.
-/*
+
 YUI().use(
   'aui-scheduler',
   function(Y) {
@@ -359,7 +359,7 @@ YUI().use(
       }
     );
   }
-);*/
+);
 
 
 $(document).ready(function() {
