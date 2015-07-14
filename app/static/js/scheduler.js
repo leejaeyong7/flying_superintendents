@@ -6,9 +6,8 @@
 	also handles document.ready event
 	
 		javascript
-		functions 		: 	getData(table, id)
-								 retreives DB data by querying
-
+		functions 		: 	getTableColumns(table)
+                                 retrieves DB form for table input and sets them accordingly for modal
 		
 		
 		Jquery 
@@ -35,50 +34,6 @@ function getTableColumns(table){
 }
 
 
-
-function getTable(table){
-    var retval = {};
-    $.ajax({
-	    type: 'GET',	   
-	    url: '/get-db',    
-	    data: "table="+table,
-	    success: function(data){
-		    if(data == "failure")
-		    {
-			    //when querying has no result
-                //			alert("fail!")
-		    }
-		    else{
-                $.extend(true,retval,JSON.parse(data));//			alert(data);
-                //console.log(retval)
-            }
-		    //$('.scheduler-contents').text(data);
-
-	    }
-	});
-    //console.log(retval)
-  //  alert(retval);
-    return retval;
-}
-
-function getData(table, id){
-	$.ajax({
-		type: 'GET',
-		url: '/get-db',
-		data: "table="+table+"&id="+id,
-		success: function(data){
-			if(data == "failure")
-			{
-				//when querying has no result
-				alert("fail!")
-			}
-			else{
-//				alert(data);
-			}
-		//$('.scheduler-contents').text(data);
-	}
-	});
-}
 /*
 	okay lets create basic db format inputter..
 	first, obtain which data we want to input
@@ -136,19 +91,23 @@ function dbParameterFormatter(table, columnData){
     }
     inputForm += '</form>'
     document.getElementById('scheduler-contents').innerHTML = inputForm;
+    $('.columnName').addClass('col-md-4 col-sm-4 col-xs-4');
+    $('.inputForm').addClass('col-md-7 col-sm-7 col-xs-7');
     $('.phoneNumber').mask("(999) 999-9999");
     $('.dateTime').mask("99/99/9999",{placeholder:"mm/dd/yyyy"});
    // console.log(inputForm);
 }
 
-
+/*
+  below are input forms for integer/float/string and datetime
+*/
 function integerInputForm(columnName, isPhone){
     var inputForm  = '';
     inputForm += '<div id = "inputrow" class = "row">'
-        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+        inputForm += '<div id = "columnName" class="columnName">'
             inputForm += columnName
         inputForm += '</div>'
-        inputForm += '<div id = "integerInput">'
+        inputForm += '<div id = "integerInput" class="inputForm">'
     if (isPhone)
     {
         inputForm += '<input type="text" name='+columnName+' class = "phoneNumber">';
@@ -164,10 +123,10 @@ function integerInputForm(columnName, isPhone){
 function floatInputForm(columnName){
     var inputForm  = '';
     inputForm += '<div id = "inputrow" class = "row">'
-        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+        inputForm += '<div id = "columnName" class="columnName">'
             inputForm += columnName
         inputForm += '</div>'
-        inputForm += '<div id = "floatInput">'
+        inputForm += '<div id = "floatInput" class="inputForm">'
             inputForm += '<input type="text" name='+columnName+' class="floatNumber">';
         inputForm += "</div>"
     inputForm += "</div>"
@@ -177,10 +136,10 @@ function floatInputForm(columnName){
 function dateInputForm(columnName){
     var inputForm  = '';
     inputForm += '<div id = "inputrow" class = "row">'
-        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+        inputForm += '<div id = "columnName" class="columnName">'
             inputForm += columnName
         inputForm += '</div>'
-        inputForm += '<div id = "dateInput">'
+        inputForm += '<div id = "dateInput" class="inputForm">'
             inputForm += '<input type="text" name='+columnName+' class= "dateTime">';
         inputForm += "</div>"
     inputForm += "</div>"
@@ -190,10 +149,10 @@ function dateInputForm(columnName){
 function stringInputForm(columnName, stringLength, isEmail){
     var inputForm  = '';
     inputForm += '<div id = "inputrow" class = "row">'
-        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+        inputForm += '<div id = "columnName" class="columnName">'
             inputForm += columnName
         inputForm += '</div>'
-        inputForm += '<div id = "stringInput">'
+        inputForm += '<div id = "stringInput" class="inputForm">'
     if (isEmail)
     {
         inputForm += '<input type="text" name='+columnName+' class = "emailAddress"  maxlength='+stringLength +'>';
@@ -207,20 +166,32 @@ function stringInputForm(columnName, stringLength, isEmail){
     return inputForm
 
 }
+
+/*
+  when foreignKey input form is called, it transfers the table with dropdown
+*/
 function foreignKeyInputForm(columnName,foreignKeyReference){
     var inputForm  = '';
     inputForm += '<div id = "inputrow" class = "row">'
-        inputForm += '<div id = "columnName" class = "col-md-3 col-sm-3 col-xs-3">'
+        inputForm += '<div id = "columnName" class="columnName">'
             inputForm += columnName
         inputForm += '</div>'
     
     var foreignTableName = foreignKeyReference.substr(0,foreignKeyReference.indexOf('.'));
     foreignTableName = foreignTableName.charAt(0).toUpperCase() + foreignTableName.slice(1);
-        inputForm += '<div id = "foreignKeyInput" class='+columnName+ '-'+foreignTableName+'>';
+    if(foreignTableName == "Users"){
+        foreignTableName = 'User';
+    }
+        inputForm += '<div id = "foreignKeyInput" class="inputForm '+columnName+ '-'+foreignTableName+'">';
 
 
     //addy.substr(0, addy.indexOf(',')); 
-        inputForm += "</div>"
+    inputForm += "</div>"
+    
+    inputForm +=  '<button type="button" class="btn btn-default btn-xs create-table-button">';
+    inputForm +=  '<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
+    inputForm +=  '</button>';
+
     inputForm += "</div>"
     
     $.ajax({
@@ -255,9 +226,9 @@ function foreignKeyInputForm(columnName,foreignKeyReference){
                                     var row = rowData[rowID]
                                     for(var col in row )
                                     {
-                                        console.log(col)
+                                        //console.log(col)
                                         //console.log(row[col])
-                                        if(col=="name" || col=="description" || col=="ppc")
+                                        if(col=="name" || col=="description" || col=="ppc" || col=="email")
                                         {
                                             foreignTableDropDown+= col + ' : '+ row[col]
                                         //                                    foreignTableDropDown +=
@@ -361,10 +332,39 @@ YUI().use(
   }
 );
 
+function tableDropdown(){
+    var inputForm  = '';
+    var tables = ["None","Project","Organization","Firmtype","Personnel","Schedule","Task","Constraints","Promise","Performance","PerformanceVariance","TaskStatus","Objects","IFCElement","Location"];
+    inputForm += '<select id="table-dropdown" class="dropdown">'
+    for(var i = 0; i < tables.length; i++){
+        inputForm += '<option value="' + tables[i] + '">' + tables[i] +'</option>';
+    }
+    inputForm += '</select>';
+    $('#createTableTitle').append(inputForm);
+    
+}
+
+$('.table-submit-button').on('click', function(){
+    var tableForm = $('#DBContainer')[0];
+   // console.log(tableForm);
+    var tableFormData = new FormData(tableForm);
+//    console.log(tableFormData)
+})
 
 $(document).ready(function() {
     //    getTable("Project")
-    getTableColumns("Task");
+    tableDropdown();
+    $('#table-dropdown').change(function(){
+        var tableName = $('option:selected',this).text()
+        if(tableName != 'None'){
+            getTableColumns(tableName);
+        }
+        else{
+            $('#DBContainer').empty();
+        }
+
+    })
+   // getTableColumns("Task");
     
    // $('.phoneNumber').mask("(999) 999-9999")
 //    setData();

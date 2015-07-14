@@ -626,8 +626,8 @@ def get_db():
         dbName = request.args.get('table')
         objectID = request.args.get('id')
         table = eval(dbName)
-        if dbName == "User":
-            return "failure"
+        #if dbName == "User":
+            #return "failure"
         if(objectID == None):
             #print table.__table__.foreign_keys
             dbDict =  [(v.__dict__) for v in table.query.all()]

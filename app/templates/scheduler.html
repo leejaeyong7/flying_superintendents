@@ -62,28 +62,59 @@
                     </div>
                     <!-- extra headers -->
                     <div class="col-md-11 col-sm-11 col-xs-11">
+                      <button type="button" class="btn btn-default btn-sm create-table-button" data-toggle="modal" data-backdrop="static" data-target="#createTableModal">
+						<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+					  </button>
                     </div>
                 </div>
                 <!-- header ends-->
                 <!--contents begin -->
-                <div id = "scheduler-contents">
-		          Hello
-		        </div>
 
             </div>
 	    <h2>BIM Scheduler</h2>
 	    <div id="myScheduler"></div>
-       </div>
+        </div>
 
+        <div class="modal fade" id="createTableModal"  role="dialog" aria-labelledby="createTableLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<div class="row">
+				  <div class="col-md-11">
+					<h4 class="modal-title" id="createTableTitle">Create Table</h4>
+                   
+				  </div>
+				  <div class="col-md-1">
+					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+					  <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+					</button>
+				  </div>
+				</div>
+			  </div>
+			  <div class="modal-body">
+                <div id = "scheduler-contents">
+		        </div>
+			  </div>
+			  <div class="modal-footer">
+                <button type="button" class="btn btn-default table-submit-button">Submit</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
 
-    <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/jquery.js"></script>
 
-    <!--<script src="/static/js/modal.js"></script>-->
-    <script src="/static/js/sidebar.js"></script>
-    <script src="http://cdn.alloyui.com/3.0.1/aui/aui-min.js"></script>
-    <script src="/static/js/scheduler.js"></script>
-    <script src="/static/js/jquery.maskedinput.min.js"></script>
-    <script language="javascript" type="text/javascript" ></script>
+        <!--<script src="/static/js/modal.js"></script>-->
+        <!-- bootstrap-->
+        <script src="static/js/bootstrap.min.js"></script>
+        <script src="static/js/bootstrap-table.js"></script>
+        
+        <script src="/static/js/sidebar.js"></script>
+        <script src="http://cdn.alloyui.com/3.0.1/aui/aui-min.js"></script>
+        <script src="/static/js/scheduler.js"></script>
+        <script src="/static/js/jquery.maskedinput.min.js"></script>
+        <script language="javascript" type="text/javascript" ></script>
     </body>
     
 </html>
