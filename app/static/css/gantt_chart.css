@@ -1,0 +1,11 @@
+table.table {
+    position:relative;
+    float:left;
+    width:24%;
+   }
+
+table.chart {
+    position:relative;
+    float:right;
+    width:74%;
+  }
