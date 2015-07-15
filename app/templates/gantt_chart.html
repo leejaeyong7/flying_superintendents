@@ -2,56 +2,70 @@
 <html>
 <head>
 	<title>Gantt Chart</title>
-	<link rel="stylesheet" type="text/css" href="css/gantt_chart.css">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="static/css/gantt_chart.css">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="js/gantt_chart.js"></script>
+	<script src="static/js/gantt_chart.js"></script>
 </head>
 
 <body>
-
+	<div id="container-fluid">
+	<div id="wrapper">
 	<div class="panel panel-default">
   	<!-- Default panel contents -->
- 		<div class="panel-heading"><strong>Gantt Chart</strong></div>
-  			<div class="panel-body">
-    			<p>
-				    Task Name: <input type="text" id="taskName" name="Task"><br>
-					Start Date: <input type="date" id="startDate" value="2015-07-11"><br>
-					End Date: <input type="date" id="endDate" value="2015-07-11"><br>
-					Progress: <input type="range" id="progress" value="40"><br>
-					<button class="btn btn-default" onclick="addTask()">Submit</button>
-    			</p>
-  			</div>
-
-	  	<!-- Tables -->
-	  	<div class="table-responsive">
-		  	<table class="table">
-		    	<tr>
-		    		<th width="10%">#</th>
-		    		<th width="30%">Task Name &nbsp; &nbsp; &nbsp; </th>
-		    		<th width="30%">Start Date</th>
-		    		<th width="30%">End Date</th>
-		    		
-		    	</tr>
-		  	</table>
-
-	  		<table class="chart">
-	  			<tr>
-	  				<th>WEEKS &nbsp; &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 2 &nbsp; &nbsp; &nbsp; 3 &nbsp; &nbsp; &nbsp; 4 &nbsp; &nbsp; &nbsp; 5 &nbsp; &nbsp; &nbsp; </th>
-	  			</tr>
-	  		</table>
-	  	</div>
+ 		<div class="panel-heading">
+ 			<strong>Gantt Chart</strong>
+ 		</div>
+		<div class="panel-body">
+			<p>
+			    Task Name: <input type="text" id="taskName" name="Task"><br>
+				Start Date: <input type="date" id="startDate" value="2015-07-11"><br>
+				End Date: <input type="date" id="endDate" value="2015-08-11"><br>
+				Progress: <input type="range" id="progress" value="40"><br>
+				<button class="btn btn-default" onclick="addTask()">Submit</button>
+			</p>
+		</div>
+	</div>
+	  		
+	<div class="panel panel-default" id="scale_weeks_panel">
+		<div class="panel heading">
+			<input type="date" id="startWeek" value="2015-07-11">
+			<strong>&nbsp; &nbsp; &nbsp; WEEKS SCALE</strong>
+			<input type="date" id="endWeek" value ="2015-12-12">
+			<button class="btn btn-default" onclick="scaleWeeks()" type="reset" id="reset">reset</button>
+		</div>
 	</div>
 
-	<div class="progress">
+	<div class="table-responsive">
+	  	<table class="table table-hover" id="gantt_chart_table">
+	    	<tbody>
+	    	<tr class="table_row_with_heads" style="width: 100%">
+	    		<th style="width: 5%" onclick="changeID(this)">#(ID?)</th>
+	    		<th style="width: 8%">Task Name</th>
+	    		<th style="width: 5%">Start Date</th>
+	    		<th style="width: 5%">End Date</th>
+	    		<th style="width: 5%">Delete</th>
+	    		<!-- width of ~70% left -->
+	    		<!--some more headings to be added by the scaleWeek function-->
+	    		<th style="width: 100%" id="weeks_number"></th>
+	    	</tr>
+	  		</tbody>
+	  	</table>
+	</div>
+
+
+
+	<p>EXAMPLE</p>
+	<div class="progress" style="width: 40%;">
   		<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
     		60% Complete
   		</div>
 	</div>
 
-
-
+	</div>
+	</div>
 </body>
 </html>

@@ -1,11 +1,68 @@
-table.table {
-    position:relative;
-    float:left;
-    width:24%;
-   }
+.panel-default {
+  background-color: #434343;
+  color: white;
+}
 
-table.chart {
-    position:relative;
-    float:right;
-    width:74%;
-  }
+.panel-default>.panel-heading {
+  background-color: #2E2E2E;
+  color: #ddd;
+}
+
+.btn-default {
+  background-color: #2E2E2E;
+  color: #DFDFDF;
+}
+
+.progress {
+  background-color: #3D3D3D;
+  color: #ddd;
+}
+
+.progress-bar {
+  background-color: #919191;
+  color: #ddd;
+}
+
+.table-hover {
+  background-color: #242424;
+  color: #ddd;
+}
+
+.table-toggle:hover {
+  background-color: #616161;
+  color: #ddd;
+}
+
+input {
+  background-color: #898989;  
+  color: #ddd;
+}
+
+body {
+  background-color: #191919;
+  color: #ddd;
+}
+
+#scale_weeks_panel {
+  background-color: #191919;
+  color: #ddd;
+}
+
+#startWeek {
+	float:left;
+	width: 10%;
+}
+
+#endWeek {
+	float:right;
+	width: 10%;
+}
+
+#reset {
+	float:right;
+}
+
+#chart_title {
+	width: 10%;
+	horizontal-align: middle;
+} 
