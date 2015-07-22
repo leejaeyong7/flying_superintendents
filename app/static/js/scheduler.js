@@ -61,7 +61,9 @@ function dbParameterFormatter(table, columnData){
             var obj = columnData[key];
             //key = columnName
             //obj = type or foreignkeyref
+           // console.log(obj)
             switch(obj){
+            case "BIGINT":
             case "INTEGER":
                 if(key == "projectFaxNumber" || key == "projectPhoneNumber" || key == "phoneNumber" )
                 {
@@ -110,11 +112,11 @@ function integerInputForm(columnName, isPhone){
         inputForm += '<div id = "integerInput" class="inputForm">'
     if (isPhone)
     {
-        inputForm += '<input type="text" name='+columnName+' class = "phoneNumber">';
+        inputForm += '<input type="text" name='+columnName+' class = "phoneNumber"></input>';
     }
     else
     {
-        inputForm += '<input type="text" name='+columnName+'>';
+        inputForm += '<input type="text" name='+columnName+'></input>';
     }
     inputForm += "</div>"
     inputForm += "</div>"
@@ -127,7 +129,7 @@ function floatInputForm(columnName){
             inputForm += columnName
         inputForm += '</div>'
         inputForm += '<div id = "floatInput" class="inputForm">'
-            inputForm += '<input type="text" name='+columnName+' class="floatNumber">';
+            inputForm += '<input type="text" name='+columnName+' class="floatNumber"></input>';
         inputForm += "</div>"
     inputForm += "</div>"
     return inputForm
@@ -140,7 +142,7 @@ function dateInputForm(columnName){
             inputForm += columnName
         inputForm += '</div>'
         inputForm += '<div id = "dateInput" class="inputForm">'
-            inputForm += '<input type="text" name='+columnName+' class= "dateTime">';
+            inputForm += '<input type="text" name='+columnName+' class= "dateTime"></input>';
         inputForm += "</div>"
     inputForm += "</div>"
     return inputForm
@@ -155,11 +157,11 @@ function stringInputForm(columnName, stringLength, isEmail){
         inputForm += '<div id = "stringInput" class="inputForm">'
     if (isEmail)
     {
-        inputForm += '<input type="text" name='+columnName+' class = "emailAddress"  maxlength='+stringLength +'>';
+        inputForm += '<input type="text" name='+columnName+' class = "emailAddress"  maxlength='+stringLength +'></input>';
     }
     else
     {
-        inputForm += '<input type="text" name='+columnName+' maxlength='+stringLength +'>';
+        inputForm += '<input type="text" name='+columnName+' maxlength='+stringLength +'></input>';
     }
     inputForm += "</div>"
     inputForm += "</div>"
@@ -183,14 +185,11 @@ function foreignKeyInputForm(columnName,foreignKeyReference){
         foreignTableName = 'User';
     }
         inputForm += '<div id = "foreignKeyInput" class="inputForm '+columnName+ '-'+foreignTableName+'">';
-
-
-    //addy.substr(0, addy.indexOf(',')); 
-    inputForm += "</div>"
+        inputForm += "</div>"
     
-    inputForm +=  '<button type="button" class="btn btn-default btn-xs create-table-button">';
-    inputForm +=  '<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
-    inputForm +=  '</button>';
+        inputForm +=  '<button type="button" class="btn btn-default btn-xs create-table-button"  onclick="createNewTableModal()">';
+            inputForm +=  '<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
+        inputForm +=  '</button>';
 
     inputForm += "</div>"
     
@@ -207,10 +206,11 @@ function foreignKeyInputForm(columnName,foreignKeyReference){
 		    else{
                 var foreignTable = JSON.parse(data);
                 var foreignTableDropDown = '';
-                foreignTableDropDown += '<select id="foreignTableDropDown" class = foreignDD-'+foreignTableName+'>'
+                foreignTableDropDown += '<select id="foreignTableDropDown" name="'+ columnName +'"class = foreignDD-'+foreignTableName+'>'
                 if(Object.keys(foreignTable).length != 0){
                     for (var rows in foreignTable)
                     {
+                       // console.log(foreignTable);
                         if(foreignTable.hasOwnProperty(rows))
                         {
                             var rowData = foreignTable[rows]
@@ -218,20 +218,18 @@ function foreignKeyInputForm(columnName,foreignKeyReference){
 
                             for(var rowID in rowData)
                             {
-                                //console.log(rowID)
-                                //console.log(rowData[rowID])
-                                foreignTableDropDown += '<option value='+rowID+'>';
+                                
                                 if(rowData.hasOwnProperty(rowID))
                                 {
                                     var row = rowData[rowID]
+                                    //value must be same as ID in foreign table
+                                    foreignTableDropDown += '<option value='+row['id']+'>';
                                     for(var col in row )
                                     {
-                                        //console.log(col)
-                                        //console.log(row[col])
+                                        //display name/description/ppcvalue or email in dropdown menu
                                         if(col=="name" || col=="description" || col=="ppc" || col=="email")
                                         {
                                             foreignTableDropDown+= col + ' : '+ row[col]
-                                        //                                    foreignTableDropDown +=
                                         }
                                     }
                                 }
@@ -265,7 +263,7 @@ function setData(){
 /* contents */
 
 //initialize AlloyUI and load the Scheduler module.
-
+/*
 YUI().use(
   'aui-scheduler',
   function(Y) {
@@ -330,7 +328,7 @@ YUI().use(
       }
     );
   }
-);
+);*/
 
 function tableDropdown(){
     var inputForm  = '';
@@ -345,14 +343,98 @@ function tableDropdown(){
 }
 
 $('.table-submit-button').on('click', function(){
-    var tableForm = $('#DBContainer')[0];
-   // console.log(tableForm);
-    var tableFormData = new FormData(tableForm);
-//    console.log(tableFormData)
+    var tableForm ={};
+    
+    var tableName = $('#createTableModal').find('#table-dropdown').val();
+    tableForm[tableName] = {};
+    $.each( $('#DBContainer').children().children('.inputForm'), function(i,data){
+        
+        if($(data).children('input').length){
+            if($(data).children('input').hasClass('phoneNumber')){
+                tableForm[tableName][ $(data).children('input')[0].name] = parseInt($(data).children('input').val().replace ( /[^\d.]/g, '' ));
+            }
+            else if($(data).children('input').hasClass('dateTime')){
+                tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+            }
+            else{
+                tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+            }
+        }
+        else if($(data).children('select').length){
+            tableForm[tableName][ $(data).children('select')[0].name] =  parseInt($(data).children('select').val());
+        }
+    });
+    var tableInputForm = new FormData();
+    tableInputForm.append('jsonDBData',JSON.stringify(tableForm))
+    //console.log(tableInputForm)
+    $.ajax({
+	    type: 'POST',	   
+	    url: '/set-db',
+		async: false,
+		contentType: false,
+		cache: false,
+		processData: false,
+	    data: tableInputForm,
+	    success: function(data){
+	        alert(data)
+        }
+	}); 
 })
+function createNewTableModal(){
+    var newModal = $('#createTableModal').clone()[0];
+    console.log(newModal)
+}
 
+
+
+        
+
+
+$('#openBtn').click(function(){
+	$('#myModal').modal({show:true})
+});
+
+/*
+$('.modal').on('hidden.bs.modal', function( event ) {
+    $(this).removeClass( 'fv-modal-stack' );
+    $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
+});
+
+
+$( '.modal' ).on( 'shown.bs.modal', function ( event ) {
+    
+    // keep track of the number of open modals
+    
+    if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' )
+    {
+        $('body').data( 'fv_open_modals', 0 );
+    }
+    
+    
+    // if the z-index of this modal has been set, ignore.
+    
+    if ( $(this).hasClass( 'fv-modal-stack' ) )
+    {
+        return;
+    }
+    
+    $(this).addClass( 'fv-modal-stack' );
+
+    $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) + 1 );
+
+    $(this).css('z-index', 1040 + (10 * $('body').data( 'fv_open_modals' )));
+
+    $( '.modal-backdrop' ).not( '.fv-modal-stack' )
+        .css( 'z-index', 1039 + (10 * $('body').data( 'fv_open_modals' )));
+
+
+    $( '.modal-backdrop' ).not( 'fv-modal-stack' )
+        .addClass( 'fv-modal-stack' ); 
+
+});*/
+        
+        
 $(document).ready(function() {
-    //    getTable("Project")
     tableDropdown();
     $('#table-dropdown').change(function(){
         var tableName = $('option:selected',this).text()
@@ -364,143 +446,7 @@ $(document).ready(function() {
         }
 
     })
-   // getTableColumns("Task");
     
-   // $('.phoneNumber').mask("(999) 999-9999")
-//    setData();
 })
 
 
-   /* (self, name, userID, projectAddress, projectFaxNumber, projectPhoneNumber, responsibleIndividual, LinkToProjectInfor)*/
-/*
-name, requestor, personCommitted, responsibleSubs, startDate, endDate, actualStartDate, duration, taskPredecessor, taskSuccessor, taskConstraints, taskPerformance, taskAnticipated, taskPerformanceVariance,taskRepeated, elements    
-*/
-// personnel1, personnel2, organization, 
-/*    var tests = 
-	{
-	    1:{
-		Firmtype:
-		{
-		    name:"the firm"
-		}
-	    },
-	    2:{
-		Organization:
-		{
-		    name:"org name",
-		    address:"UIUC",
-		    phoneNumber:123123123,
-		    firmtypeID:1
-		}
-	    },
-	    3:{
-		Personnel:
-		{
-		    name:"jae",
-		    phoneNumber:123123123,
-		    emailAddress:"hello@gmail.com",
-		    role:"UI dev",
-		    organizationID:1		
-		}
-	    },
-	    4:{
-		Personnel:
-		{		    
-		    name:"yong",
-		    phoneNumber:123123123,
-		    emailAddress:"hello2@gmail.com",
-		    role:"UI dev",
-		    organizationID:1
-		}
-	    },
-	    5:{
-		TaskStatus:
-		{
-		    name:'test taskstatus'
-		}
-	    },
-	    6:{
-		Performance:
-		{
-		    ppc:10.0,
-		    taskMadeReady:1.00,
-		    maturityLevel:1.00,
-		    variance:1.00,
-		    status:1
-		}
-	    },
-	   7:{
-		PerformanceVariance:
-		{
-		    name:'test PerformanceVariance'
-		}
-	    },
-	    8:{
-		Promise:
-		{
-		    name:"nameOpromise"
-		}
-	    },
-	    9:{
-		Constraints:
-		{
-		    relatedID:2,
-		    description:"descrb",
-		    responsibleIndividual:1,
-		    initiateDate:Date.UTC(2013,10,04),
-		    promiseDate:Date.UTC(2013,10,08),
-		    completeDate:Date.UTC(2014,01,3),
-		    revisePromiseCompletion:1,
-		    constraintVariance:1,
-		}
-	    },
-	    10:{
-		Objects:
-		{
-		    name:"objname"
-		}
-	    },
-	    11:{
-		Task:
-		{
-		    name:'times test',
-		    requestor:1,//personnel,
-		    personCommitted:2,//personnel
-		    responsibleSubs:1,//organization
-		    startDate:Date.UTC(2012,10,04),
-		    endDate:Date.UTC(2012,11,3),
-		    actualStartDate:Date.UTC(2012,10,8),
-		    duration:200,
-		    taskPredecessor:null,//task
-		    taskSuccessor:null,//task
-		    taskConstraints:1,//task
-		    taskPerformance:1,//constraints
-		    taskAnticipated:123,//performance
-		    taskPerformanceVariance:1,//performancevariance
-		    taskRepeated:3,
-		    elements:1//objects
-		}
-	    }
-	}
-
-    
-    for(var test in tests){
-	var obj = JSON.stringify(tests[test]);	
-	//alert(obj)
-	var tableInputForm = new FormData();
-	tableInputForm.append("jsonDBData",obj);
-	$.ajax({
-	    type: 'POST',
-	    url: '/set-db',
-	    data: tableInputForm,  //JSON of inputs
-	    contentType: false,	    
-	    cache: false,	    
-	    processData: false,	  
-	    success: function(data){
-	    
-	    
-	    }
-	
-	});
-    }
-*/

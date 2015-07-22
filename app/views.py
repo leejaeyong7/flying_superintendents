@@ -609,14 +609,10 @@ def get_dir():
 @login_required
 def set_db():
     if request.method == 'POST':
-        js= request.form.get('jsonDBData')
+        js =  request.form.get('jsonDBData')
         jsonDBData = json.loads(js)
-        print jsonDBData
         for tableName, tableData in jsonDBData.iteritems():
-            print str(tableName)+" : "+str(tableData)
-            #tableID = tableData['id']
             current_user.set(tableName, tableData)
-            #print tableData
     return 'success'
 
 @app.route('/get-db', methods = ['GET'])

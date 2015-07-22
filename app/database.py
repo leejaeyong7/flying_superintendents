@@ -61,10 +61,10 @@ class Project(db.Model):
     __tablename__ = 'project'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120))
-    userID = db.Column(db.String(120), db.ForeignKey('users.email'))
+    userID = db.Column(db.Integer, db.ForeignKey('users.id'))
     projectAddress = db.Column(db.String(300))
-    projectFaxNumber = db.Column(db.Integer)
-    projectPhoneNumber = db.Column(db.Integer)
+    projectFaxNumber = db.Column(db.BigInteger)
+    projectPhoneNumber = db.Column(db.BigInteger)
     responsibleIndividual = db.Column(db.Integer, db.ForeignKey('personnel.id'))
     users = db.relationship('User')
     personnel = db.relationship('Personnel')
@@ -86,7 +86,7 @@ class Organization(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120))
     address = db.Column(db.String(120))
-    phoneNumber = db.Column(db.Integer)
+    phoneNumber = db.Column(db.BigInteger)
     firmtypeID = db.Column(db.Integer, db.ForeignKey('firmtype.id'))
     firmtype = db.relationship('Firmtype')
 
@@ -110,7 +110,7 @@ class Personnel(db.Model):
     __tablename__ = 'personnel'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120))
-    phoneNumber = db.Column(db.Integer)
+    phoneNumber = db.Column(db.BigInteger)
     emailAddress = db.Column(db.String(120))
     role = db.Column(db.String(120))
     organizationID = db.Column(db.Integer, db.ForeignKey('organization.id'))
@@ -129,18 +129,18 @@ class Personnel(db.Model):
 class Schedule(db.Model):
     __tablename__ = 'schedule'
     id = db.Column(db.Integer, primary_key = True)
-    taskID = db.Column(db.Integer, db.ForeignKey('task.id'))
-    task = db.relationship('Task')
+    projectID = db.Column(db.Integer, db.ForeignKey('project.id'))
+    project = db.relationship('Project')
 
-    def __init__(self, taskID, task):
-        self.taskID = taskID
-        self.task = task
+    def __init__(self, projectID, task):
+        self.projectID = projectID
         db.session.commit()
 
 class Task(db.Model):
     __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120))
+    scheduleID = db.Column(db.Integer, db.ForeignKey('schedule.id'))
     requestor = db.Column(db.Integer, db.ForeignKey('personnel.id'))
     personCommitted = db.Column(db.Integer, db.ForeignKey('personnel.id'))
     responsibleSubs = db.Column(db.Integer, db.ForeignKey('organization.id'))
@@ -163,11 +163,13 @@ class Task(db.Model):
     constraints = db.relationship('Performance')
     performanceVariance = db.relationship('PerformanceVariance')
     objects = db.relationship('Objects')
+    schedule = db.relationship('Schedule')
     #task = db.relationship('Task')
     #task = db.relationship('Task')
-    def __init__(self, name, requestor, personCommitted, responsibleSubs, startDate, endDate, actualStartDate, duration, taskPredecessor, taskSuccessor, taskConstraints, taskPerformance, taskAnticipated, taskPerformanceVariance,taskRepeated, elements
+    def __init__(self, name, scheduleID, requestor, personCommitted, responsibleSubs, startDate, endDate, actualStartDate, duration, taskPredecessor, taskSuccessor, taskConstraints, taskPerformance, taskAnticipated, taskPerformanceVariance,taskRepeated, elements
 ):
         self.name = name
+        self.scheduleID = scheduleID
         self.requestor = requestor
         self.personCommitted = personCommitted
         self.responsibleSubs = responsibleSubs
@@ -224,6 +226,7 @@ class Promise(db.Model):
 class Performance(db.Model):
     __tablename__ = 'performance'
     id = db.Column(db.Integer, primary_key = True)
+    scheduleID = db.Column(db.Integer, db.ForeignKey('schedule.id'))
     ppc = db.Column(db.Float)
     taskMadeReady = db.Column(db.Float)
     maturityLevel = db.Column(db.Float)
@@ -231,7 +234,8 @@ class Performance(db.Model):
     status = db.Column(db.Integer, db.ForeignKey('taskStatus.id'))
     taskStatus = db.relationship('TaskStatus')
 
-    def __init__(self, ppc, taskMadeReady, maturityLevel, variance, status):
+    def __init__(self, scheduleID, ppc, taskMadeReady, maturityLevel, variance, status):
+        self.scheduleID = scheduleID
         self.ppc = ppc
         self.taskMadeReady = taskMadeReady
         self.maturityLevel = maturityLevel
@@ -259,21 +263,25 @@ class TaskStatus(db.Model):
 class Objects(db.Model):
     __tablename__ = 'objects'
     id = db.Column(db.Integer, primary_key = True)
+    projectID = db.Column(db.Integer, db.ForeignKey('project.id'))
     name = db.Column(db.String(120))
 
-    def __init__(self, name):
+    def __init__(self,  projectID, name):
+        self.projectID = projectID
         self.name = name
         db.session.commit()
 
 class IFCElement(db.Model):
     __tablename__ = 'ifcelement'
     id = db.Column(db.Integer, primary_key = True)
+    objectsID = db.Column(db.Integer, db.ForeignKey('objects.id'))
     name = db.Column(db.String(120))
     type = db.Column(db.String(120))
     pos = db.Column(db.Float())
 
-    def __init(self, name, type, pos ):
+    def __init(self,objectsID, name, type, pos ):
         self.name = name
+        self.objectsID = objectsID
         self.type = type
         self.pos = pos
         db.session.commit()
@@ -281,12 +289,14 @@ class IFCElement(db.Model):
 class Location(db.Model):
     __tablename__ = 'location'
     id = db.Column(db.Integer, primary_key = True)
+    objectsID = db.Column(db.Integer, db.ForeignKey('objects.id'))
     name = db.Column(db.String(120))
     type = db.Column(db.String(120))
     pos = db.Column(db.Float())
 
-    def __init(self, name, type, pos ):
+    def __init(self,objectsID, name, type, pos ):
         self.name = name
+        self.objectsID = objectsID
         self.type = type
         self.pos = pos
         db.session.commit()
