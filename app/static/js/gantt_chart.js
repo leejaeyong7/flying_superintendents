@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*	
 	server side
 	load multiple projects 
@@ -11,10 +12,25 @@
 
 
 
+=======
+/*
+
+	2. server side
+	3. calendar table
+	4. pop-out (modal?)
+	
+
+	7/14 Tasks
+	2. data binding (angularJS?
+	3. delete (buggily finished), modify
+*/
+
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 /* global array to hold tasks objs */
 var tasks = new Array();
 /* var to hold current number of weeks */
 var weeks = 7; 
+<<<<<<< HEAD
 /* global array to hold projects objs */
 var projects = new Array();
 /* startWeek and endWeek, will getData from project later */
@@ -22,6 +38,8 @@ var start = "2015-05-11";
 var end = "2015-06-16";
 /* use temp static weekDiv now */
 var weekDiv = '4%';
+=======
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 
 
 /* task object ctor*/
@@ -128,6 +146,7 @@ function generateBar (task) {
   	*/
 	var $bar = '<div class="progress" style="display: inline-block; width: ' + barLength + ';"><div class="progress-bar" role="progressbar" aria-valuenow="'
 					+ task.progress 
+<<<<<<< HEAD
 					+ '" aria-valuemin="0" aria-valuemax="100" style="width: '
 					+ progressLength +';">' + progressLength + '</div></div>';         
 	
@@ -143,11 +162,28 @@ function generateBar (task) {
 	};
 	$completeBar += $bar;
 
+=======
+					+ ' aria-valuemin="0" aria-valuemax="100" style="width: '
+					+ progressLength +';">' + progressLength + '</div></div>';         
+	
+	//calculate position of the bar
+	var weekDiv = scaleWeeks();    //get the div width of each week number 
+	var divsBeforeBar = diffDays(document.getElementById("startWeek").value, task.startDate) / 7;     //cannot be < 0 
+
+	var $completeBar = '';
+
+	for (var i = 1; i <= divsBeforeBar; i++) {
+		$completeBar += '<div style="display: inline-block; width: ' + weekDiv + '">' + " " + '</div>';
+	};
+	$completeBar += $bar;
+
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 	return $completeBar;
 }
 
 /* generate gantt chart table row with newly added tasks array elem */
 function addTableRow(task) {
+<<<<<<< HEAD
 	//<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>	
 	var $row = '<tr  data-toggle="tooltip" data-placement="bottom" title="' 
 		+ task.details + '"><td>'
@@ -160,6 +196,15 @@ function addTableRow(task) {
 			'" data-toggle="modal" class="btn btn-primary">expand</a></p></td>'
 		+ '<td>' + generateBar(task) + '</td>'
 		+ '</tr>';
+=======
+	var $row = '<tr><td>'+ task.number
+		   						+'</td><td>'+task.taskName
+		   						+'</td><td>'+task.startDate
+		   						+'</td><td>'+task.endDate
+		   						+'</td><td><button class="btn btn-default" onclick="deleteTask(this)">delete</button></td>'
+								+ '<td>' + generateBar(task) + '</td>'
+								+ '</tr>';
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 	$('.table').append($row);
 }
 
@@ -198,6 +243,7 @@ function addTask() {
     var task = new Task(tasks.length, name, startDate, endDate, progress);
     tasks.push(task);
     addTableRow(task);
+<<<<<<< HEAD
     generateTaskDetailsModal(task);
 }
 
@@ -237,6 +283,15 @@ function generateCalendar() {
 		currDate.setDate(currDate.getDate() + 1);
 	};
 	document.getElementById("weeks_number").innerHTML = $row;	
+=======
+}
+
+/***** delete task *****/
+function deleteTask(r) {
+	var rowNum = r.parentNode.parentNode.rowIndex;         //get current row number
+	document.getElementById("gantt_chart_table").deleteRow(rowNum);    //delete current row of chart
+	tasks.splice(rowNum, 1);   //buggy
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 }
 
 /*********************************/
@@ -261,6 +316,7 @@ function loadProject() {
 		generateTaskDetailsModal(project.tasks[i]);	
 	};
 
+<<<<<<< HEAD
 }
 
 
@@ -268,13 +324,47 @@ function loadProject() {
 
 
 
+=======
+/***** weeks scaling once the reset button is clicked *****/
+function scaleWeeks() {
+	var start = document.getElementById("startWeek").value;
+	var end = document.getElementById("endWeek").value;
+	var days = diffDays(start, end);
+	weeks = Math.floor(days/7);
+	var percent = Math.floor(1/weeks * 100);
+	
+	if (percent == 1) {
+		alert("week scale is too large");
+		return;
+	}
+	
+	percent += '%';
+
+	var $row = '';
+	for (var i = 1; i <= weeks; i++) {
+		//create div like: <div style="width: 20%"> i <div>
+		$row += '<div style="display: inline-block; width: ' + percent + ';">' + i + '</div>';
+	}
+	document.getElementById("weeks_number").innerHTML = $row;	
+	return percent;
+}
+
+function changeID(r) {
+	
+}
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7
 
 
 
 $(document).ready(function(){
+<<<<<<< HEAD
     generateCalendar();
 });
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 })
+=======
+    scaleWeeks();
+});
+>>>>>>> 1de63d7c09beb08fbdaddf56b237f0498504d8c7

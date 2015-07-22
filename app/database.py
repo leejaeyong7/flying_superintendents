@@ -66,6 +66,7 @@ class Project(db.Model):
     projectFaxNumber = db.Column(db.Integer)
     projectPhoneNumber = db.Column(db.Integer)
     responsibleIndividual = db.Column(db.Integer, db.ForeignKey('personnel.id'))
+    users = db.relationship('User')
     personnel = db.relationship('Personnel')
     LinkToProjectInfor = db.Column(db.String(300))
     
@@ -265,7 +266,32 @@ class Objects(db.Model):
         db.session.commit()
 
 class IFCElement(db.Model):
-    __tablename__ = 'objects'
+    __tablename__ = 'ifcelement'
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120))
+    type = db.Column(db.String(120))
+    pos = db.Column(db.Float())
+
+    def __init(self, name, type, pos ):
+        self.name = name
+        self.type = type
+        self.pos = pos
+        db.session.commit()
+
+class Location(db.Model):
+    __tablename__ = 'location'
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120))
+    type = db.Column(db.String(120))
+    pos = db.Column(db.Float())
+
+    def __init(self, name, type, pos ):
+        self.name = name
+        self.type = type
+        self.pos = pos
+        db.session.commit()
+
+    
 
 
 

@@ -21,3 +21,52 @@
 input{
     color: black;
 }
+.modal-content{
+	background: #313131;
+	color: white;
+}
+.modal-body > h4{
+	background: #313131;
+	color: orange;
+}
+.close-button{
+	background: #313131;
+	color: orange;
+	padding: 0;	
+	border: none;
+	background: none;	
+}
+
+.modal-title{
+	color: orange;
+}
+
+#inputrow{
+    height: 30px;
+}
+
+#table-dropdown{
+    background: transparent;
+    color: orange;
+    height: 30px;
+    font-size: 16px;
+    border: none;
+}
+#foreignTableDropDown{
+    background: transparent;
+    color: white;
+   /* height: 30px;
+    font-size: 16px;*/
+    border: none;
+    padding: none;
+    width: 100%;
+}
+input{
+   /* background: transparent;
+    color: white;
+    border: none;
+    width: 100%;*/
+}
+.table-submit-button{
+    background-color: #6699FF;
+}
