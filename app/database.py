@@ -48,11 +48,14 @@ class User(db.Model, UserMixin):
 
     def set(self, tableName,tableValues):
         targetTable = eval(tableName)
-        #targetTable.__init__(**tableValues)
-        #target = eval(table+'.'+column)
         db.session.add(targetTable(**tableValues))
         db.session.commit()
 
+    def update(self, tableName, tid, tableValues):
+        targetTable = eval(tableName)
+        db.session.query(targetTable).filter(targetTable.id == tid).update(tableValues)
+        db.session.commit()
+    
     def getColumns(self, tableName):
         targetTable = eval(tableName)
         print targetTable.values()

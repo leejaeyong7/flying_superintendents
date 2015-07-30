@@ -6,13 +6,30 @@
 	also handles document.ready event
 	
 		javascript
-		functions 		: 	getTableColumns(table)
+		functions 		: 	getTableColumns(table,tabletype)
                                  retrieves DB form for table input and sets them accordingly for modal
+
+                            dbParameterFormatter(table, columnData, tabletype)
+                                 --explanation
+                            
+                            function(params)
+                                 --explanation
+
+                            function(params)
+                                 --explanation
+
+                            function(params)
+                                 --explanation
+
+                            function(params)
+                                 --explanation
 		
 		
 		Jquery 
 		Scripts 		: 	
 */
+
+
 
 function getTableColumns(table){
     $.ajax({
@@ -33,9 +50,67 @@ function getTableColumns(table){
 	}); 
 }
 
+function getTableViews(table){
+
+    $.ajax({
+	    type: 'GET',	   
+	    url: '/get-db',    
+	    data: "table="+table,
+	    success: function(data){
+		    if(data == "failure")
+		    {
+			    //when querying has no result
+                //			alert("fail!")
+		    }
+		    else{
+                var tableView = JSON.parse(data)
+                console.log(tableView)
+                var tableRowList = '';
+                tableRowList += '<select id="tableRowList" class="viewTableRowDD tableViewDD-'+table+'">'
+                if(Object.keys(tableView).length != 0){
+                    for (var rows in tableView)
+                    {
+                       // console.log(foreignTable);
+                        if(tableView.hasOwnProperty(rows))
+                        {
+                            var rowData = tableView[rows]
+                            tableRowList += '<option value=0>None </option>'
+
+                            for(var rowID in rowData)
+                            {
+                                
+                                if(rowData.hasOwnProperty(rowID))
+                                {
+                                    var row = rowData[rowID]
+                                    //value must be same as ID in foreign table
+                                    tableRowList += '<option value='+row['id']+'>';
+                                    for(var col in row )
+                                    {
+                                        //display name/description/ppcvalue or email in dropdown menu
+                                        if(col=="name" || col=="description" || col=="ppc" || col=="email")
+                                        {
+                                            tableRowList+= col + ' : '+ row[col]
+                                        }
+                                    }
+                                }
+                                tableRowList += '</option>'
+                            }
+                        }
+                    }
+                    tableRowList += '</select>'
+                }
+                else
+                {
+                    tableRowList = 'None'
+                }    
+                $('#viewTableModal').find('.modal-body').append(tableRowList)
+	        }
+        }
+	});
+}
+
 
 /*
-	okay lets create basic db format inputter..
 	first, obtain which data we want to input
 	I have to create 'create DB button' for every input tables.
 
@@ -52,16 +127,17 @@ function getTableColumns(table){
 
 	
 */
-function dbParameterFormatter(table, columnData){
+function dbParameterFormatter(table, columnData, tabletype){
+
+    /*
+      creating a html template based on inputs to return appropriate dataformat
+    */
+    
     var inputForm = '';
     inputForm += '<form id ="DBContainer" class ="">'
-
     for (var key in columnData){
         if(columnData.hasOwnProperty(key)){
             var obj = columnData[key];
-            //key = columnName
-            //obj = type or foreignkeyref
-           // console.log(obj)
             switch(obj){
             case "BIGINT":
             case "INTEGER":
@@ -101,7 +177,13 @@ function dbParameterFormatter(table, columnData){
 }
 
 /*
+
+
+
   below are input forms for integer/float/string and datetime
+
+
+
 */
 function integerInputForm(columnName, isPhone){
     var inputForm  = '';
@@ -251,84 +333,6 @@ function foreignKeyInputForm(columnName,foreignKeyReference){
     return inputForm
 
 }
-/*
-  Funtion to set data
-      I want to be able to set data given JSONIFIED string of user input
- */
-
-function setData(){
-
-}
-
-/* contents */
-
-//initialize AlloyUI and load the Scheduler module.
-/*
-YUI().use(
-  'aui-scheduler',
-  function(Y) {
-    var events = [
-      {
-        content: 'AllDay',
-        endDate: new Date(2015, 1, 5, 23, 59),
-        startDate: new Date(2015, 1, 5, 0)
-      },
-      {
-        color: '#8D8',
-        content: 'Colorful',
-        endDate: new Date(2015, 1, 6, 6),
-        startDate: new Date(2015, 1, 6, 2)
-      },
-      {
-        content: 'MultipleDays',
-        endDate: new Date(2015, 1, 8),
-        startDate: new Date(2015, 1, 4)
-      },
-      {
-        content: 'Disabled',
-        disabled: true,
-        endDate: new Date(2015, 1, 8, 5),
-        startDate: new Date(2015, 1, 8, 1)
-      },
-      {
-        content: 'Meeting',
-        endDate: new Date(2015, 1, 7, 7),
-        meeting: true,
-        startDate: new Date(2015, 1, 7, 3)
-      },
-      {
-        color: '#88D',
-        content: 'Overlap',
-        endDate: new Date(2015, 1, 5, 4),
-        startDate: new Date(2015, 1, 5, 1)
-      },
-      {
-        content: 'Reminder',
-        endDate: new Date(2015, 1, 4, 4),
-        reminder: true,
-        startDate: new Date(2015, 1, 4, 0)
-      }
-    ];
-
-    var agendaView = new Y.SchedulerAgendaView();
-    var dayView = new Y.SchedulerDayView();
-    var eventRecorder = new Y.SchedulerEventRecorder();
-    var monthView = new Y.SchedulerMonthView();
-    var weekView = new Y.SchedulerWeekView();
-
-    new Y.Scheduler(
-      {
-        activeView: weekView,
-        boundingBox: '#myScheduler',
-        date: new Date(2015, 1, 4),
-        eventRecorder: eventRecorder,
-        items: events,
-        render: true,
-        views: [dayView, weekView, monthView, agendaView]
-      }
-    );
-  }
-);*/
 
 function tableDropdown(){
     var inputForm  = '';
@@ -339,6 +343,7 @@ function tableDropdown(){
     }
     inputForm += '</select>';
     $('#createTableTitle').append(inputForm);
+    $('#viewTableTitle').append(inputForm);
     
 }
 
@@ -380,72 +385,49 @@ $('.table-submit-button').on('click', function(){
         }
 	}); 
 })
-function createNewTableModal(){
-    var newModal = $('#createTableModal').clone()[0];
-    console.log(newModal)
-}
 
 
-
+$('.update-table-button').click(function(){
+    $.ajax({
+        type: 'POST',
+	    url: '/update-db',
+		async: false,
+		contentType: false,
+		cache: false,
+		processData: false,
+	   // data: "test",
+	   /* success: function(data){
+	        alert(data)
+        }*/
         
-
-
-$('#openBtn').click(function(){
-	$('#myModal').modal({show:true})
+    });
 });
-
-/*
-$('.modal').on('hidden.bs.modal', function( event ) {
-    $(this).removeClass( 'fv-modal-stack' );
-    $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
-});
+ 
 
 
-$( '.modal' ).on( 'shown.bs.modal', function ( event ) {
-    
-    // keep track of the number of open modals
-    
-    if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' )
-    {
-        $('body').data( 'fv_open_modals', 0 );
-    }
-    
-    
-    // if the z-index of this modal has been set, ignore.
-    
-    if ( $(this).hasClass( 'fv-modal-stack' ) )
-    {
-        return;
-    }
-    
-    $(this).addClass( 'fv-modal-stack' );
 
-    $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) + 1 );
-
-    $(this).css('z-index', 1040 + (10 * $('body').data( 'fv_open_modals' )));
-
-    $( '.modal-backdrop' ).not( '.fv-modal-stack' )
-        .css( 'z-index', 1039 + (10 * $('body').data( 'fv_open_modals' )));
-
-
-    $( '.modal-backdrop' ).not( 'fv-modal-stack' )
-        .addClass( 'fv-modal-stack' ); 
-
-});*/
-        
-        
 $(document).ready(function() {
     tableDropdown();
-    $('#table-dropdown').change(function(){
+    $('.dropdown').change(function(){
         var tableName = $('option:selected',this).text()
-        if(tableName != 'None'){
-            getTableColumns(tableName);
+        if($('#createTableModal').hasClass('in')){
+            
+            if(tableName != 'None'){
+                getTableColumns(tableName);
+            }
+            else{
+                $('#DBContainer').empty();
+            }
         }
-        else{
-            $('#DBContainer').empty();
+        else if($('#viewTableModal').hasClass('in')){
+            if(tableName != 'None'){
+                getTableViews(tableName)
+                //getTableColumns(tableName, 'viewTable');
+            }
         }
-
     })
+    
+    
     
 })
 

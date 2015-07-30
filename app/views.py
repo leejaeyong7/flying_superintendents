@@ -20,75 +20,6 @@ import time
 #---------------------------------------------------------------------
 #
 #   
-#  redis server call. 
-#
-#---------------------------------------------------------------------
-# from redis import Redis
-# redis = Redis()
-# from flask import current_app
-# from pickle import loads, dumps
-
-
-# class DelayedResult(object):
-#     def __init__(self, key):
-#         self.key = key
-#         self._rv = None
-
-#     @property
-#     def return_value(self):
-#         if self._rv is None:
-#             rv = redis.get(self.key)
-#             if rv is not None:
-#                 self._rv = loads(rv)
-#         return self._rv
-
-
-# def queuefunc(f):
-#     def delay(*args, **kwargs):
-#         qkey = current_app.config['REDIS_QUEUE_KEY']
-#         key = '%s:result:%s' % (qkey, str(uuid4()))
-#         s = dumps((f, key, args, kwargs))
-#         redis.rpush(current_app.config['REDIS_QUEUE_KEY'], s)
-#         return DelayedResult(key)
-#     f.delay = delay
-#     return f
-
-# def queue_daemon(app, rv_ttl=500):
-#     while 1:
-#         msg = redis.blpop(app.config['REDIS_QUEUE_KEY'])
-#         func, key, args, kwargs = loads(msg[1])
-#         try:
-#             rv = func(*args, **kwargs)
-#         except Exception, e:
-#             rv = e
-#         if rv is not None:
-#             redis.set(key, dumps(rv))
-#             redis.expire(key, rv_ttl)
-
-
-# #subprocess.call(os.path.join(os.getcwd(),'app/src/redis-server'))
-
-
-# def event_stream():
-#     pubsub = redis.pubsub()
-#     pubsub.subscribe('chat')
-#     for message in pubsub.listen():
-#         print message
-#         yield 'data: %s\n\n' % message['data']
-
-# @app.route('/post', methods=['POST'])
-# def post():
-#     message = request.form['message']
-#     user = session.get('user', 'anonymous')
-#     red.publish('chat', ' %s: %s' % (user, message))
-# @app.route('/stream')
-# def stream():
-#     return Response(event_stream(), mimetype="text/event-stream")
-    
-
-#---------------------------------------------------------------------
-#
-#   
 #   path traversal sub class
 #
 #---------------------------------------------------------------------
@@ -598,12 +529,39 @@ def create_directory():
         else:
             os.makedirs(curr_dir)
         return 'success'
+
+
+@app.route('/move-files', methods = ['POST'])
+@login_required
+def move_dir():
+    if request.method=='POST':
+        new_dir = request.form.getlist('filelist')#('dataArray')
+        destination = request.form.get('destination')#('dataArray')
+        sub_dir = pathClass.subPath()
+        destination = os.path.join(current_user.getFileDir(),sub_dir,destination)
+        for files in new_dir:
+            fileName = os.path.join(current_user.getFileDir(),sub_dir,files)
+            shutil.move(fileName,os.path.join(destination,files))
+        return 'success'
+        
+
     """
 @app.route('/get-dir', methods = ['GET'])
 @login_required
 def get_dir():
     return current_user.getFileDir()
 """
+
+    
+
+#---------------------------------------------------------------------
+#
+#   
+#   db handling functions
+#
+#---------------------------------------------------------------------
+
+
 
 @app.route('/set-db', methods = ['POST'])
 @login_required
@@ -660,20 +618,26 @@ def get_db_columns():
 #        return "success"
 
 
-
-@app.route('/move-files', methods = ['POST'])
+@app.route('/update-db', methods = ['POST'])
 @login_required
-def move_dir():
-    if request.method=='POST':
-        new_dir = request.form.getlist('filelist')#('dataArray')
-        destination = request.form.get('destination')#('dataArray')
-        sub_dir = pathClass.subPath()
-        destination = os.path.join(current_user.getFileDir(),sub_dir,destination)
-        for files in new_dir:
-            fileName = os.path.join(current_user.getFileDir(),sub_dir,files)
-            shutil.move(fileName,os.path.join(destination,files))
-        return 'success'
-        
+def update_db():
+    if request.method == 'POST':
+        current_user.update('Organization',2,dict(phoneNumber = 2177777777))
+        """
+        js =  request.form.get('jsonDBData')
+        jsonDBData = json.loads(js)
+        for tableName, tableData in jsonDBData.iteritems():
+            current_user.set(tableName, tableData)
+        """
+    return 'success'
+
+
+#---------------------------------------------------------------------
+#
+#   
+#   etc
+#
+#---------------------------------------------------------------------
     
 @app.route('/get-imgs', methods = ['GET'])
 @login_required
