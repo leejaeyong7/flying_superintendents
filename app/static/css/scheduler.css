@@ -29,7 +29,7 @@ input{
 	background: #313131;
 	color: orange;
 }
-.close-button{
+:not(.modal-footer) > .close-button{
 	background: #313131;
 	color: orange;
 	padding: 0;	
@@ -55,11 +55,17 @@ input{
 #foreignTableDropDown{
     background: transparent;
     color: white;
-   /* height: 30px;
-    font-size: 16px;*/
     border: none;
     padding: none;
     width: 100%;
+}
+#tableRowList{
+    background: transparent;
+    width: 100%;
+    color: orange;
+    height: 30px;
+    font-size: 16px;
+    border: none;
 }
 input{
    /* background: transparent;
@@ -67,6 +73,6 @@ input{
     border: none;
     width: 100%;*/
 }
-.table-submit-button{
+.submit-button{
     background-color: #6699FF;
 }

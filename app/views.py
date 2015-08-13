@@ -622,13 +622,15 @@ def get_db_columns():
 @login_required
 def update_db():
     if request.method == 'POST':
-        current_user.update('Organization',2,dict(phoneNumber = 2177777777))
-        """
+        #current_user.update('Organization',2,dict(phoneNumber = 2177777777))
         js =  request.form.get('jsonDBData')
         jsonDBData = json.loads(js)
+        print jsonDBData
+        rowID = jsonDBData['id']
         for tableName, tableData in jsonDBData.iteritems():
-            current_user.set(tableName, tableData)
-        """
+            print tableName, tableData
+            if(tableName != 'id'):
+                current_user.update(tableName, rowID, tableData)
     return 'success'
 
 
