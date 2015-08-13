@@ -103,10 +103,11 @@ function getTableViews(table){
                 {
                     tableRowList = 'None'
                 }    
-                $('#viewTableModal').find('.modal-body').append(tableRowList)
+                document.getElementById('viewtable-contents').innerHTML = tableRowList
 	        }
         }
 	});
+    
 }
 
 
@@ -388,6 +389,8 @@ $('.table-submit-button').on('click', function(){
 
 
 $('.update-table-button').click(function(){
+    
+
     $.ajax({
         type: 'POST',
 	    url: '/update-db',
@@ -402,14 +405,20 @@ $('.update-table-button').click(function(){
         
     });
 });
- 
 
-
+$(document).on('change', '#tableRowList', function(){
+    /* 
+       load data values
+    */
+    var tableName = $('#viewTableModal').find('.dropdown').find('option:selected').text()
+    var tableRowValue = document.getElementById('tableRowList').value
+    
+})
 
 $(document).ready(function() {
     tableDropdown();
     $('.dropdown').change(function(){
-        var tableName = $('option:selected',this).text()
+        var tableName = $('option:selected',this).text();
         if($('#createTableModal').hasClass('in')){
             
             if(tableName != 'None'){
@@ -421,11 +430,13 @@ $(document).ready(function() {
         }
         else if($('#viewTableModal').hasClass('in')){
             if(tableName != 'None'){
-                getTableViews(tableName)
+                getTableViews(tableName);
                 //getTableColumns(tableName, 'viewTable');
             }
         }
-    })
+    });
+   
+   
     
     
     
