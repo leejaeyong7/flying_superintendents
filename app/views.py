@@ -16,6 +16,7 @@ import os.path
 import files
 import shutil
 import time
+import cv2
 
 #---------------------------------------------------------------------
 #
@@ -641,6 +642,14 @@ def update_db():
 #
 #---------------------------------------------------------------------
     
+@app.route('/convert-video', methods = ['POST'])
+@login_required
+def convert_video():
+    filename =  request.get_data()
+    sub_dir = pathClass.subPath()
+    print os.path.join(current_user.getFileDir(),sub_dir,filename)
+    return "Success"
+
 @app.route('/get-imgs', methods = ['GET'])
 @login_required
 def get_image_dir():    
@@ -654,6 +663,8 @@ def get_image_dir():
         sub_dir = pathClass.subPath()
         return send_file(os.path.join(current_user.getFileDir(),sub_dir,request.args.get('type')), mimetype='image')
     
+
+
 @app.route('/allowed-extension', methods = ['GET'])
 @login_required
 def allowed_extension():

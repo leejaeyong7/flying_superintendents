@@ -48,13 +48,16 @@
 							$(document).on('click','.process-button',function(e)..
 								 handles process button
 
+                            $(document).on('click','.convert-video-button',function(e)..
+                                 converts from video to image by creating new folder and putting in images converted from video 
+                                 
 
 
 */
 
 //--------------------------------------------------------------------
 /*
-	buttons on headers
+  buttons on headers
 */
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
@@ -120,8 +123,8 @@ $('#password-form').on('submit',function(e){
 		cache: false,
 		processData: false,
 		/*success: function(e){
-			alert(e);
-		}*/
+		  alert(e);
+		  }*/
 	})
 	document.getElementById('password-form').reset();
 	//alert('done');
@@ -131,77 +134,94 @@ $('#password-form').on('submit',function(e){
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 /*
-	Buttons on right click menu
+  Buttons on right click menu
 */
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
-	var backupName;
-	$(document).on('click','.rename-button',function(e){
+var backupName;
+$(document).on('click','.rename-button',function(e){
 
-		backupName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
-		$('#browser').children().eq(rightIndex).children('.browser-files-file').text('');
-		$('#browser').children().eq(rightIndex).removeClass('browser-clicked');
+	backupName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
+	$('#browser').children().eq(rightIndex).children('.browser-files-file').text('');
+	$('#browser').children().eq(rightIndex).removeClass('browser-clicked');
 
-		var renameForm = '';
-		renameForm +='<form id = "rename-text col-md-12 col-sm-12 col-xs-12">';
-		renameForm += 	'<input id="rename-text-input" type="text" placeholder="New name for file...">';
-		renameForm += 	'</input>';
-		renameForm += 	'<input id="rename-text-submit" type="submit">';
-		renameForm += 	'</input>';
-		renameForm += '</form>';
-		$('#browser').children().eq(rightIndex).children('.browser-files-file').append(renameForm);
-		$('#rename-text').css({
-			display: 'block',
-		});
+	var renameForm = '';
+	renameForm +='<form id = "rename-text col-md-12 col-sm-12 col-xs-12">';
+	renameForm += 	'<input id="rename-text-input" type="text" placeholder="New name for file...">';
+	renameForm += 	'</input>';
+	renameForm += 	'<input id="rename-text-submit" type="submit">';
+	renameForm += 	'</input>';
+	renameForm += '</form>';
+	$('#browser').children().eq(rightIndex).children('.browser-files-file').append(renameForm);
+	$('#rename-text').css({
+		display: 'block',
+	});
 
-		$('#rename-text-input').focus();
+	$('#rename-text-input').focus();
+})
+
+$(document).on('click','.convert-video-button',function(e){
+    fileName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
+   
+
+    $.ajax({
+	    type: 'POST',
+	    url: '/convert-video',
+        data: fileName,
+	    success: function(data){
+	        alert(data);
+	    }
 	})
 
-	$(document).on('keydown','#rename-text-input',function(e){
-		var rex;
-		switch(e.keyCode){
-			//when hit enter
-			case 13:
-				renamefile();
-				$('#browser').empty();
-				
-				getFileList('browser-files-list',viewOption);
-				break;
-			case 27:
-				$('#browser').children().eq(rightIndex).children('.browser-files-file').empty();
-				$('#browser').children().eq(rightIndex).children('.browser-files-file').text(backupName);
-				break;
-			default:
-				rex = new RegExp($(this).val(), 'i');
-				break;
-		}
 
-	})
-	$(document).on('keydown','#newFolder-text-input',function(e){
-		var rex;
-		switch(e.keyCode){
-			//when hit enter
-			case 13:
-				createNewFolder($(this).val());
-				$('#browser').empty();
-				getFileList('browser-files-list',viewOption);
-				break;
-			case 27:
-				$('#browser').empty();
-				getFileList('browser-files-list',viewOption);
-				break;
-			default:
-				rex = new RegExp($(this).val(), 'i');
-				break;
-		}
+    
+})
+  
+$(document).on('keydown','#rename-text-input',function(e){
+	var rex;
+	switch(e.keyCode){
+		//when hit enter
+	case 13:
+		renamefile();
+		$('#browser').empty();
+		
+		getFileList('browser-files-list',viewOption);
+		break;
+	case 27:
+		$('#browser').children().eq(rightIndex).children('.browser-files-file').empty();
+		$('#browser').children().eq(rightIndex).children('.browser-files-file').text(backupName);
+		break;
+	default:
+		rex = new RegExp($(this).val(), 'i');
+		break;
+	}
 
-	})
+})
+$(document).on('keydown','#newFolder-text-input',function(e){
+	var rex;
+	switch(e.keyCode){
+		//when hit enter
+	case 13:
+		createNewFolder($(this).val());
+		$('#browser').empty();
+		getFileList('browser-files-list',viewOption);
+		break;
+	case 27:
+		$('#browser').empty();
+		getFileList('browser-files-list',viewOption);
+		break;
+	default:
+		rex = new RegExp($(this).val(), 'i');
+		break;
+	}
+
+})
 
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 /*
-	Buttons for visualization
+  Buttons for visualization
 */
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
@@ -209,12 +229,12 @@ $('#password-form').on('submit',function(e){
 $(document).on('click','.visualize-button',function(e){
 	alert("visual!")
 	/*$.ajax({
-		type: 'GET',
-		url: '/viewer',
-		success: function(data){
-			$('body').html(data);
-		}
-	})*/
+	  type: 'GET',
+	  url: '/viewer',
+	  success: function(data){
+	  $('body').html(data);
+	  }
+	  })*/
 
 })
 $(document).on('click','.sparse-button',function(e){
@@ -268,7 +288,7 @@ $(document).on('click','.dense-button',function(e){
 })
 
 $(document).on('click','.process-button',function(e){
-//alert("sparse!");
+    //alert("sparse!");
 
 
 	var sparseFinished = false;

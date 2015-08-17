@@ -7,29 +7,36 @@
 	
 		javascript
 		functions 		: 	getTableColumns(table,tabletype)
-                                 retrieves DB form for table input and sets them accordingly for modal
+                                 retrieves DB form for table input and sets them accordingly for create table modal
 
                             getTableViews(table)
                                  retrieves DB form for table input in tableView modal
 
                             dbParameterFormatter(table, columnData, tabletype)
-                                 
+                                 formats DB accordingly to fit in create table modal
                             
-                            function(params)
-                                 --explanation
+                            **inputforms(params)
+                                 creates html formats for inputs accordingly
 
-                            function(params)
-                                 --explanation
+                            tableDropdown()
+                                 creates a table dropdown menu for html
 
-                            function(params)
-                                 --explanation
+                            loadViewTableValues()
+                                 loads current table sql values to forms loaded from getTableViews
 
-                            function(params)
-                                 --explanation
-		
-		
+                                 		
 		Jquery 
-		Scripts 		: 	
+		Scripts 		: 	$(document).on('change', '#tableRowList', function(){}
+                                 on change event for tableRowList to request ajax form by calling loadViewTableValues
+
+                            $(document).on('click', '.close-button' ,function(e){}
+                                 on close, erase all modal input forms 
+
+                            $('.table-submit-button').on('click', function(){}
+                                 submit button for create table modal
+
+                            $('.change-submit-button').on('click', function(){}
+                                 submit button for tableView Modal
 */
 
 
@@ -42,7 +49,7 @@ function getTableColumns(table){
 	    success: function(data){
 		    if(data == "failure")
 		    {
-
+                alert("error loading tables...")
 		    }
 		    else
             {
@@ -62,7 +69,7 @@ function getTableViews(table){
 		    if(data == "failure")
 		    {
 			    //when querying has no result
-                //			alert("fail!")
+                alert("error loading tables...")
 		    }
 		    else{
                 var tableView = JSON.parse(data)
@@ -285,6 +292,8 @@ function foreignKeyInputForm(columnName,foreignKeyReference, tabletype){
 		    else{
                 var foreignTable = JSON.parse(data);
                 var foreignTableDropDown = '';
+
+                //creates dropdown menu based on JSON input recieved from get-db ajax call
                 foreignTableDropDown += '<select id="foreignTableDropDown" name="'+ columnName +'"class = foreignDD-'+foreignTableName+'>'
                 if(Object.keys(foreignTable).length != 0){
                     for (var rows in foreignTable)

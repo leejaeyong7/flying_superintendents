@@ -135,7 +135,7 @@ class Schedule(db.Model):
     projectID = db.Column(db.Integer, db.ForeignKey('project.id'))
     project = db.relationship('Project')
 
-    def __init__(self, projectID, task):
+    def __init__(self, projectID):
         self.projectID = projectID
         db.session.commit()
 
