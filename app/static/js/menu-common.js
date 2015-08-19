@@ -87,7 +87,6 @@ function getFileList(classname, vO){
 	browserList = '';
 	browserHeaderSet(vO);
 	$.getJSON($SCRIPT_ROOT + '/get-files?sort=filename&order=asc', function(json){
-
 		$.each(json, function()
 		{
 			browserList += parseFileData(this.filetype,this.filename,this.filedate,classname,vO);
@@ -128,6 +127,8 @@ function upload(i, file){
 			var string = parseFileData(e.filetype,e.filename,e.status,'upload-table-list',0);
 			parseViewMode('.upload-table-list',0);
 			$('.upload-table').append(string);
+            //$('#browser').empty();
+            //getFileList('browser-files-list',viewOption) ;
 		}
 	});
 }

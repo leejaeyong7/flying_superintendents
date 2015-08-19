@@ -145,7 +145,7 @@ $(document).on('mousedown','li.browser-files-list',function(e){
 			filesystem_drawBetweenWith('browser-clicked browser-focused','shift');
 		}
 		//if on ctrl or command click
-		else if(e.metaKey){
+		else if(e.metaKey || e.ctrlKey){
 			firstIndex = $(this).index();
 			if($(this).hasClass('browser-clicked')){
 				$(this).removeClass('browser-clicked browser-focused');
@@ -236,7 +236,7 @@ $(document).on('mouseup','li.browser-files-list',function(e){
 	$('.browser-focused').removeClass('browser-focused');
 	if(e.button== 0){
 		//if meta or ctrl key is clicked
-		if(e.metaKey){
+		if(e.metaKey || e.ctrlKey){
 			if(!mouseleftInFilebrowser){
 				lastIndex = $(this).index();
 			}
@@ -254,7 +254,7 @@ $(document).on('mouseup','li.browser-files-list',function(e){
 			if(firstIndex == lastIndex){
 				//erase all except this one
 				var clicked = $(this).index();
-				if ((!mouseleftInFilebrowser) && (!e.metaKey) && (!e.shiftKey)){
+				if ((!mouseleftInFilebrowser) && (!e.metaKey && !e.ctrlKey) && (!e.shiftKey)){
 					$(this).toggleClass("browser-clicked");
 					filesystem_eraseAllClickedExcept(clicked);
 				}

@@ -17,6 +17,34 @@ import files
 import shutil
 import time
 import cv2
+import redis
+
+
+
+
+#---------------------------------------------------------------------
+#
+#   
+#   Redis server related
+#
+#---------------------------------------------------------------------
+
+red = redis.StrictRedis()
+
+def event_stream():
+    pubsub = red.pubsub()
+    pubsub.subscribe("updates")
+    for message in pubsub.listen():
+        print message
+        yield 'data: %s\n\n' % message['data']
+
+@app.route('/stream')
+@login_required
+def stream():
+    return Response(event_stream(),mimetype="text/event-stream")
+        
+
+
 
 #---------------------------------------------------------------------
 #
@@ -384,16 +412,18 @@ def get_files():
 def upload():
     if current_user.is_authenticated():
         if request.method=='POST':
-            file = request.files.get('upload-file')
+            
+            filelist = request.files.getlist('fileData')
             sub_dir = pathClass.subPath()
             curr_dir = os.path.join(current_user.getFileDir(),sub_dir)
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(curr_dir, file.filename))
-                name, ext = os.path.splitext(file.filename)
-                filetypes = files.fileParser(ext)
-                return jsonify({"filename": file.filename, "filetype": filetypes, "status":'<i class="glyphicon glyphicon-ok"></i>'})
-    else:
+            for file in filelist:
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(curr_dir, file.filename))
+                    name, ext = os.path.splitext(file.filename)
+                    filetypes = files.fileParser(ext)
+            return "success"
+        else:
 	     return redirect(url_for('index'))       
 	    
 @app.route('/change-directory', methods = ['POST'])
@@ -403,7 +433,7 @@ def change_directory():
         newPath = request.form.get('newpath')
         if newPath == '..':
             sub_dir = pathClass.subPath()
-            print sub_dir
+            #print sub_dir
             new_sub_dir = os.path.dirname(os.path.dirname(sub_dir))
             if new_sub_dir != '':
                 new_sub_dir += '/'
@@ -413,7 +443,7 @@ def change_directory():
             return new_sub_dir
         else:
             sub_dir = pathClass.subPath()
-            print sub_dir
+            #print sub_dir
             sub_dir +=(newPath+'/')
             pathClass.addPath(sub_dir)
             return sub_dir
@@ -645,10 +675,36 @@ def update_db():
 @app.route('/convert-video', methods = ['POST'])
 @login_required
 def convert_video():
-    filename =  request.get_data()
-    sub_dir = pathClass.subPath()
-    print os.path.join(current_user.getFileDir(),sub_dir,filename)
-    return "Success"
+    def generate():
+        filename =  request.get_data()
+        sub_dir = pathClass.subPath()
+        videoFile = cv2.VideoCapture( os.path.join(current_user.getFileDir(),sub_dir,filename))
+        newFolderName = os.path.splitext(filename)[0]
+        newFolderDir = ""
+        i = 1
+        #check whether path exists and create path based upon video file name
+        if (os.path.exists(os.path.join(current_user.getFileDir(),sub_dir,newFolderName))):
+            while (os.path.exists(os.path.join(current_user.getFileDir(),sub_dir,newFolderName+ " " + str(i)))):
+                i = i + 1
+            os.makedirs(os.path.join(current_user.getFileDir(), sub_dir, newFolderName+ " "+str(i)))
+            newFolderDir = os.path.join(current_user.getFileDir(), sub_dir, newFolderName+ " "+ str(i))
+        else:
+            os.makedirs(os.path.join(current_user.getFileDir(), sub_dir, newFolderName ))
+            newFolderDir = os.path.join(current_user.getFileDir(), sub_dir, newFolderName )
+        count = 0
+        print newFolderDir  
+        while True:
+            f, img = videoFile.read()
+            cv2.imwrite(os.path.join(newFolderDir, "image_"+str(count)+".jpg"), img)
+            count = count + 1  
+            #print "success on " + str(count)
+            totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
+            red.publish("updates", count/totalCount)
+            print f
+            if not f:
+                break;
+        return "success"
+    return Response(generate(), mimetype = 'text/event-stream')
 
 @app.route('/get-imgs', methods = ['GET'])
 @login_required

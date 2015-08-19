@@ -48,20 +48,21 @@
 							$(document).on('click','.process-button',function(e)..
 								 handles process button
 
-                            $(document).on('click','.convert-video-button',function(e)..
-                                 converts from video to image by creating new folder and putting in images converted from video 
+                        $(document).on('click','.convert-video-button',function(e)..
+                            converts from video to image by creating new folder and putting in images converted from video 
                                  
 
 
 */
 
-//--------------------------------------------------------------------
-/*
-  buttons on headers
-*/
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//
+// buttons on headers
+//
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
 
 $(document).on('click','.delete-button',function(e){
 	deleteFiles();
@@ -163,17 +164,34 @@ $(document).on('click','.rename-button',function(e){
 
 $(document).on('click','.convert-video-button',function(e){
     fileName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
-   
-
+    var source = new EventSource("/stream");
+    var i = 0;
+    source.onmessage = function(event){
+        $('#convert-process').width(parseInt(parseFloat(event.data)*100)+'%')
+        console.log(parseInt(parseFloat(event.data)*100)+'%')
+    }
     $.ajax({
 	    type: 'POST',
 	    url: '/convert-video',
         data: fileName,
+        beforeSend: function(data){
+            $('#convert-process').width('0%')
+            $('#convertProgressModal').modal('show')
+        },
+        error: function(data){
+            $('#browser').empty();
+ 		    getFileList('browser-files-list',viewOption);
+            source.close();
+            $('#convertProgressModal').modal('hide')
+        },
 	    success: function(data){
-	        alert(data);
+            $('#browser').empty();
+ 		    getFileList('browser-files-list',viewOption);
+            source.close();
+            $('#convert-process').width('100%')
+            $('#convertProgressModal').modal('hide')
 	    }
 	})
-
 
     
 })

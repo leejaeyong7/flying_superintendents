@@ -194,20 +194,76 @@ function parseViewMode(class1, vO){
 	upload button submit
 */
 $('#upload-form').on('submit', function(e){
-	    e.preventDefault();
-	    $('#upload-close').prop('disabled',true);
-		$('.upload-table').empty();
+    e.preventDefault();
+    $('#upload-close').prop('disabled',true);
+    $('.upload-table').empty();
+    
+    
+    var file = document.getElementById('file_input').files;
+    
+    var fileForm = new FormData({});
+    for (fid in file)
+    {
+        if(file.hasOwnProperty(fid))
+        {
+            fileForm.append('fileData', file[fid])
+        }
+    }
+    console.log(file.length)
+    $.ajax({
+        url: '/upload',  //Server script to process data
+        type: 'POST',
+        xhr: function() {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // Check if upload property exists
+                myXhr.upload.addEventListener('progress',function(e){
+                    // For handling the progress of the upload
+                     $('#upload-progress').width( (count / (file.length) * 100)+"%")
+                    count++;
+                }, false);
 
-	    var file = document.getElementById('file_input').files;
-	    $.each(file,function(i,fileid){
-	    	upload(i,fileid);
-	    });
+            }
+            return myXhr;
+        },
+        //Ajax events
+        beforeSend: function(){
+            var inputForm = ''
+            $('.progress-place').empty()
+            count = 0;
+            inputForm += '<div class="progress">'
+            inputForm += '<div  id ="upload-progress" class="progress-bar progress-bar-success progress-sparse" style="width: 0%"></div>'
+            inputForm += '</div>'
+            $('#uploadModal').find('.progress-place').append(inputForm)
+        },
+        success: function(data){
+            /*
+             */
+            $('#upload-progress').width( "100%")
+            $('#upload-close').prop('disabled',false);
+	        document.getElementById('upload-form').reset();
 
-	    $('#upload-close').prop('disabled',false);
-	    document.getElementById('upload-form').reset();
+	        $('#browser').empty();
+	        getFileList('browser-files-list',viewOption);
+            
+        },
+        error: function(data){
+            $('#upload-close').prop('disabled',false);
+	        document.getElementById('upload-form').reset();
 
-		$('#browser').empty();
-		getFileList('browser-files-list',viewOption);
+	        $('#browser').empty();
+	        getFileList('browser-files-list',viewOption);
+        },
+        // Form data
+        data: fileForm,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+  
+    
+    
+
 });
 
 

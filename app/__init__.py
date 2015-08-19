@@ -1,4 +1,4 @@
-
+import redis
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -11,6 +11,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:5000/point_clou
 app.config['LOGIN_DISABLED'] = False
 app.config['TESTING'] = False
 app.secret_key = 'test'
+red = redis.StrictRedis()
+
 from database import db
 #db.init_app(app)
 db.create_all()

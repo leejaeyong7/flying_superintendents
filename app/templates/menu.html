@@ -160,45 +160,49 @@
 	  	
 	  	<!-- upload modal -->
 		<div class="modal fade" id="uploadModal"  role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<div class="row">
-							<div class="col-md-11">
-								<h4 class="modal-title" id="file-modal">File/Folder Upload</h4>
-							</div>
-							<div class="col-md-1">
-								<button id="upload-close" type="button" class="close-button" data-dismiss="modal" aria-label="Close">
-									<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="modal-body">
-						<h4>Select files from your computer</h4>
-						<form method="post" enctype="multipart/form-data" id="upload-form">
-							<div class="form-inline row">
-								<div class="col-md-9 col-sm-9 col-xs-9">
-									<div class="form-group" >
-										<input type="file" class="files" name="file_id" id="file_input" multiple>
-									</div>
-								</div>
-								<div class="col-md-3 col-sm-3 col-xs-3" style="padding-right:3px">
-									<button type="submit" class="btn btn-sm btn-primary" id="upload-submit">Upload files</button>
-								</div>
-							</div>
-						</form>
-						<h4>Allowed Extension: </h4>
-						<div class="allowed-extension"> 
-						</div>
-						<div class="divider" style="margin-bottom: 40px; margin-left: 20px">
-						</div>
-						<div class="upload-table" style="overflow-y: auto">
-						</div>
-					</div>
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<div class="row">
+				  <div class="col-md-11">
+					<h4 class="modal-title" id="file-modal">File/Folder Upload</h4>
+				  </div>
+				  <div class="col-md-1">
+					<button id="upload-close" type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+					  <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+					</button>
+				  </div>
 				</div>
+			  </div>
+			  <div class="modal-body">
+				<h4>Select files from your computer</h4>
+				<!--form method="post" enctype="multipart/form-data" id="upload-form"-->
+                <form enctype="multipart/form-data" id ="upload-form">
+                  <div class="form-inline row">
+                    <div class="col-md-9 col-sm-9 col-xs-9">
+                      <div class="form-group" >
+                        <input type="file" class="files" name="file_id" id="file_input" multiple></input>
+                        
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-3 col-xs-3" style="padding-right:3px">
+                      <button type="submit" class="btn btn-sm btn-primary" id="upload-submit">Upload files</button>
+                    </div>
+                  </div>
+                </form>
+                <h4>Allowed Extension: </h4>
+                <div class="allowed-extension"> 
+                </div>
+                <div class="divider" style="margin-bottom: 40px; margin-left: 20px">
+                </div>
+                <div class="progress-place">
+				  
+                </div>
+			  </div>
 			</div>
-		</div>
+		  </div>
+        </div>
 
 		<div class="modal fade" id="imageModal"  role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -329,6 +333,32 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Help modal -->
+		<div class="modal fade" id="convertProgressModal"  role="dialog" aria-labelledby="convertProgressModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-12">
+								<h4 class="modal-title" id="myModalLabel">Video Conversion Progress</h4>
+							</div>
+							
+						</div>
+					</div>
+					<div class="modal-body">
+                      <div class="convert-progress-place">
+                        <div class="progress">
+                          <div id ="convert-process" class="progress-bar progress-bar-warning progress-process">
+                          </div>
+                        </div>
+                      </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+       
 	<!--<div aria-hidden="true"><img id="imagekk" class="fade" src="get_imgs?type=1"/></div>-->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
