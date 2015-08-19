@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gantt Chart</title>
+	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/gantt_chart.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="js/gantt_chart.js"></script>
+</head>
+
+<body>
+	<div id="container-fluid">
+	<div id="wrapper">	  		
+	
+	<!-- Load Project -->
+	<p><a href="#loadProject" data-toggle="modal" class="btn btn-primary">Load Project(s)</a></p>
+
+	<!-- Project info -->
+	<div class="jumbotron">
+		<p id="startWeek">2015-05-11</p>
+		<h1>&nbsp; &nbsp; &nbsp; PROJECT NAME</h1>
+		<p id="endWeek">2015-11-12</p>
+	</div>
+
+	<div id="theTable" >
+		<!-- nav bars for display of day/week/month/quarter -->
+	   <ul class="nav nav-tabs">
+	      <li><a href="#DAY" data-toggle="tab"> DAY</a></li>
+	      <li><a href="#WEEK" data-toggle="tab"> WEEK</a></li>
+	      <li><a href="#MONTH" data-toggle="tab"> MONTH</a></li>
+	      <li><a href="#QUARTER" data-toggle="tab"> QUARTER</a></li>
+	   </ul>
+		<div class="table-responsive" id="left_portion">
+		  	<!-- left table with task info -->
+		  	<table class="table table-hover" id="left_table">
+			      <tr id="table_row_with_heads">
+			    		<td style="width: 15%">#(ID?)</td>
+			    		<td style="width: 25%">Task Name</td>
+			    		<td style="width: 25%">Start Date</td>
+			    		<td style="width: 25%">End Date</td>
+			    		<td style="width: 10%">Details</td>
+			    	</tr>	
+		  	</table><!-- left table -->
+		</div><!-- left table responsive div -->
+
+		<!-- div of right table which has progress bars -->
+		<div class="right_portion">
+
+		   <div class="tab-content">
+		      <!-- DAY -->
+		      <div class="tab-pane fade active in" id="DAY">
+				  	<div class="table-responsive">
+					  	<table class="table table-hover" id="day_table">
+					  	</table>
+				  	</div>
+		      </div>
+		      <!-- WEEK -->
+		      <div class="tab-pane fade" id="WEEK">
+				  	<div class="table-responsive">
+					  	<table class="table table-hover" id="week_table">
+					  	</table>
+				  	</div>
+		      </div>
+		      <!-- MONTH -->
+		      <div class="tab-pane fade" id="MONTH">
+				  	<div class="table-responsive">
+					  	<table class="table table-hover" id="month_table">
+					  	</table>
+				  	</div>
+		      </div>
+		      <!-- QUARTER -->
+		      <div class="tab-pane fade" id="QUARTER">
+				  	<div class="table-responsive">
+					  	<table class="table table-hover" id="quarter_table">
+					  	</table>
+				  	</div>
+		      </div>
+		   </div><!-- tab content -->
+	   </div><!-- div for right portion -->
+	</div>
+
+
+	<!-- addTask modal -->
+       <div id="addTask" class="modal fade" tabindex="-1">
+       	<div class="modal-dialog">
+	<div class="modal-content">
+	      <div class="modal-header">
+                        <button type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal"></button>
+                        <h3 class="modal-title">Add Task</h3>
+                    </div>
+                    <div class="modal-body">
+		<p>
+		    	Task Name: <input type="text" id="taskName" name="Task"><br>
+			Start Date: <input type="date" id="startDate" value="2015-07-11"><br>
+			End Date: <input type="date" id="endDate" value="2015-08-11"><br>
+			Progress: <input type="range" id="progress" value="40"><br>
+			<button class="btn btn-default" onclick="addTask()">Submit</button>
+		</p>
+	       </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+	</div>
+       	</div>
+       </div>
+
+       <!-- loadProject modal -->
+       	<div id="loadProject" class="modal fade" tabindex="-1">
+       		<div class="modal-dialog">	
+       		<div class="modal-content">
+       			<div class="modal-header">
+       				<button type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal"></button>
+       				<h3 class="modal-title">Load Project</h3>
+       			</div>	
+       			<div class="modal-body">
+       				<p>
+       					Please enter project ID: <input type="text" id="projectID" name="Project"><br>
+       					<button class="btn btn-default" onclick="loadProject()">Submit</button>
+       				</p>
+       			</div>
+   			<div class="modal-footer">
+		                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+		           </div>
+       		</div>
+       		</div>
+       	</div>
+
+	<!-- task details modal -->
+       	<div class="modal fade" tabindex="-1">
+       		<div class="modal-dialog">	
+       		<div class="modal-content">
+       			<div class="modal-header">
+       				<button type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal"></button>
+       				<h3 class="modal-title">Task Details</h3>
+       			</div>	
+       			<div class="modal-body">
+       				<!-- will be filled with task details -->
+       			</div>
+   			<div class="modal-footer">
+		                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+		           </div>
+       		</div>
+       		</div>
+       	</div>	
+
+	</div><!-- wrapper -->
+	</div><!-- container-->
+</body>
+</html>

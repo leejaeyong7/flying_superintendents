@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gantt Chart</title>
+	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/gantt_chart.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="js/gantt_chart.js"></script>
+</head>
+
+<body>
+	<div id="container-fluid">
+	<div id="wrapper">	  		
+	
+	<!-- Load Project -->
+	<p><a href="#loadProject" data-toggle="modal" class="btn btn-primary">Load Project(s)</a></p>
+
+    <!-- loadProject modal -->
+   	<div id="loadProject" class="modal fade" tabindex="-1">
+   		<div class="modal-dialog">	
+	   		<div class="modal-content">
+	   			<div class="modal-header">
+	   				<button type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal"></button>
+	   				<h3 class="modal-title">Load Project</h3>
+	   			</div><!-- modal-header -->	
+	   			<div class="modal-body">
+	   				<p>
+	   					Please enter project ID: <input type="text" id="projectID" name="Project"><br>
+	   					<button class="btn btn-default" onclick="loadProject()">Submit</button>
+	   				</p>
+	   			</div><!-- modal-body -->
+				<div class="modal-footer">
+			                     <button class="btn btn-primary" data-dismiss="modal">Close</button>
+			   </div><!-- modal-footer -->
+	   		</div><!-- modal-content -->
+   		</div><!-- modal-dialog -->
+   	</div><!-- loadProject modal -->
+
+	</div><!-- wrapper -->
+	</div><!-- container-->
+</body>
+</html>

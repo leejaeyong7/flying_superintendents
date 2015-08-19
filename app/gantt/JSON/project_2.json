@@ -1,0 +1,14 @@
+[
+  {
+   "ID":2,
+   "name":"project2",
+   "startDate":"2015-01-01",
+   "endDate":"2015-12-12",
+  	"userID":"hiii123",
+  	"projectAddress":"Lorem ipsum dolor sit amet, em ipsum dolor sit amet",
+  	"projectFaxNumber":2173331000,
+  	"projectPhoneNumber":2173331111,
+  	"responsibleIndividual":"John Doe",
+  	"LinkToProjectInfor":"http://example.com/"
+  }
+]
