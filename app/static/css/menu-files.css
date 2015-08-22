@@ -65,10 +65,10 @@
 	padding-left: 3px;
 }
 .browser-body{
-	height: 550px;
+	max-height: 550px;
 	list-style-position:inside; 
 	position: relative;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 li.browser-files {

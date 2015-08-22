@@ -59,73 +59,75 @@ function progressModalData(rI){ // rI stands for right Index
 
 	//create a test form and sequentially check whether vsfm/pmvs/potree has been processed
 	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rI).find('.browser-files-name-name').text());
+	testForm.append('folder_id' , $('#browser').children().eq(rI).find('.browser-files-file').text());
 	$.ajax({
-			type: 'POST',
-			url: '/done-potree',
-			data: testForm,
-			contentType: false,
-			cache: false,
-			processData: false
-	}).done(function(data){
-			if(data == "true"){
-				$('.sparse-button').prop("disabled",false);
-				$('.dense-button').prop("disabled",false);
-				$('.process-button').prop("disabled",false);
-				$('.visualize-button').prop("disabled",false);
-				document.getElementById('progress-sparse').style.width = '100' + '%';
-				document.getElementById('progress-dense').style.width = '100' + '%';
-				document.getElementById('progress-process').style.width = '100' + '%';
+        type: 'POST',
+        url: '/done-potree',
+        data: testForm,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(data){
+            if(data == "true"){
+                $('.sparse-button').prop("disabled",false);
+                $('.dense-button').prop("disabled",false);
+                $('.process-button').prop("disabled",false);
+                $('.visualize-button').prop("disabled",false);
+                document.getElementById('progress-sparse').style.width = '100' + '%';
+                document.getElementById('progress-dense').style.width = '100' + '%';
+                document.getElementById('progress-process').style.width = '100' + '%';
 			}
 			else{
-				$.ajax({
-					type: 'POST',
-					url: '/done-pmvs',
-					data: testForm,
-					contentType: false,
-					cache: false,
-					processData: false
-				}).done(function(data){
-					if(data == "true"){
-						$('.sparse-button').prop("disabled",false);
-						$('.dense-button').prop("disabled",false);
-						$('.process-button').prop("disabled",false);
-						$('.visualize-button').prop("disabled",true);
-						document.getElementById('progress-sparse').style.width = '100' + '%';
-						document.getElementById('progress-dense').style.width = '100' + '%';
-						document.getElementById('progress-process').style.width = '0' + '%';
-					}
-					else{
-						$.ajax({
-							type: 'POST',
-							url: '/done-vsfm',
-							data: testForm,
-							contentType: false,
-							cache: false,
-							processData: false
-						}).done(function(data){
-							if(data == "true"){
-								$('.sparse-button').prop("disabled",false);
-								$('.dense-button').prop("disabled",false);
-								$('.process-button').prop("disabled",true);
-								$('.visualize-button').prop("disabled",true);
-								document.getElementById('progress-sparse').style.width = '100' + '%';
-								document.getElementById('progress-dense').style.width = '0' + '%';
-								document.getElementById('progress-process').style.width = '0' + '%';
-							}
-							else{
-								$('.sparse-button').prop("disabled",false);
-								$('.dense-button').prop("disabled",true);
-								$('.process-button').prop("disabled",true);
-								$('.visualize-button').prop("disabled",true);
-								document.getElementById('progress-sparse').style.width = '0' + '%';
-								document.getElementById('progress-dense').style.width = '0' + '%';
-								document.getElementById('progress-process').style.width = '0' + '%';
-							}
-						})
-					}
-				})
-			}
-
-	})	
+                $.ajax({
+                    type: 'POST',
+                    url: '/done-pmvs',
+                    data: testForm,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(data){
+                        if(data == "true"){
+                            $('.sparse-button').prop("disabled",false);
+                            $('.dense-button').prop("disabled",false);
+                            $('.process-button').prop("disabled",false);
+                            $('.visualize-button').prop("disabled",true);
+                            document.getElementById('progress-sparse').style.width = '100' + '%';
+                            document.getElementById('progress-dense').style.width = '100' + '%';
+                            document.getElementById('progress-process').style.width = '0' + '%';
+                        }
+                        else{
+                            $.ajax({
+                                type: 'POST',
+                                url: '/done-vsfm',
+                                data: testForm,
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success:function(data){
+                                    if(data == "true"){
+                                        $('.sparse-button').prop("disabled",false);
+                                        $('.dense-button').prop("disabled",false);
+                                        $('.process-button').prop("disabled",true);
+                                        $('.visualize-button').prop("disabled",true);
+                                        document.getElementById('progress-sparse').style.width = '100' + '%';
+                                        document.getElementById('progress-dense').style.width = '0' + '%';
+                                        document.getElementById('progress-process').style.width = '0' + '%';
+                                    }
+                                    else{
+                                        $('.sparse-button').prop("disabled",false);
+                                        $('.dense-button').prop("disabled",true);
+                                        $('.process-button').prop("disabled",true);
+                                        $('.visualize-button').prop("disabled",true);
+                                        document.getElementById('progress-sparse').style.width = '0' + '%';
+                                        document.getElementById('progress-dense').style.width = '0' + '%';
+                                        document.getElementById('progress-process').style.width = '0' + '%';
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
+    })	
 }

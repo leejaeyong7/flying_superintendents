@@ -18,6 +18,7 @@ import shutil
 import time
 import cv2
 import redis
+import math
 
 
 
@@ -695,14 +696,14 @@ def convert_video():
         print newFolderDir  
         while True:
             f, img = videoFile.read()
-            cv2.imwrite(os.path.join(newFolderDir, "image_"+str(count)+".jpg"), img)
-            count = count + 1  
-            #print "success on " + str(count)
-            totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
-            red.publish("updates", count/totalCount)
-            print f
+            
             if not f:
                 break;
+            totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
+            totalZeros = int(math.floor(math.log(totalCount,10)))
+            cv2.imwrite(os.path.join(newFolderDir, "image_"+(str(count).zfill(totalZeros+1))+".jpg"), img)
+            count = count + 1  
+            red.publish("updates", count/totalCount)
         return "success"
     return Response(generate(), mimetype = 'text/event-stream')
 

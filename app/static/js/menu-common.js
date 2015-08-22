@@ -86,7 +86,8 @@ var viewOption = 0;
 function getFileList(classname, vO){
 	browserList = '';
 	browserHeaderSet(vO);
-	$.getJSON($SCRIPT_ROOT + '/get-files?sort=filename&order=asc', function(json){
+	$.getJSON($SCRIPT_ROOT + '/get-files?sort=filename&order=asc', function(json2){
+        var json = json2.sort(predicatBy("filetype")).sort(predicatBy("filename"))
 		$.each(json, function()
 		{
 			browserList += parseFileData(this.filetype,this.filename,this.filedate,classname,vO);
@@ -101,6 +102,16 @@ function getFileList(classname, vO){
 	});
 }
 
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
 
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
@@ -110,28 +121,7 @@ function getFileList(classname, vO){
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
-/*
-	uploads data given file
-*/
-function upload(i, file){
-	var form_data = new FormData();
-	form_data.append('upload-file',file);
-	$.ajax({
-		type: 'POST',
-		url: '/upload',
-		data: form_data,
-		contentType: false,
-		cache: false,
-		processData: false,
-		success: function(e){
-			var string = parseFileData(e.filetype,e.filename,e.status,'upload-table-list',0);
-			parseViewMode('.upload-table-list',0);
-			$('.upload-table').append(string);
-            //$('#browser').empty();
-            //getFileList('browser-files-list',viewOption) ;
-		}
-	});
-}
+
 
 function deleteFiles(){
 	if(confirm('delete all clicked files and folders?')){
@@ -141,7 +131,10 @@ function deleteFiles(){
 		$('.browser-clicked').each(function(i){
 			if($(this).hasClass('filetype-Folder'))
 			{
-				deleteFolders.append('folder_name',$(this).children('.browser-files-file').text());
+                if($(this).children('.browser-files-file').text() != "..")
+                {
+				    deleteFolders.append('folder_name',$(this).children('.browser-files-file').text());
+                }
 			}
 			else
 			{

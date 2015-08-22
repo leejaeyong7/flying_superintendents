@@ -257,10 +257,11 @@ $(document).on('click','.visualize-button',function(e){
 })
 $(document).on('click','.sparse-button',function(e){
 	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-name-name').text());
+	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
 
 	$('.close-button').prop("disabled",true);
 	var sparseFinished = false;
+    console.log(testForm)
 	$.ajax({
 		type: 'POST',
 		url: '/run-vsfm',
@@ -268,40 +269,50 @@ $(document).on('click','.sparse-button',function(e){
 		contentType: false,
 		cache: false,
 		processData: false,
-	}).done(function(data){
-		if(data == '100'){
-			$('.close-button').prop("disabled",false);
-			progressModalData(rightIndex);
-			$('#browser').empty();
-			sparseFinished = true;
-			getFileList('browser-files-list',viewOption);
-		}
-		document.getElementById('progress-sparse').style.width = data + '%';
+        error: function(){
+            //error handling func
+            alert("error!")
+        },
+        success: function(data){
+		    if(data == '100'){
+			    $('.close-button').prop("disabled",false);
+			    progressModalData(rightIndex);
+			    $('#browser').empty();
+			    sparseFinished = true;
+			    getFileList('browser-files-list',viewOption);
+		    }
+		    document.getElementById('progress-sparse').style.width = data + '%';
 
+	    }
 	})
 })
 
 $(document).on('click','.dense-button',function(e){
 	var sparseFinished = false;
 	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-name-name').text());
+	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
 	
 	$.ajax({
-		type: 'POST',
-		url: '/run-pmvs',
-		data: testForm,
-		contentType: false,
-		cache: false,
-		processData: false,
-	}).done(function(data){
-		if(data == '100'){
-			$('.close-button').prop("disabled",false);
-			progressModalData(rightIndex);
-			$('#browser').empty();
-			getFileList('browser-files-list',viewOption);
-		}
-		document.getElementById('progress-dense').style.width = data + '%';
+        type: 'POST',
+        url: '/run-pmvs',
+        data: testForm,
+        contentType: false,
+        cache: false,
+        processData: false,
+        error: function(){
+            //error handling func
+            alert("error!")
+        },
+        success:function(data){
+		    if(data == '100'){
+			    $('.close-button').prop("disabled",false);
+			    progressModalData(rightIndex);
+			    $('#browser').empty();
+			    getFileList('browser-files-list',viewOption);
+		    }
+		    document.getElementById('progress-dense').style.width = data + '%';
 
+	    }
 	})
 })
 
@@ -312,7 +323,7 @@ $(document).on('click','.process-button',function(e){
 	var sparseFinished = false;
 	
 	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-name-name').text());
+	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
 	
 	$.ajax({
 		type: 'POST',
@@ -321,15 +332,20 @@ $(document).on('click','.process-button',function(e){
 		contentType: false,
 		cache: false,
 		processData: false,
-	}).done(function(data){
-		if(data == '100'){
-			$('.close-button').prop("disabled",false);
-			progressModalData(rightIndex);
-			$('#browser').empty();
-			getFileList('browser-files-list',viewOption);
-		}
-		document.getElementById('progress-process').style.width = data + '%';
+        error: function(){
+            //error handling func
+            alert("error!")
+        },
+        success:function(data){
+		    if(data == '100'){
+			    $('.close-button').prop("disabled",false);
+			    progressModalData(rightIndex);
+			    $('#browser').empty();
+			    getFileList('browser-files-list',viewOption);
+		    }
+		    document.getElementById('progress-process').style.width = data + '%';
 
+	    }
 	})
 })
 
