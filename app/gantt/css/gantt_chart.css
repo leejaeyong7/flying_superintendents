@@ -1,0 +1,126 @@
+.panel-default {
+  background-color: #434343;
+  color: white;
+}
+
+.panel-default>.panel-heading {
+  background-color: #2E2E2E;
+  color: #ddd;
+}
+
+.btn-default {
+  background-color: #2E2E2E;
+  color: #DFDFDF;
+}
+
+.progress {
+  background-color: #3D3D3D;
+  color: #ddd;
+}
+
+.progress-bar {
+  background-color: #919191;
+  color: #ddd;
+}
+
+.table-hover {
+  background-color: #242424;
+  color: #ddd;
+}
+
+.table-toggle:hover {
+  background-color: #616161;
+  color: #ddd;
+}
+
+input {
+  background-color: #898989;  
+  color: #ddd;
+}
+
+body {
+  background-color: #191919;
+  color: #ddd;
+}
+
+#scale_weeks_panel {
+  background-color: #191919;
+  color: #ddd;
+}
+
+#startWeek {
+	float:left;
+	width: 10%;
+}
+
+#endWeek {
+	float:right;
+	width: 10%;
+}
+
+#reset {
+	float:right;
+}
+
+#chart_title {
+	width: 10%;
+	horizontal-align: middle;
+} 
+
+
+.left_portion {
+  vertical-align: top;
+  display: inline-block;
+  width: 40%;
+  float: left;
+}
+
+.right_portion {  
+  vertical-align: top;
+  width: 60%;
+  display: inline-block;
+}
+
+.jumbotron {
+    background-color: #191919;
+}
+
+.block {
+  width: 20px;
+  display: inline-block;
+  background-color : transparent;
+}
+
+.DAY_table tr td {
+  width: 1em;
+}
+
+.WEEK_table tr td {
+  width: 0.28em;
+}
+
+.MONTH_table tr td {
+  width: 0.066em;
+}
+
+.QUARTER_table tr td {
+  width: 0.033em;
+}
+
+footer {
+  padding: 2em 0;
+  margin: 3em 0;
+  border-top: 1px solid #ddd;
+  color: #999;
+  text-align: center;
+}
+
+.hoverx{
+    background-color:red;
+    color:lime;
+}
+
+.selectedRow{
+    color:blue;
+    background:yellow;
+}
