@@ -222,6 +222,16 @@ def scheduler():
         return render_template("scheduler.html")
     else:
         return redirect(url_for('index'))
+
+
+    
+@app.route('/board')
+@login_required
+def scheduler():
+    if current_user.is_authenticated():
+        return render_template("sample.html")
+    else:
+        return redirect(url_for('index'))
 #---------------------------------------------------------------------
 #
 #   
