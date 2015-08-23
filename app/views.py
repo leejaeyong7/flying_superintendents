@@ -1,4 +1,4 @@
-1;2cfrom flask import Flask, render_template, request, flash, session, redirect, url_for, jsonify, send_file, Response
+from flask import Flask, render_template, request, flash, session, redirect, url_for, jsonify, send_file, Response
 from flask.helpers import send_from_directory
 from flask.ext.login import login_user, logout_user, current_user, login_required, fresh_login_required
 from flask.ext.mail import Mail, Message
