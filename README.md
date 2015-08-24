@@ -30,17 +30,18 @@ Version control for flying superintendents web app.
 
  
 ## Installation process
-1. Setup mysql
-  * echo “create database point_cloud_server” | mysql -u root
-2. Install pip
-  * [sudo] easy_install pip
-3. Install virtualenv
-  * [sudo] pip install vitrualenv
+1. Setup git
   * cd [destination folder]
+  * git clone https://github.com/leejaeyong7/flying_superintendents.git
+  * cd flying_superintendents
+2. Setup mysql
+  * echo “create database point_cloud_server” | mysql -u root
+3. Install pip
+  * [sudo] apt-get install python-pip
+4. Install virtualenv
+  * [sudo] pip install vitrualenv
   * virtualenv venv
   * . venv/bin/activate
-4. Setup git
-  * git clone https://github.com/leejaeyong7/flying_superintendents.git
 5. Install dependencies
   * pip install -r requirements.txt
 
