@@ -1,0 +1,6 @@
+#don't track these files
+*.*~
+.*
+
+#track these files
+!.gitignore

@@ -1,0 +1,7 @@
+#don't track these files
+
+#python pyc bytefile
+*.pyc
+*.*~
+
+!.gitignore

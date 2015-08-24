@@ -1,0 +1,7 @@
+# don't track these files
+internet-jobs/
+.*
+bootstrap-theme.css.map
+bootstrap.css.map
+#track these files
+!.gitignore
