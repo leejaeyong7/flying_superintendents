@@ -43,7 +43,7 @@ Version control for flying superintendents web app.
   * virtualenv venv
   * . venv/bin/activate
 5. Install dependencies
-  * pip install -r requirements.txt
+  * (venv)pip install -r requirements.txt
 
 ## ETC
 1. Binary files
