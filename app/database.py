@@ -151,22 +151,22 @@ class Task(db.Model):
     endDate = db.Column(db.DateTime)
     actualStartDate = db.Column(db.DateTime)
     duration = db.Column(db.Float)
-    taskPredecessor = db.Column(db.Integer, db.ForeignKey('task.id'))
-    taskSuccessor = db.Column(db.Integer, db.ForeignKey('task.id'))
+    taskPredecessor = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=True)
+    taskSuccessor = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=True)
     taskConstraints = db.Column(db.Integer, db.ForeignKey('constraints.id'))
     taskPerformance = db.Column(db.Integer, db.ForeignKey('performance.id'))
     taskAnticipated = db.Column(db.Integer)
     taskPerformanceVariance = db.Column(db.Integer, db.ForeignKey('performanceVariance.id')) 
     taskRepeated = db.Column(db.Integer)
     elements =  db.Column(db.Integer, db.ForeignKey('objects.id'))
-    organization = db.relationship('Organization')
+    #organization = db.relationship('Organization')
     #personnel = db.relationship('Personnel')
     #personnel = db.relationship('Personnel')
-    constraints = db.relationship('Constraints')
-    constraints = db.relationship('Performance')
-    performanceVariance = db.relationship('PerformanceVariance')
-    objects = db.relationship('Objects')
-    schedule = db.relationship('Schedule')
+    #constraints = db.relationship('Constraints')
+    #constraints = db.relationship('Performance')
+    #performanceVariance = db.relationship('PerformanceVariance')
+    #objects = db.relationship('Objects')
+    #schedule = db.relationship('Schedule')
     #task = db.relationship('Task')
     #task = db.relationship('Task')
     def __init__(self, name, scheduleID, requestor, personCommitted, responsibleSubs, startDate, endDate, actualStartDate, duration, taskPredecessor, taskSuccessor, taskConstraints, taskPerformance, taskAnticipated, taskPerformanceVariance,taskRepeated, elements
@@ -176,9 +176,9 @@ class Task(db.Model):
         self.requestor = requestor
         self.personCommitted = personCommitted
         self.responsibleSubs = responsibleSubs
-        self.startDate = datetime.fromtimestamp(startDate/1000.00)
-        self.endDate = datetime.fromtimestamp(endDate/1000.00)
-        self.actualStartDate = datetime.fromtimestamp(actualStartDate/1000.00)
+        self.startDate = startDate#datetime.fromtimestamp(startDate/1000.00)
+        self.endDate = endDate#datetime.fromtimestamp(endDate/1000.00)
+        self.actualStartDate = actualStartDate#datetime.fromtimestamp(actualStartDate/1000.00)
         self.duration = duration
         self.taskPredecessor = taskPredecessor
         self.taskSuccessor = taskSuccessor
@@ -209,9 +209,9 @@ class Constraints(db.Model):
         self.relatedID = relatedID
         self.description = description
         self.responsibleIndividual = responsibleIndividual
-        self.initiateDate = datetime.fromtimestamp(initiateDate/1000.00)
-        self.promiseDate = datetime.fromtimestamp(promiseDate/1000.00)
-        self.completeDate = datetime.fromtimestamp(completeDate/1000.00)
+        self.initiateDate = initiateDate#datetime.fromtimestamp(initiateDate/1000.00)
+        self.promiseDate = promiseDate#datetime.fromtimestamp(promiseDate/1000.00)
+        self.completeDate = completeDate#datetime.fromtimestamp(completeDate/1000.00)
         self.revisePromiseCompletion = revisePromiseCompletion
         self.constraintVariance = constraintVariance
         db.session.commit()

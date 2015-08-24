@@ -1,0 +1,7 @@
+#ignore these files
+venv/
+scripts/
+redis/
+*.*~
+._*
+#don't ignore these

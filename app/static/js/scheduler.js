@@ -315,7 +315,7 @@ function foreignKeyInputForm(columnName,foreignKeyReference, tabletype){
                                     for(var col in row )
                                     {
                                         //display name/description/ppcvalue or email in dropdown menu
-                                        if(col=="name" || col=="description" || col=="ppc" || col=="email")
+                                        if(col=="name" || col=="description" || col=="ppc" || col=="email" || col=="projectID")
                                         {
                                             foreignTableDropDown+= col + ' : '+ row[col]
                                         }
@@ -365,17 +365,47 @@ $('.table-submit-button').on('click', function(){
         
         if($(data).children('input').length){
             if($(data).children('input').hasClass('phoneNumber')){
-                tableForm[tableName][ $(data).children('input')[0].name] = parseInt($(data).children('input').val().replace ( /[^\d.]/g, '' ));
+                if(!$(data).children('input').val())
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = parseInt($(data).children('input').val().replace ( /[^\d.]/g, '' ));
+                }
             }
             else if($(data).children('input').hasClass('dateTime')){
-                tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+                if(!$(data).children('input').val())
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    var date = new Date($(data).children('input').val());
+                    tableForm[tableName][ $(data).children('input')[0].name] =  date;
+                }
             }
             else{
-                tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+                if(!$(data).children('input').val())
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+                }
             }
         }
         else if($(data).children('select').length){
-            tableForm[tableName][ $(data).children('select')[0].name] =  parseInt($(data).children('select').val());
+            var value = parseInt($(data).children('select').val());
+            if(value != 0)
+            {
+                tableForm[tableName][ $(data).children('select')[0].name] =  parseInt($(data).children('select').val());
+            }
+            else
+            {
+                tableForm[tableName][ $(data).children('select')[0].name] =  null;
+            }
         }
     });
     var tableInputForm = new FormData();
@@ -454,11 +484,10 @@ function loadViewTableValues(){
                         for (col in rowData){
                             if(rowData.hasOwnProperty(col))
                             {
-                                // console.log(col, rowData[col])
-                                // console.log(document.getElementsByName(col));
-                                //rowData[col] = document.getElementsByName(col)[0].defaultValue;
-                                $('input[name="'+col+'"]').attr('value', rowData[col]);
-                                $('select[name="'+col+'"').children().eq(rowData[col]).attr("selected", "selected")
+                                if( $('input[name="'+col+'"]').length)
+                                    $('input[name="'+col+'"]').attr('value', rowData[col]);
+                                if($('select[name="'+col+'"').length)
+                                    $('select[name="'+col+'"').children('[value='+rowData[col]+']').attr("selected", "selected")
                             }
                         }
                         
@@ -506,8 +535,54 @@ $('.change-submit-button').on('click', function(){
     tableForm[tableName] = {};
     tableForm['id'] = parseInt(rowID);
     $.each( $('#viewtable-db').children().children('.inputForm'), function(i,data){
-        
-        if($(data).children('input').length){
+         if($(data).children('input').length){
+            if($(data).children('input').hasClass('phoneNumber')){
+                if(!$(data).children('input').val())
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = parseInt($(data).children('input').val().replace ( /[^\d.]/g, '' ));
+                }
+            }
+            else if($(data).children('input').hasClass('dateTime')){
+                if(!$(data).children('input').val())
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    var date = new Date($(data).children('input').val());
+                    tableForm[tableName][ $(data).children('input')[0].name] =  date;
+                }
+            }
+            else{
+                if(!$(data).children('input').val())
+                {
+                    console.log($(data).children('input').val())
+                    tableForm[tableName][ $(data).children('input')[0].name] = null;
+                }
+                else
+                {
+                    tableForm[tableName][ $(data).children('input')[0].name] =  $(data).children('input').val();
+                }
+            }
+        }
+        else if($(data).children('select').length){
+            var value = parseInt($(data).children('select').val());
+            if(value != 0)
+            {
+                tableForm[tableName][ $(data).children('select')[0].name] =  parseInt($(data).children('select').val());
+            }
+            else
+            {
+                tableForm[tableName][ $(data).children('select')[0].name] =  null;
+            }
+        }
+
+        //
+       /* if($(data).children('input').length){
             if($(data).children('input').hasClass('phoneNumber')){
                 tableForm[tableName][ $(data).children('input')[0].name] = parseInt($(data).children('input').val().replace ( /[^\d.]/g, '' ));
             }
@@ -520,7 +595,7 @@ $('.change-submit-button').on('click', function(){
         }
         else if($(data).children('select').length){
             tableForm[tableName][ $(data).children('select')[0].name] =  parseInt($(data).children('select').val());
-        }
+        }*/
     });
     
     var tableInputForm = new FormData();

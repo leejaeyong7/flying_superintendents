@@ -627,7 +627,7 @@ def get_db():
         if(objectID == None):
             #print table.__table__.foreign_keys
             dbDict =  [(v.__dict__) for v in table.query.all()]
-            dbTable = {dbName:{counter+1:{k:str(v) for (k,v) in dbd.iteritems()  if '_' not in k} for counter, dbd in enumerate(dbDict)}}
+            dbTable = {dbName:{counter+1:{k:(mapDataPyToJS(v)) for (k,v) in dbd.iteritems()  if '_' not in k} for counter, dbd in enumerate(dbDict)}}
             return json.dumps(dbTable)
         else:
             dbData = table.query.filter_by(id= objectID).all()
@@ -635,10 +635,17 @@ def get_db():
                 return "failure"
             else:
                 dbDict = table.query.filter_by(id= objectID).first().__dict__
-            
-                return json.dumps({i:dbDict[i] for i in dbDict if i[0]!='_'})
+                return json.dumps({i:mapDataPyToJS(dbDict[i]) for i in dbDict if i[0]!='_'})
 
-        #return jsonify(dbDict)
+def mapDataPyToJS(v):
+    if type(v) == datetime:
+        print ("%02d" % v.month)+'/'+("%02d" % v.day)+'/'+str(v.year)
+        return ("%02d" % v.month)+'/'+("%02d" % v.day)+'/'+str(v.year)
+    elif v== None:
+        return ""
+    else:
+        return v
+        
 @app.route('/get-db-columns', methods = ['GET'])
 @login_required
 def get_db_columns():

@@ -35,5 +35,5 @@ function getTaskTableData() {
 }
 
 $(document).ready(function(){
-    getTableData();
+    getTaskTableData();
 });
