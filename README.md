@@ -8,6 +8,7 @@ Version control for flying superintendents web app.
 1. Python 2.7.x
   1. Linux install -1
     * $ sudo apt-get install python
+    * please note that python 2.7.x not python3 is the one that works
 2. OpenCV
   1. Linux install -1
     * $ sudo apt-get install libopencv-dev python-opencv
