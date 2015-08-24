@@ -25,6 +25,8 @@ Version control for flying superintendents web app.
 4. MySQL
   1. Linux install -1
     * $ sudo apt-get install  mysql-server
+    * [sudo] mysql_install_db --user=root --basedir=[install PATH] --datadir=[desired DATA PATH]
+    * systemctl start mysqld.service
 5. Git
   1. Linux install -1
     * $ sudo apt-get install  git
@@ -36,8 +38,6 @@ Version control for flying superintendents web app.
   * git clone https://github.com/leejaeyong7/flying_superintendents.git
   * cd flying_superintendents
 2. Setup mysql
-  * [sudo] mysql_install_db --user=root --basedir=[install PATH] --datadir=[desired DATA PATH]
-  * systemctl start mysqld.service
   * echo “create database point_cloud_server” | mysql -u root
 3. Install pip
   * [sudo] apt-get install python-pip
