@@ -35,6 +35,8 @@ Version control for flying superintendents web app.
   * git clone https://github.com/leejaeyong7/flying_superintendents.git
   * cd flying_superintendents
 2. Setup mysql
+  * [sudo] mysql_install_db --user=root --basedir=[install PATH] --datadir=[desired DATA PATH]
+  * systemctl start mysqld.service
   * echo “create database point_cloud_server” | mysql -u root
 3. Install pip
   * [sudo] apt-get install python-pip
