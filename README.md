@@ -47,10 +47,15 @@ Version control for flying superintendents web app.
   * . venv/bin/activate
 5. Install dependencies
   * (venv)pip install -r requirements.txt
+6. Copy OpenCV library to Venv lib
+  * cp [/path-to-python2.7-lib]/lib/site-packages/cv* [/path-to-venv]/lib/python2.7/site-packages
+
 
 ## ETC
 1. Binary files
   * login.mp4 from raamc (file size too large for git)
+  * scp raamac@130.126.242.166:~/Documents/point-cloud-server/app/static/img/login.mp4 [/path-to-app]/static/img/login.mp4 
+  * please note that vpn or school network is required
  
 ## Running
 * (venv) python run.py
