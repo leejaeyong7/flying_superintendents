@@ -51,3 +51,8 @@ Version control for flying superintendents web app.
 ## ETC
 1. Binary files
   * login.mp4 from raamc (file size too large for git)
+ 
+## Running
+* (venv) python run.py
+
+
