@@ -58,6 +58,7 @@ Version control for flying superintendents web app.
   * please note that vpn or school network is required
  
 ## Running
+* $redis-server &
 * (venv) python run.py
 
 
