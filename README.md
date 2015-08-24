@@ -43,7 +43,7 @@ Version control for flying superintendents web app.
   * [sudo] apt-get install python-pip
 4. Install virtualenv
   * [sudo] pip install vitrualenv
-  * virtualenv venv
+  * virtualenv [-p /path-to-python2.7/python2.7 // not necessary if python3 is not installed] venv
   * . venv/bin/activate
 5. Install dependencies
   * (venv)pip install -r requirements.txt
