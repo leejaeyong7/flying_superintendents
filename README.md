@@ -41,6 +41,8 @@ Version control for flying superintendents web app.
   * . venv/bin/activate
 4. Setup git
   * git clone https://github.com/leejaeyong7/flying_superintendents.git
+5. Install dependencies
+  * pip install -r requirements.txt
 
 ## ETC
 1. Binary files
