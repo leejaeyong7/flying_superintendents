@@ -1,102 +1,145 @@
-/*	created by Jae Yong Lee
-	
-	menu-buttons.js
 
-	handles jquery events for button click/input events
-	
-		javascript
-		functions 		: 	none
-		
-		
-		Jquery 
-		Scripts 		: 	$(document).on('click','.delete-button',function(e)..
-								 delete clicked files based on classes
-
-							$(document).on('click','.home-button',function(e)..
-								 call ajax function to change subdirectory to home address
-
-							$(document).on('click','.levelup-button',function(e)..
-								 call ajax function to change subdirectory to up one level
-
-							$(document).on('click','.transform-button',function(e)..
-								 change viewOption from 0 1 2
-
-							$(document).on('click','.newfolder-button',function(e)..
-								 create new folder
-
-							$('#password-form').on('submit',function(e)..
-								 handles password form (change password form)
-
-							$(document).on('click','.rename-button',function(e)..
-								 rename clicked files
-
-							$(document).on('keydown','#rename-text-input',function(e)..
-								 handles events in rename input form
-
-							$(document).on('keydown','#newFolder-text-input',function(e)..
-								 handles events in newfolder name input form
-
-							$(document).on('click','.visualize-button',function(e)..
-								 handles viewer calling function
-
-							$(document).on('click','.sparse-button',function(e)..
-								 handles sparse button
-
-							$(document).on('click','.dense-button',function(e)..
-								 handles dense button
-
-							$(document).on('click','.process-button',function(e)..
-								 handles process button
-
-                        $(document).on('click','.convert-video-button',function(e)..
-                            converts from video to image by creating new folder and putting in images converted from video 
-                                 
+/*===============================================================================
+ * @author: Jae Yong Lee
+ * @file: menu-button.js
+ *  
+ * @summary:
+ *      handles jquery events for button click/input events
+ *      should be loaded after menu-events for rightIndex variable
+ *      should be loaded after menu-files for viewOption variable
+ *
+ *===============================================================================*/
 
 
-*/
 
-
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
+//===============================================================================//
+//===============================================================================//
 //
-// buttons on headers
+//                            global variables
 //
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
+//===============================================================================//
+//===============================================================================//
 
+var backupname; // backup name for renaming file/folder
+
+//===============================================================================//
+//===============================================================================//
+//
+//                            buttons on header row
+//
+//===============================================================================//
+//===============================================================================//
+
+
+/**
+ *  deletes selected files and reloads page
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.delete-button',function(e){
-	deleteFiles();
-	$('#browser').empty();
-	getFileList('browser-files-list',viewOption);
-})
+    //prompts user confirmation
+	if(confirm('delete all clicked files and folders?')){
+		var filesToDelete = new FormData();
+	  	var foldersToDelete = new FormData();
 
+        //append all files to delete and folders to delete
+		$('.browser-clicked').each(function(i){
+			if($(this).hasClass('filetype-Folder'))
+			{
+                if($(this).children('.browser-files-file').text() != "..")
+                {
+				    foldersToDelete.append('folder_name',$(this).children('.browser-files-file').text());
+                }
+			}
+			else
+			{
+				filesToDelete.append('file_name',$(this).children('.browser-files-file').text());
+			}
+		});
+
+
+        //call ajax request to delete all files and folders and refresh
+		$.ajax({
+	        type: 'POST',
+	        url: '/delete',
+	        data: filesToDelete,
+	        contentType: false,
+	        cache: false,
+	        processData: false,
+            success: function(e){                
+	            $.ajax({
+	                type: 'POST',
+	                url: '/delete-directory',
+	                data: foldersToDelete,
+	                contentType: false,
+	                cache: false,
+	                processData: false,
+                    success: function(e){
+                        getFileList('browser-files-list',viewOption);
+                    },
+                    error: function(e){
+                        alert("delete folder failed");
+                    }
+
+	            });
+            },
+            error: function(e){
+                alert("delete failed");
+            }
+	    });//end ajax	  	    
+    }//end confirm
+});
+
+/**
+ *  changes current directory to home
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.home-button',function(e){
 	$.ajax({
         type: 'POST',
-        url: '/home-directory'
+        url: '/home-directory',
+        success: function(e){
+	        getFileList('browser-files-list',viewOption);            
+        }
     });
-	$('#browser').empty();
-	getFileList('browser-files-list',viewOption);
-})
+});
 
+/**
+ *  changes current directory one level up
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.levelup-button',function(e){
 	$.ajax({
         type: 'POST',
-        url: '/up-directory'
+        url: '/up-directory',
+        success: function(e){
+	        getFileList('browser-files-list',viewOption);
+        }
     });
-	$('#browser').empty();
-	getFileList('browser-files-list',viewOption);
-})
+});
+
+/**
+ *  cycles viewpoint on click
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.transform-button',function(e){
 	viewOption = viewOption+1;
 	if(viewOption == 3)
 		viewOption = 0;
-	$('#browser').empty();
 	getFileList('browser-files-list',viewOption);
-})
+});
 
+
+/**
+ *  create a prompt for user to input foldername 
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.newfolder-button',function(e){
-
+    
 	var ct = currenttime();
 	var newFolderForm = '';
 	newFolderForm +='<form id = "newFolder-text col-md-12 col-sm-12 col-xs-12">';
@@ -110,43 +153,98 @@ $(document).on('click','.newfolder-button',function(e){
 	$('#browser').append(newFolderData);
 	parseViewMode('.browser-files-list',viewOption);
 	$('#newFolder-text-input').focus();
-})
+});
 
-$('#password-form').on('submit',function(e){
-	var passwordData = new FormData();
-	passwordData.append('oldPassword',document.getElementById('oldPassword').value)
-	passwordData.append('password',document.getElementById('password').value)
-	$.ajax({
-		type: 'POST',
-		url: '/change-password',
-		data: passwordData,
-		contentType: false,
-		cache: false,
-		processData: false,
-		/*success: function(e){
-		  alert(e);
-		  }*/
-	})
-	document.getElementById('password-form').reset();
-	//alert('done');
-	getFileList('browser-files-list',viewOption)
-})
+/**
+ *  upload-submit button click event to upload files from inputs in upload-modal
+ *  @params: none
+ *  @return: none
+ */
+$('#upload-form').on('submit', function(e){
+    //set upload-modal close button disabled for safety
+    $('#upload-close').prop('disabled',true);
 
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-/*
-  Buttons on right click menu
-*/
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
+    //get file list into form
+    var file = document.getElementById('file_input').files;
+    var fileForm = new FormData({});
+    for (var fid in file)
+    {
+        if(file.hasOwnProperty(fid))
+        {
+            fileForm.append('fileData', file[fid]);
+        }
+    }
+    //prompt ajax upload with file formdata
+    $.ajax({
+        url: '/upload',  
+        type: 'POST',
+        // Custom XMLHttpRequest
+        xhr: function() {
+            var myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // Check if upload property exists
+                myXhr.upload.addEventListener('progress',function(e){
+                    // For handling the progress of the upload
+                    $('#upload-progress').width( (count / (file.length) * 100)+"%");
+                    count++;
+                }, false);
+            }
+            return myXhr;
+        },
+        //Ajax events
+        beforeSend: function(){
+            var inputForm = '';
+            $('.progress-place').empty();
+            count = 0;
+            inputForm += '<div class="progress">';
+            inputForm += '<div id ="upload-progress" class="progress-bar progress-bar-success progress-sparse" style="width: 0%">';
+            inputForm += '</div>';
+            inputForm += '</div>';
+            $('#uploadModal').find('.progress-place').append(inputForm);
+        },
+        success: function(data){
+            $('#upload-progress').width( "100%");
+            $('#upload-close').prop('disabled',false);
+	        document.getElementById('upload-form').reset();
+	        getFileList('browser-files-list',viewOption);
+        },
+        error: function(data){
+            alert("upload failed");
+            $('#upload-close').prop('disabled',false);
+            //enable below code if wants to keep file data on error
+	        //document.getElementById('upload-form').reset();
+	        getFileList('browser-files-list',viewOption);
+        },
+        // Form data
+        data: fileForm,
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+});
 
-var backupName;
+//===============================================================================//
+//===============================================================================//
+//
+//                            Right Click menus
+//
+//===============================================================================//
+//===============================================================================//
+
+
+/**
+ *  create a prompt to user input for new filename and focuses
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.rename-button',function(e){
 
+    //save backupname from right-clicked file/folder name and 
 	backupName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
 	$('#browser').children().eq(rightIndex).children('.browser-files-file').text('');
 	$('#browser').children().eq(rightIndex).removeClass('browser-clicked');
 
+
+    //rename form
 	var renameForm = '';
 	renameForm +='<form id = "rename-text col-md-12 col-sm-12 col-xs-12">';
 	renameForm += 	'<input id="rename-text-input" type="text" placeholder="New name for file...">';
@@ -154,57 +252,67 @@ $(document).on('click','.rename-button',function(e){
 	renameForm += 	'<input id="rename-text-submit" type="submit">';
 	renameForm += 	'</input>';
 	renameForm += '</form>';
+
 	$('#browser').children().eq(rightIndex).children('.browser-files-file').append(renameForm);
 	$('#rename-text').css({
 		display: 'block',
 	});
 
 	$('#rename-text-input').focus();
-})
+});
 
+/**
+ *  converts selected video file to video
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.convert-video-button',function(e){
-    fileName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
+
+    var fileName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
     var source = new EventSource("/stream");
-    var i = 0;
+
+    // redis function message converting into progress percentage
     source.onmessage = function(event){
-        $('#convert-process').width(parseInt(parseFloat(event.data)*100)+'%')
-        console.log(parseInt(parseFloat(event.data)*100)+'%')
-    }
+        $('#convert-process').width(parseInt(parseFloat(event.data)*100)+'%');
+        console.log(parseInt(parseFloat(event.data)*100)+'%');
+    };
+
+    
     $.ajax({
 	    type: 'POST',
 	    url: '/convert-video',
         data: fileName,
         beforeSend: function(data){
-            $('#convert-process').width('0%')
-            $('#convertProgressModal').modal('show')
+            $('#convert-process').width('0%');
+            $('#convertProgressModal').modal('show');
         },
         error: function(data){
-            $('#browser').empty();
  		    getFileList('browser-files-list',viewOption);
             source.close();
-            $('#convertProgressModal').modal('hide')
+            $('#convertProgressModal').modal('hide');
         },
 	    success: function(data){
-            $('#browser').empty();
  		    getFileList('browser-files-list',viewOption);
             source.close();
-            $('#convert-process').width('100%')
-            $('#convertProgressModal').modal('hide')
+            $('#convert-process').width('100%');
+            $('#convertProgressModal').modal('hide');
 	    }
-	})
+	});
 
     
-})
-  
+});
+
+/**
+ *  keydown event handler for rename function. when enter, it will call helper function to rename files
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('keydown','#rename-text-input',function(e){
 	var rex;
 	switch(e.keyCode){
 		//when hit enter
 	case 13:
-		renamefile();
-		$('#browser').empty();
-		
-		getFileList('browser-files-list',viewOption);
+		renamefile($(this).val());
 		break;
 	case 27:
 		$('#browser').children().eq(rightIndex).children('.browser-files-file').empty();
@@ -215,84 +323,159 @@ $(document).on('keydown','#rename-text-input',function(e){
 		break;
 	}
 
-})
-$(document).on('keydown','#newFolder-text-input',function(e){
-	var rex;
-	switch(e.keyCode){
-		//when hit enter
-	case 13:
-		createNewFolder($(this).val());
-		$('#browser').empty();
-		getFileList('browser-files-list',viewOption);
-		break;
-	case 27:
-		$('#browser').empty();
-		getFileList('browser-files-list',viewOption);
-		break;
-	default:
-		rex = new RegExp($(this).val(), 'i');
-		break;
-	}
+});
 
-})
+/**
+ *  renames all highlighted file given filename
+ *  @params: {string} name = filename for new files
+ *  @return: none
+ */
+function renamefile(name){
+	//rename file1 to file2
+	var filesToChange = new FormData();
+	$('.browser-files').each(function(e){
+		if($(this).index() == rightIndex){
+			filesToChange.append('file-name',backupName);
+		}
+		else if ($(this).hasClass('browser-clicked')){
+			filesToChange.append('file-name',$(this).children('.browser-files-file').text());
+		}
+	});
+	filesToChange.append('rename-id',name);
 
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-/*
-  Buttons for visualization
-*/
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-
-$(document).on('click','.visualize-button',function(e){
-	alert("visual!")
-	/*$.ajax({
-	  type: 'GET',
-	  url: '/viewer',
-	  success: function(data){
-	  $('body').html(data);
-	  }
-	  })*/
-
-})
-$(document).on('click','.sparse-button',function(e){
-	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
-
-	$('.close-button').prop("disabled",true);
-	var sparseFinished = false;
-    console.log(testForm)
 	$.ajax({
 		type: 'POST',
-		url: '/run-vsfm',
-		data: testForm,
-		contentType: false,
-		cache: false,
-		processData: false,
+		url: '/rename',
+		data: filesToChange,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success:function (e){
+		    getFileList('browser-files-list',viewOption);
+        },
+        error: function (e){
+            alert("rename failed");
+        }
+	});
+}
+
+
+/**
+ *  keydown event for newfolder text input. When hit enter, it will call helper function to update foldername
+ *  @params: 
+ *  @return: 
+ */
+$(document).on('keydown','#newFolder-text-input',function(e){
+    var rex;
+    switch(e.keyCode){
+		//when hit enter
+    case 13:
+        createNewFolder($(this).val());
+        break;
+        //when hit esc key
+	case 27:
+        getFileList('browser-files-list',viewOption);
+        break;
+        //when regular keystoke
+    default:
+        rex = new RegExp($(this).val(), 'i');
+        break;
+    }
+});
+
+
+/**
+ *  calls ajax function based on given filename
+ *  @params: {string} name = filename for new folder
+ *  @return: none
+ */
+function createNewFolder(name){
+	var newfolderForm = new FormData();
+	newfolderForm.append('newfolder_id',name);
+	$.ajax({
+		type: 'POST',
+		url: '/create-directory',
+		data: newfolderForm,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(e) {
+            getFileList('browser-files-list',viewOption);
+        },
+        error: function(e) {
+            alert("create new folder failed");
+        }
+	});
+}
+
+//===============================================================================//
+//===============================================================================//
+//
+//                            Visualization Buttons
+//
+//===============================================================================//
+//===============================================================================//
+
+
+/** TODO
+ *  calls visualization scripts on current folder
+ *  @params: none
+ *  @return: none
+ */
+$(document).on('click','.visualize-button',function(e){
+    
+});
+
+
+
+/**
+ *  triggers sparse reconstruction script given foldername by right click
+ *  @params: none
+ *  @return: none
+ */
+$(document).on('click','.sparse-button',function(e){
+    //append folder name to form
+    var testForm = new FormData();
+    testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
+    
+    //disable close button for safety
+    $('.close-button').prop("disabled",true);
+    var sparseFinished = false;
+    
+    $.ajax({
+        type: 'POST',
+        url: '/run-vsfm',
+        data: testForm,
+        contentType: false,
+        cache: false,
+        processData: false,
         error: function(){
-            //error handling func
-            alert("error!")
+            $('.close-button').prop("disabled",false);
+            alert("sparse reconstruction error!");
         },
         success: function(data){
-		    if(data == '100'){
-			    $('.close-button').prop("disabled",false);
-			    progressModalData(rightIndex);
-			    $('#browser').empty();
-			    sparseFinished = true;
-			    getFileList('browser-files-list',viewOption);
-		    }
-		    document.getElementById('progress-sparse').style.width = data + '%';
+            if(data == '100'){
+                $('.close-button').prop("disabled",false);
+                progressModalData(rightIndex);
+                sparseFinished = true;
+                getFileList('browser-files-list',viewOption);
+            }
+            document.getElementById('progress-sparse').style.width = data + '%';
+        }
+    });
+});
 
-	    }
-	})
-})
-
+/**
+ *  triggers dense reconstruction script after sparse reconstruction is done
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.dense-button',function(e){
-	var sparseFinished = false;
-	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
-	
-	$.ajax({
+    var sparseFinished = false;
+    var testForm = new FormData();
+    testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
+    
+    $.ajax({
         type: 'POST',
         url: '/run-pmvs',
         data: testForm,
@@ -301,51 +484,77 @@ $(document).on('click','.dense-button',function(e){
         processData: false,
         error: function(){
             //error handling func
-            alert("error!")
+            $('.close-button').prop("disabled",false);
+            alert("error!");
         },
         success:function(data){
-		    if(data == '100'){
-			    $('.close-button').prop("disabled",false);
-			    progressModalData(rightIndex);
-			    $('#browser').empty();
-			    getFileList('browser-files-list',viewOption);
-		    }
-		    document.getElementById('progress-dense').style.width = data + '%';
+            if(data == '100'){
+                $('.close-button').prop("disabled",false);
+                progressModalData(rightIndex);
+                getFileList('browser-files-list',viewOption);
+            }
+            document.getElementById('progress-dense').style.width = data + '%';
+            
+        }
+    });
+});
 
-	    }
-	})
-})
-
+/**
+ *  triggers potree script after dense reconstruction is done
+ *  @params: none
+ *  @return: none
+ */
 $(document).on('click','.process-button',function(e){
-    //alert("sparse!");
-
-
-	var sparseFinished = false;
-	
-	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
-	
-	$.ajax({
-		type: 'POST',
-		url: '/run-potree',
-		data: testForm,
-		contentType: false,
-		cache: false,
-		processData: false,
+    var sparseFinished = false;
+    var testForm = new FormData();
+    testForm.append('folder_id' , $('#browser').children().eq(rightIndex).find('.browser-files-file').text());
+    
+    $.ajax({
+        type: 'POST',
+        url: '/run-potree',
+        data: testForm,
+        contentType: false,
+        cache: false,
+        processData: false,
         error: function(){
             //error handling func
-            alert("error!")
+            $('.close-button').prop("disabled",false);
+            alert("error!");
         },
         success:function(data){
-		    if(data == '100'){
-			    $('.close-button').prop("disabled",false);
-			    progressModalData(rightIndex);
-			    $('#browser').empty();
-			    getFileList('browser-files-list',viewOption);
-		    }
-		    document.getElementById('progress-process').style.width = data + '%';
+            if(data == '100'){
+                $('.close-button').prop("disabled",false);
+                progressModalData(rightIndex);
+                getFileList('browser-files-list',viewOption);
+            }
+            document.getElementById('progress-process').style.width = data + '%';
+            
+        }
+    });
+});
 
-	    }
-	})
-})
 
+//===============================================================================//
+//===============================================================================//
+//
+//                            helper functions
+//
+//===============================================================================//
+//===============================================================================//
+/**
+ *  retrieves current time from server
+ *  @params: none
+ *  @return: none
+ */
+function currenttime(){
+	$.ajax({
+		type: 'GET',
+		url: '/current-time',
+		success: function(text){
+			return text;
+		},
+		error: function(){
+            alert("error retrieving time");
+		}
+	});
+}

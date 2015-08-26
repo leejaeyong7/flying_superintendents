@@ -1,66 +1,90 @@
-/*	created by Jae Yong Lee
-	
-	menu-modal.js
-
-	handles javascript/jquery events for server menu page on modals
-	
-		javascript
-		functions 		: 	progressModalData(rI) 
-								over-all function for calling appropriate progressModal's button properties & progress bar length
-		
-		
-		Jquery 
-		Scripts 		: 	$('#imageModal').on()
-								 when image modal is shown update imageModal
-							
-							$('#uploadModal').on()		
-								 when upload modal is shown update UploadModal
-
-							$('#progressModal').on()	
-								 when progress modal is shown call progressModalData
-*/
+/*===============================================================================
+ * @author: Jae Yong Lee
+ * @file: menu-modals.js
+ *  
+ * @summary:
+ *      handles modal events on show/close
+ *      should be loaded after modal-events for right-index access
+ *
+ *===============================================================================*/
 
 
-
+//===============================================================================//
+//===============================================================================//
+//
+//                            modal events
+//
+//===============================================================================//
+//===============================================================================//
+/**
+ *  image modal show event
+ *  @params: none
+ *  @return: none
+ */
 $('#imageModal').on('show.bs.modal', function (event) {
-	var button = $(event.relatedTarget) // Button that triggered the modal
-	var recipient = button.data('toggle') // Extract info from data-* attributes
-	// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-	// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-	$('#imageModal').focus();
-	updateImageModal();
-})
+    $('#imageModal').focus();
+    updateImageModal();
+});
+/**
+ *  retrieves image from server to place in imagemodal
+ *  @params: none
+ *  @return: none
+ */
+function updateImageModal(){
+    var filename = $('#browser').children().eq(rightIndex).find('.browser-files-file').text();
+    var string ='<img src="get-imgs?type='+filename+'" alt="' +filename+'" class= "imageModal-image"></img>';
+    $('#imageModal').find('.modal-body').empty();
+    $('#imageModal').find('.modal-body').append(string);
+}
 
-
-
+/**
+ *  upload modal show event
+ *  @params: none
+ *  @return: none
+ */
 $('#uploadModal').on('show.bs.modal', function (event) {
-	var button = $(event.relatedTarget) // Button that triggered the modal
-	var recipient = button.data('toggle') // Extract info from data-* attributes
-	// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-	// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-
-	$('.upload-table').empty();
+    $('.upload-table').empty();
     $('.progress-place').empty();
-	updateUploadModal();
-})
+    updateUploadModal();
+});
+/**
+ *  update allowed extension from uploadmodal
+ *  @params: none
+ *  @return: none
+ */
+function updateUploadModal(){
+    $('.allowed-extension').empty();
+    $.ajax({
+        type: 'GET',
+        url: '/allowed-extension',
+        success: function(data){
+            $('.allowed-extension').text(data);
+        }
+    });
+}
 
 
-
+/**
+ *  progress modal show event
+ *  @params: none
+ *  @return: none
+ */
 $('#progressModal').on('show.bs.modal', function (event) {
-	var button = $(event.relatedTarget) // Button that triggered the modal
-	var recipient = button.data('toggle') // Extract info from data-* attributes
-	// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-	// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-	progressModalData(rightIndex);
-})
+    progressModalData(rightIndex);
+});
 
 
+/**
+ *  progress modal status check
+ *  @params: {Integer} rI = index of right clicked element
+ *  @return: none
+ */
 function progressModalData(rI){ // rI stands for right Index
-
-	//create a test form and sequentially check whether vsfm/pmvs/potree has been processed
-	var testForm = new FormData();
-	testForm.append('folder_id' , $('#browser').children().eq(rI).find('.browser-files-file').text());
-	$.ajax({
+    
+    //create a test form and sequentially check whether vsfm/pmvs/potree has been processed
+    var testForm = new FormData();
+    testForm.append('folder_id' , $('#browser').children().eq(rI).find('.browser-files-file').text());
+    $.ajax({
         type: 'POST',
         url: '/done-potree',
         data: testForm,
@@ -76,8 +100,8 @@ function progressModalData(rI){ // rI stands for right Index
                 document.getElementById('progress-sparse').style.width = '100' + '%';
                 document.getElementById('progress-dense').style.width = '100' + '%';
                 document.getElementById('progress-process').style.width = '100' + '%';
-			}
-			else{
+            }
+            else{
                 $.ajax({
                     type: 'POST',
                     url: '/done-pmvs',
@@ -123,11 +147,11 @@ function progressModalData(rI){ // rI stands for right Index
                                         document.getElementById('progress-process').style.width = '0' + '%';
                                     }
                                 }
-                            })
+                            });
                         }
                     }
-                })
+                });
             }
         }
-    })	
+    });
 }

@@ -1,285 +1,263 @@
-/*	created by Jae Yong Lee
-	
-	menu-files.js
-
-	handles javascript/jquery events for server menu page on browser-files
-	also handles document.ready event
-	
-		javascript
-		functions 		: 	browserHeaderSet(vO) 
-								 append browser-file's header based on viewoptions
-
-							parseViewOptions(filename,filetype, vO)
-								 parse filetype based on viewOptions 
-
-							parseFileData(filetype, filename, filedate, classname ,vO)
-								 parse data based on input file/name/date
-
-							parseViewMode(class1, vO)
-								 adds classes based on viewOptions
-		
-		
-		Jquery 
-		Scripts 		: 	$('#upload-form').on('submit')
-								 handles upload event
-*/
+/*===============================================================================
+ * @author: Jae Yong Lee
+ * @file: menu-files.js
+ *  
+ * @summary:
+ *      browser file list HTML parser functions
+ *
+ *
+ *===============================================================================*/
 
 
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-/*
-	File Input parsers
-*/
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
+//===============================================================================//
+//===============================================================================//
+//
+//                            Global Variables
+//
+//===============================================================================//
+//===============================================================================//
 
-/*
-	append browser-file's header based on viewoptions(0,1,2)
-*/
+var viewOption = 0; //view option variable
+
+//===============================================================================//
+//===============================================================================//
+//
+//                            File Input Parsers
+//
+//===============================================================================//
+//===============================================================================//
+
+/**
+ *  browser file list header parser on viewoptions (0,1,2)
+ *  @params: {Integer} vO = viewOption value 
+ *    vO == 0 : default(list) mode
+ *    vO == 1 : 3 in a row mode
+ *    vO == 2 : 6 in a row mode
+ *  @return: none
+ */
 function browserHeaderSet(vO){//vO stands for viewOption (static variable)
-	var string = '';
-	$('#browser-header').empty();
-	switch(vO){
-		case 0:
-		  	string+=	'<div id = "browser-header-filetype" class = "col-md-1 col-sm-4 col-xs-4 viewmode0">Type</div>'
-		  	string+=	'<div id = "browser-header-filename" class = "col-md-7 col-sm-4 col-xs-4 viewmode0">Name</div>'
-		  	string+=	'<div id = "browser-header-filedate" class = "col-md-4 col-sm-4 col-xs-4 viewmode0">Modified</div>'
-			break;
-
-		case 1:
-		  	string+=	'<div id = "browser-header-filetype" class = "hidden">Type</div>'
-		  	string+=	'<div id = "browser-header-filename" class = "hidden">Name</div>'
-		  	string+=	'<div id = "browser-header-filedate" class = "hidden">Modified</div>'
-			break;
-
-		case 2:
-		  	string+=	'<div id = "browser-header-filetype" class = "hidden">Type</div>'
-		  	string+=	'<div id = "browser-header-filename" class = "hidden">Name</div>'
-		  	string+=	'<div id = "browser-header-filedate" class = "hidden">Modified</div>'
-			break;
-	}
-	$('#browser-header').append(string);
-}
-
-
-/*
-	parse filetype based on viewOptions 
-*/
-function parseViewOptions(filename,filetype, vO){
-	var string = '';
-	switch(vO){
-		//default mode
-		case 0: 
-			switch(filetype){
-				case 'Image': string +='<i style="color:green" class="glyphicon glyphicon-picture"></i>';
-					break;
-				case 'File': string +='<i style="color:white" class="glyphicon glyphicon-file viewmode0"></i>';
-					break;
-				case 'Video': string +='<i style="color:red" class="glyphicon glyphicon-facetime-video viewmode0"></i>';
-					break;
-				case 'Folder': string +='<i style="color:yellow" class="glyphicon glyphicon-folder-close viewmode0"></i>';
-					break;
-				default: string +='';
-					break;
-			};
-			break;
-		//preview mode(shows image large, images)
-		case 1:
-			switch(filetype){
-				case 'Image': string +='<img src="get-imgs?type='+filename+'" alt="' +filename+'" class= "browser-files-image viewmode1"></img>'
-					break;
-				case 'File': string +='<i style="color:white" class="glyphicon glyphicon-file viewmode1"></i>';
-					break;
-				case 'Video': string +='<i style="color:red" class="glyphicon glyphicon-facetime-video viewmode1"></i>';
-					break;
-				case 'Folder': string +='<i style="color:yellow" class="glyphicon glyphicon-folder-close viewmode1"></i>';
-					break;
-				default: string +='';
-					break;
-			}
-			break;
-		//test mode
-		case 2:
-			switch(filetype){
-				case 'Image': 	string +='<div class="browser-files-image viewmode2">';
-								string +='<img src="get-imgs?type='+filename+'" alt="' +filename+'" class= "browser-files-image-image viewmode2"></img>'
-								string +='</div>'
-					break;
-				case 'File': string +='<i style="color:white" class="glyphicon glyphicon-file viewmode2"></i>';
-					break;
-				case 'Video': string +='<i style="color:red" class="glyphicon glyphicon-facetime-video viewmode2"></i>';
-					break;
-				case 'Folder': string +='<i style="color:yellow" class="glyphicon glyphicon-folder-close viewmode2"></i>';
-					break;
-				default: string +='';
-					break;
-			}
-			break;
-		default:
-			break;
-	}
-	return string;
-}
-
-
-/*
-	parse data based on input file/name/date
-	gives how li data structure is made
-
-*/
-function parseFileData(filetype, filename, filedate, classname ,vO){
-	string = '';
-	string +='<li class="browser-files filetype-' + filetype + ' '+classname+'">';
-		string +='<div class="browser-files-icon '+classname+'">';
-			string += parseViewOptions(filename,filetype,vO);
-		string += '</div>'
-		string +='<div class="browser-files-file '+classname+'" >'+filename+'</div>';
-		string +='<div class="browser-files-time '+classname+'">';
-			string += '<div class="browser-files-time-data '+classname+'" >'
-		if(classname != 'upload-table-list'){
-			string += '<i style="color:white" class="glyphicon glyphicon-calendar"></i> ' + filedate;
-		}
-		else
-			string += filedate;
-
-			string += '</div>'
-		string +='</div>'
-	string +='</li>';
-	return string;
-}
-
-/*
-	adds classes based on viewOptions
-*/
-function parseViewMode(class1, vO){
-	
-	switch(vO){
-				case 0:	
-					/*
-						viewmode0 is file viewer
-						#put button for search button in small window
-					*/
-					$('.browser-files' +class1).addClass('viewmode0 row');
-					$('.browser-files-icon' + class1).addClass('viewmode0 col-md-1 col-sm-4 col-xs-4');
-					$('.browser-files-file' + class1).addClass('viewmode0 col-md-7 col-sm-4 col-xs-4');
-					$('.browser-files-time' + class1).addClass('viewmode0 col-md-4 col-sm-4 col-xs-4');
-					break;
-				case 1:	
-					$('.browser-files' + class1).addClass('viewmode1 col-md-4 col-sm-4 col-xs-4');
-					$('.browser-files-icon' + class1).addClass('viewmode1 col-md-12 col-sm-12 col-xs-12');
-					$('.browser-files-file' + class1).addClass('viewmode1 col-md-12 col-sm-12 col-xs-12');
-					$('.browser-files-time' + class1).addClass('viewmode1 hidden');
-					break;
-				case 2:	
-					$('.browser-files' + class1).addClass('viewmode2 col-md-2 col-sm-2 col-xs-2');
-					$('.browser-files-icon' + class1).addClass('viewmode2 col-md-12 col-sm-12 col-xs-12');
-					$('.browser-files-file'+ class1).addClass('viewmode2 col-md-12 col-sm-12 col-xs-12');
-					$('.browser-files-time' + class1).addClass('viewmode2 hidden');
-					break;
-				default : 
-					break;
-		}
-}
-
-
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-/*
-	Document actions/ form actions
-*/
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-
-/*
-	upload button submit
-*/
-$('#upload-form').on('submit', function(e){
-    e.preventDefault();
-    $('#upload-close').prop('disabled',true);
-    $('.upload-table').empty();
-    
-    
-    var file = document.getElementById('file_input').files;
-    
-    var fileForm = new FormData({});
-    for (fid in file)
-    {
-        if(file.hasOwnProperty(fid))
-        {
-            fileForm.append('fileData', file[fid])
-        }
+    var string = '';
+    $('#browser-header').empty();
+    switch(vO){
+        //for vO == 0, show table header-like form
+    case 0:
+        string+=	'<div id = "browser-header-filetype" class = "col-md-1 col-sm-4 col-xs-4 viewmode0">Type</div>';
+        string+=	'<div id = "browser-header-filename" class = "col-md-7 col-sm-4 col-xs-4 viewmode0">Name</div>';
+        string+=	'<div id = "browser-header-filedate" class = "col-md-4 col-sm-4 col-xs-4 viewmode0">Modified</div>';
+        break;
+        //else hide header
+    case 1:
+        string+=	'<div id = "browser-header-filetype" class = "hidden">Type</div>';
+        string+=	'<div id = "browser-header-filename" class = "hidden">Name</div>';
+        string+=	'<div id = "browser-header-filedate" class = "hidden">Modified</div>';
+        break;
+        
+    case 2:
+        string+=	'<div id = "browser-header-filetype" class = "hidden">Type</div>';
+        string+=	'<div id = "browser-header-filename" class = "hidden">Name</div>';
+        string+=	'<div id = "browser-header-filedate" class = "hidden">Modified</div>';
+        break;
     }
-    console.log(file.length)
-    $.ajax({
-        url: '/upload',  //Server script to process data
-        type: 'POST',
-        xhr: function() {  // Custom XMLHttpRequest
-            var myXhr = $.ajaxSettings.xhr();
-            if(myXhr.upload){ // Check if upload property exists
-                myXhr.upload.addEventListener('progress',function(e){
-                    // For handling the progress of the upload
-                     $('#upload-progress').width( (count / (file.length) * 100)+"%")
-                    count++;
-                }, false);
+    $('#browser-header').append(string);
+}
 
-            }
-            return myXhr;
-        },
-        //Ajax events
-        beforeSend: function(){
-            var inputForm = ''
-            $('.progress-place').empty()
-            count = 0;
-            inputForm += '<div class="progress">'
-            inputForm += '<div  id ="upload-progress" class="progress-bar progress-bar-success progress-sparse" style="width: 0%"></div>'
-            inputForm += '</div>'
-            $('#uploadModal').find('.progress-place').append(inputForm)
+
+/**
+ *  parse icon given filetype and viewoption
+ *  @params: {String} filename = name of file/folder
+ *           {String} filetype = type of file/folder
+ *           {Integer} vO = viewoption
+ *  @return: {String} string = HTML form data for icon in list
+ */
+function parseIcon(filename,filetype, vO){
+    var string = '';
+    switch(filetype){
+    case 'Image':
+        switch(vO){
+        case 0:
+            string +='<i style="color:green" class="glyphicon glyphicon-picture"></i>';
+            break;
+        case 1:
+            string +='<img src="get-imgs?type='+filename+'" alt="' +filename+'" class= "browser-files-image viewmode1">';
+            string +='</img>';
+            break;
+        case 2:
+            string +='<div class="browser-files-image viewmode2">';
+            string +='<img src="get-imgs?type='+filename+'" alt="' +filename+'" class= "browser-files-image-image viewmode2">';
+            string +='</img>';
+            string +='</div>';
+            break;
+        }
+        break;
+    case 'File': string +='<i style="color:white" class="glyphicon glyphicon-file viewmode'+vO+'"></i>';
+        break;
+    case 'Video': string +='<i style="color:red" class="glyphicon glyphicon-facetime-video viewmode'+vO+'"></i>';
+        break;
+    case 'Folder': string +='<i style="color:yellow" class="glyphicon glyphicon-folder-close viewmode'+vO+'"></i>';
+        break;
+    default: string +='';
+        break;
+    }
+    return string;
+}
+
+
+/**
+ *  given parameters for file data, creates a HTML form for li element for each entry
+ *  @params: {String} filetype = type of file
+ *           {String} filename = name of file
+ *           {String} filedate = date of file in string
+ *           {String} classname = class name of browser list
+ *           {Integer} vO = viewoption parameter
+ *  @return: {String} string = string value of HTML li form structure
+ */
+function parseFileData(filetype, filename, filedate, classname ,vO){
+    string = '';
+    string +='<li class="browser-files filetype-' + filetype + ' '+classname+'">';
+    string +='<div class="browser-files-icon '+classname+'">';
+    string += parseIcon(filename,filetype,vO);
+    string += '</div>';
+    string +='<div class="browser-files-file '+classname+'" >'+filename+'</div>';
+    string +='<div class="browser-files-time '+classname+'">';
+    string +='<div class="browser-files-time-data '+classname+'" >';
+    string +='<i style="color:white" class="glyphicon glyphicon-calendar"></i> ' + filedate;
+    string +='</div>';
+    string +='</div>';
+    string +='</li>';
+    return string;
+}
+
+
+/**
+ *  adds bootstrap column / input class for given viewmode
+ *  @params: {String} class1 = class name to add
+ *           {Integer} vO = viewOption parameter
+ *  @return: none
+ */
+function browserAddClassUponViewOption(class1, vO){
+    
+    switch(vO){
+    case 0:	
+        /*
+          viewmode0 is file viewer
+          #put button for search button in small window
+        */
+        $('.browser-files' +class1).addClass('viewmode0 row');
+        $('.browser-files-icon' + class1).addClass('viewmode0 col-md-1 col-sm-4 col-xs-4');
+        $('.browser-files-file' + class1).addClass('viewmode0 col-md-7 col-sm-4 col-xs-4');
+        $('.browser-files-time' + class1).addClass('viewmode0 col-md-4 col-sm-4 col-xs-4');
+        break;
+    case 1:	
+        $('.browser-files' + class1).addClass('viewmode1 col-md-4 col-sm-4 col-xs-4');
+        $('.browser-files-icon' + class1).addClass('viewmode1 col-md-12 col-sm-12 col-xs-12');
+        $('.browser-files-file' + class1).addClass('viewmode1 col-md-12 col-sm-12 col-xs-12');
+        $('.browser-files-time' + class1).addClass('viewmode1 hidden');
+        break;
+    case 2:	
+        $('.browser-files' + class1).addClass('viewmode2 col-md-2 col-sm-2 col-xs-2');
+        $('.browser-files-icon' + class1).addClass('viewmode2 col-md-12 col-sm-12 col-xs-12');
+        $('.browser-files-file'+ class1).addClass('viewmode2 col-md-12 col-sm-12 col-xs-12');
+        $('.browser-files-time' + class1).addClass('viewmode2 hidden');
+        break;
+    default : 
+        break;
+    }
+}
+
+/**
+ *  retrives file list in JSON form and append parsed HTML form in HTML
+ *  @params: {String} classname = name of browser class
+ *           {Integer} vO = viewOption parameter
+ *  @return: none
+ */
+function getFileList(classname, vO){
+    $.ajax({
+        type: 'GET',
+        url: '/get-files',
+        beforeSend: function(e){
+            /*
+              function called before send
+            */
+            $('#browser').empty();
+	        browserList = '';
+	        browserHeaderSet(vO);
         },
         success: function(data){
             /*
-             */
-            $('#upload-progress').width( "100%")
-            $('#upload-close').prop('disabled',false);
-	        document.getElementById('upload-form').reset();
-
-	        $('#browser').empty();
-	        getFileList('browser-files-list',viewOption);
-            
+              function called after success
+            */
+            var rawJSON = JSON.parse(data);
+            var json = rawJSON.sort(predicatsBy(["filetype","filename"]));
+		    $.each(json, function()
+		           {
+			           browserList += parseFileData(this.filetype,this.filename,this.filedate,classname,vO);
+		           });
+		    if(browserList === '')
+		    {
+			    browserList = parseFileData('','nofiles','',classname,vO);
+		    }
+		    $('#browser').append(browserList);
+		    browserAddClassUponViewOption('.'+classname,vO);
         },
-        error: function(data){
-            $('#upload-close').prop('disabled',false);
-	        document.getElementById('upload-form').reset();
-
-	        $('#browser').empty();
-	        getFileList('browser-files-list',viewOption);
+        error: function(e){
+            /*
+              function called on fail
+            */
+            alert("file-list retrieval failed!");
         },
-        // Form data
-        data: fileForm,
-        //Options to tell jQuery not to process data or worry about content-type.
-        cache: false,
         contentType: false,
+        cache: false,
         processData: false
-    })
-  
-    
-    
+    });
+}
 
+/**
+ *  helper function recursively setting predicat
+ *  @params: {[String]} propArray = array of property in string form
+ *  @return: {Integer} predicate Value
+ */
+function predicatsBy(propArray){
+    return function(a,b){
+        if(propArray[0] === undefined)
+            return 0;
+        if(a[propArray[0]] > b[propArray[0]]){
+            return 1;
+        }
+        else if(a[propArray[0]] < b[propArray[0]]){
+            return -1;
+        }
+        else{
+            return predicatsBy(propArray.splice(0,1));
+        }
+    };
+
+}
+
+
+
+//===============================================================================//
+//===============================================================================//
+//
+//                            Helper/Hook functions 
+//
+//===============================================================================//
+//===============================================================================//
+/**
+ *  disables default right-click menu for 
+ *  @params: none
+ *  @return: none
+ */
+$('#browser').on('contextmenu',function(){
+        return false;
 });
 
 
-/*
-	document.ready event
-	handles all event that requires to be ran on loading page
-*/
+/**
+ *  document ready event to load filelist on page visit
+ *  @params: none
+ *  @return: none
+ */
+
 $(document).ready(function () {
-	/*if(fileAlreadyLoaded()){
-		return;
-	}*/
-	//$('.rcmenu ').hide();
-	getFileList('browser-files-list',viewOption);
-	//usernameVal();
-	progressModalData(0);
-	$('ol').on('contextmenu',function(){
-		return false;
-	});
+    getFileList('browser-files-list',viewOption);
 });
