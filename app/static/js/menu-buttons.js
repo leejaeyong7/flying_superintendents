@@ -268,7 +268,28 @@ $(document).on('click','.rename-button',function(e){
  */
 $(document).on('click','.convert-video-button',function(e){
 
+    $('#convertOptionModal').modal('show');
+
+});
+
+/**
+ *  submit option form for video conversion and run video to image conversion
+ *  @param: none
+ *  @return: none
+ */
+$(document).on('click', '#option-submit',function(e){
+ 
     var fileName = $('#browser').children().eq(rightIndex).children('.browser-files-file').text();
+
+    var ffp = $('#convert-option-parameter-finalFramePos').children('.option-parameter-value').val();
+    var framerate = $('#convert-option-parameter-framerate').children('.option-parameter-value').val();
+    var videoConvertForm = new FormData();
+    videoConvertForm.append("filename", fileName);
+    videoConvertForm.append("ffp", ffp);
+    videoConvertForm.append("framerate",framerate);
+    
+    
+    
     var source = new EventSource("/stream");
 
     // redis function message converting into progress percentage
@@ -281,8 +302,12 @@ $(document).on('click','.convert-video-button',function(e){
     $.ajax({
 	    type: 'POST',
 	    url: '/convert-video',
-        data: fileName,
+        data: videoConvertForm,
+        cache: false,
+        contentType: false,
+        processData: false,
         beforeSend: function(data){
+            $('#convertOptionModal').modal('hide');
             $('#convert-process').width('0%');
             $('#convertProgressModal').modal('show');
         },
@@ -298,10 +323,7 @@ $(document).on('click','.convert-video-button',function(e){
             $('#convertProgressModal').modal('hide');
 	    }
 	});
-
-    
 });
-
 /**
  *  keydown event handler for rename function. when enter, it will call helper function to rename files
  *  @params: none

@@ -17,6 +17,57 @@
 //===============================================================================//
 //===============================================================================//
 /**
+ *  convert Option modal show event
+ *  @params: none
+ *  @return: none
+ */
+$('#convertOptionModal').on('show.bs.modal', function (event) {
+    updateConvertOptionModal();
+});
+
+
+
+/**
+ *  retrieves parameters from video
+ *  @param: none
+ *  @return: none
+ */
+function updateConvertOptionModal(){
+    var filename = $('#browser').children().eq(rightIndex).find('.browser-files-file').text();
+    $.ajax({
+        type: 'POST',
+        url: '/video-info',
+        beforeSend: function(e){
+            /*
+              function called before send
+            */
+            $('.option-parameter-name').addClass('col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-6 col-sm-6 col-xs-6');
+            $('#convert-option-parameter-finalFramePos').children(".option-parameter-name").text("Final Frame Pos input :");
+            $('#convert-option-parameter-framerate').children(".option-parameter-name").text("Skip per capture input :");
+        },
+        success:  function(e){
+            /*
+              function called after success
+            */
+            var frameCount = JSON.parse(e).totalCount;
+            $('.info-parameter-name').text("Total Frame Count :");
+            $('.info-parameter-value').text(frameCount);
+            $('#convert-option-parameter-finalFramePos').children(".option-parameter-value").val(frameCount);
+        },
+        error:  function(e){
+            /*
+              function called on fail
+            */
+            alert("video-info retrieval failed");
+        },
+        data: filename,
+        contentType: false,
+        cache: false,
+        processData: false
+    });
+}
+
+/**
  *  image modal show event
  *  @params: none
  *  @return: none

@@ -135,7 +135,7 @@
 	  	
 	  	<div id="videoMenu" class="rcmenu dropdown clearfix closeAtClick">
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
-				<li><a tabindex="-1" href="#" class="convert-video-button">Convert to Images</a></li>
+				<li><a tabindex="-1" href="#" class="convert-video-button" >Convert to Images</a></li>
 				<li class="divider"></li>
 				<li><a class="newfolder-button" tabindex="-1">New Folder</a></li>
 				<li><a tabindex="-1" class="delete-button" >Delete</a></li>
@@ -334,8 +334,50 @@
 			</div>
 		</div>
 
-		<!-- Help modal -->
-		<div class="modal fade" id="convertProgressModal"  role="dialog" aria-labelledby="convertProgressModalLabel" aria-hidden="true">
+		<!--video convert option modal -->
+
+
+		<div class="modal fade" id="convertOptionModal"  role="dialog" aria-labelledby="convertOptionModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<div class="col-md-12">
+								<h4 class="modal-title" id="myModalLabel">Video Conversion Options</h4>
+							</div>
+							
+						</div>
+					</div>
+					<div class="modal-body">
+      
+                        <div id="convert-option-parameter-info" class="info-parameter"><!--  -->
+                          <div class="info-parameter-name col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-6 col-sm-6 col-xs-6"></div>
+                          <div class="info-parameter-value col-md-4 col-sm-4 col-xs-4"></div>
+                        </div>
+                        <hr> </hr>
+                        <div id="convert-option-parameter-finalFramePos" class="option-parameter"><!--  -->
+                          <div class="option-parameter-name"></div>
+                          <input type="number" class="option-parameter-value"></input>
+                        </div>
+                    
+                        <div id="convert-option-parameter-framerate" class="option-parameter"><!--  -->
+                          <div class="option-parameter-name"></div>
+                          <input type="number" class="option-parameter-value" value=0></input>
+                        </div>
+                    </div>
+                    <div class="modal-footer" >
+
+                        <button id="option-submit" class="btn btn-default">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                    </div>
+				</div>
+			</div>
+		</div>
+		
+
+        <!-- convert progress modal -->
+        <div class="modal fade" id="convertProgressModal"  role="dialog" aria-labelledby="convertProgressModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -369,11 +411,10 @@
     <script src="static/js/bootstrap.min.js"></script>
     <script src="static/js/bootstrap-table.js"></script>
 	<!-- JS-->
-    <script src="static/js/menu-common.js"></script>
+    <script src="static/js/menu-files.js"></script>
     <script src="static/js/menu-events.js"></script>
     <script src="static/js/menu-buttons.js"></script>
     <script src="static/js/menu-modals.js"></script>
-    <script src="static/js/menu-files.js"></script>
     <script src="static/js/sidebar.js"></script>
 
 

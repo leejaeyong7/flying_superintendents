@@ -187,11 +187,10 @@ function getFileList(classname, vO){
               function called after success
             */
             var rawJSON = JSON.parse(data);
-            var json = rawJSON.sort(predicatsBy(["filetype","filename"]));
-		    $.each(json, function()
-		           {
-			           browserList += parseFileData(this.filetype,this.filename,this.filedate,classname,vO);
-		           });
+            var json = rawJSON.sort(predicatsBy(["filetype", "filename"]));
+            for(var entry in json){
+                browserList += parseFileData(json[entry].filetype,json[entry].filename,json[entry].filedate,classname,vO);
+            }
 		    if(browserList === '')
 		    {
 			    browserList = parseFileData('','nofiles','',classname,vO);
@@ -212,27 +211,37 @@ function getFileList(classname, vO){
 }
 
 /**
- *  helper function recursively setting predicat
+ *  helper function for setting predicat
  *  @params: {[String]} propArray = array of property in string form
  *  @return: {Integer} predicate Value
  */
 function predicatsBy(propArray){
     return function(a,b){
-        if(propArray[0] === undefined)
-            return 0;
-        if(a[propArray[0]] > b[propArray[0]]){
-            return 1;
+        var retval = 0;
+        for(var prop in propArray){
+            if(a[propArray[prop]]== "File" && b[propArray[prop]]=="Folder"){
+                retval = 1;
+                break;
+            }
+            else if(a[propArray[prop]]== "Folder" && b[propArray[prop]]=="File"){
+                retval = -1;
+                break;
+            }
+
+            if(a[propArray[prop]] > b[propArray[prop]])
+            {
+                retval = 1;
+                break;
+            }
+            else if (a[propArray[prop]] < b[propArray[prop]])
+            {
+                retval = -1;
+                break;
+            }
         }
-        else if(a[propArray[0]] < b[propArray[0]]){
-            return -1;
-        }
-        else{
-            return predicatsBy(propArray.splice(0,1));
-        }
+        return retval;
     };
-
 }
-
 
 
 //===============================================================================//

@@ -689,18 +689,37 @@ def update_db():
 #   etc
 #
 #---------------------------------------------------------------------
-    
+
+
+
+
+@app.route('/video-info', methods = ['POST'])
+@login_required
+def video_info():
+    filename =  request.get_data()
+    sub_dir = pathClass.subPath()
+    videoFile = cv2.VideoCapture( os.path.join(current_user.getFileDir(),sub_dir,filename))
+    totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
+    videoFormat = videoFile.get(cv2.cv.CV_CAP_PROP_FORMAT)
+    return json.dumps({"totalCount":totalCount, "videoFormat":videoFormat})
+
+
+
 @app.route('/convert-video', methods = ['POST'])
 @login_required
 def convert_video():
     def generate():
-        filename =  request.get_data()
+        filename =  request.form["filename"]
+        framerate = int(request.form["framerate"])
         sub_dir = pathClass.subPath()
         videoFile = cv2.VideoCapture( os.path.join(current_user.getFileDir(),sub_dir,filename))
+        ffp = videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT) -  int(request.form["ffp"])
         newFolderName = os.path.splitext(filename)[0]
         newFolderDir = ""
         i = 1
+    
         #check whether path exists and create path based upon video file name
+        print "path making.."
         if (os.path.exists(os.path.join(current_user.getFileDir(),sub_dir,newFolderName))):
             while (os.path.exists(os.path.join(current_user.getFileDir(),sub_dir,newFolderName+ " " + str(i)))):
                 i = i + 1
@@ -709,18 +728,28 @@ def convert_video():
         else:
             os.makedirs(os.path.join(current_user.getFileDir(), sub_dir, newFolderName ))
             newFolderDir = os.path.join(current_user.getFileDir(), sub_dir, newFolderName )
+
+
+        print "pathmaking complete"
         count = 0
-        print newFolderDir  
+        totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT) / (framerate+1)
+        videoFile.set(cv2.cv.CV_CAP_PROP_POS_FRAMES,ffp )
+        
+        totalZeros = int(math.floor(math.log(totalCount,10)))
         while True:
             f, img = videoFile.read()
-            
+
+            if framerate != 0:
+                for _ in range(framerate):
+                    f, img = videoFile.read()
+                    if not f:
+                        break;
             if not f:
                 break;
-            totalCount =  videoFile.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
-            totalZeros = int(math.floor(math.log(totalCount,10)))
             cv2.imwrite(os.path.join(newFolderDir, "image_"+(str(count).zfill(totalZeros+1))+".jpg"), img)
             count = count + 1  
             red.publish("updates", count/totalCount)
+    
         return "success"
     return Response(generate(), mimetype = 'text/event-stream')
 
