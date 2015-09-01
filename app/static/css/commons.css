@@ -15,7 +15,9 @@ img{
 	max-width: 100%;
 }
 	
-
+.jumbotron{
+    background-color: black;
+}
 
 .btn{
 	background: #545454;

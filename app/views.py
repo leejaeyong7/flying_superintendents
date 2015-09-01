@@ -94,8 +94,8 @@ def index():
 
 @app.route('/create-user', methods = ['POST'])
 def create_user():
-    email_name = request.form["inputEmail"]
-    password = request.form["inputPassword"]
+    email_name = request.form["newEmail"]
+    password = request.form["newPassword"]
     db.session.add(User(email_name,password))
     db.session.commit()
     curr_dir = os.getcwd()
@@ -106,22 +106,6 @@ def create_user():
     curr_dir += '/data/'
     os.makedirs(curr_dir)
     return render_template('request-sent.html')
-
-
-@app.route('/create-firm', methods = ['POST'])
-def create_firm():
-    email_name = request.form["inputEmail"]
-    password = request.form["inputPassword"]
-    db.session.add(database.Firmtype(email_name))
-    db.session.commit()
-    """curr_dir = os.getcwd()
-    curr_dir += '/app/static/user_data/' + str(email_name)
-    os.makedirs(curr_dir)
-    file = open(curr_dir + '/user.dat', 'w+')
-    file.close()
-    curr_dir += '/data/'
-    os.makedirs(curr_dir)"""
-    return 'success'
 
 
 @app.route('/login', methods=['POST'])

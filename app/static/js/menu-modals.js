@@ -43,7 +43,7 @@ function updateConvertOptionModal(){
             */
             $('.option-parameter-name').addClass('col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-6 col-sm-6 col-xs-6');
             $('#convert-option-parameter-finalFramePos').children(".option-parameter-name").text("Final Frame Pos input :");
-            $('#convert-option-parameter-framerate').children(".option-parameter-name").text("Skip per capture input :");
+            $('#convert-option-parameter-framerate').children(".option-parameter-name").text("Skip per captur einput :");
         },
         success:  function(e){
             /*

@@ -1,51 +1,62 @@
+/*===============================================================================
+ * @author: Jae Yong Lee
+ * @file: login.js
+ *  
+ * @summary:
+ *      handles login scripts and password checks
+ *
+ *
+ *===============================================================================*/
 
+/*
+  TODO
+  1. checkemail function
+  2. signup-console
 
-function stopVideo(){
-	var video = document.getElementById('videoId');
-	var tmp = video.src;
-	/*//var video = $("video").get(0);
-	video.pause(0);*/
-	//$(document).ajaxStop();
-	video.src = "";
-	video.load();
-	$("video").remove();
+*/
 
-	$("#videoId").html('<video id="videoId" loop class="embed-responsive-item" preload = "none"></video>');
-	video = $("video").get(0);
-	video.src = tmp;
-	video.addEventListener('pause', stopVideo);
-
-
+/**
+ *  checks whether email address is valid
+ *  @param: none
+ *  @return: {bool} if correct true, else false
+ */
+function checkEmail(){
+    //not yet implemented yet
+    if($('#signup-email').length)
+        return true;
 }
 
-$('.form-signin').on('submit', function(e){
-	stopVideo();
+
+
+/**
+ *  check whether password is valid or not
+ *  @param: none
+ *  @return: {bool} if correct true, else false
+ */
+function checkPassword(){
+    return $("#default-password").val() == $("#confirm-password").val();
+}
+
+
+
+/**
+ *  checks confirm-password is same value with original password and prompts signup button to be true
+ *  @param: none
+ *  @return: none
+ */
+$('#confirm-password').keyup(function(e){
+    if(!e.enterKey){
+        if($('#default-password').length && checkEmail()){
+            if(checkPassword()){
+                $('#signup-button').prop('disabled',false);
+            }
+            else{
+                $('#signup-button').prop('disabled',true);
+            }
+        }
+    }
 });
 
-$('.stopv').on('mousedown', function(e){
-	stopVideo();
+$(document).ready(function(){
+    $('#signup-button').prop('disabled',true);
 });
-
-/*$(document).bind('beforeunload',function(e){
-	alert("reloading..")
-	stopVideo();
-})*/
-
-$(window).ready(function(){
-	
-	var video = $('video').get(0);
-	video.play();
-	window.onbeforeunload = stopVideo;
-	video.addEventListener('pause',	$(document).ajaxStop(function(e){
-		var tmp = video.src;
-		video.src = "";
-		video.load();
-		$("video").remove();
-		$("#videoId").html('<video id="videoId" loop class="embed-responsive-item" preload = "none"></video>');
-		video = $("video").get(0);
-		video.src = tmp;
-		})
-	);
-
-
-})

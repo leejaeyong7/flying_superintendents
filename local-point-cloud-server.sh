@@ -20,7 +20,6 @@ else
     #echo "adding path"
     #export PATH=$PATH:/home/hao/VisualSFM/vsfm/bin
     #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/hao/VisualSFM/vsfm/bin
-    cd /home/raamac/Documents/point-cloud-server/
-    . /home/raamac/Documents/point-cloud-server/venv/bin/activate ; python /home/raamac/Documents/point-cloud-server/run.py
+    . venv/bin/activate ; python run.py
 fi
 exit 0
