@@ -21,11 +21,18 @@
  *  @return: {bool} if correct true, else false
  */
 function checkEmail(){
-    //not yet implemented yet
-    if($('#signup-email').length)
-        return true;
+    if($('#signup-email').val().length > 0)
+        return validateEmail($('#signup-email').val());
 }
-
+/**
+ *  regex checker for email input
+ *  @param: {string} email = email address to be tested
+ *  @return: {bool} if correct true, else false
+ */
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
 
 
 /**
@@ -34,9 +41,15 @@ function checkEmail(){
  *  @return: {bool} if correct true, else false
  */
 function checkPassword(){
-    return $("#default-password").val() == $("#confirm-password").val();
+    if($('#default-password').val().length > 0)
+        return $("#default-password").val() == $("#confirm-password").val();
+    else
+        return false;
 }
 
+function checkNames(){
+    return  ($('#signup-firstname').val().length > 0) &&  ($('#signup-lastname').val().length > 0);
+}
 
 
 /**
@@ -44,15 +57,13 @@ function checkPassword(){
  *  @param: none
  *  @return: none
  */
-$('#confirm-password').keyup(function(e){
+$('#signup-form').keyup(function(e){
     if(!e.enterKey){
-        if($('#default-password').length && checkEmail()){
-            if(checkPassword()){
-                $('#signup-button').prop('disabled',false);
-            }
-            else{
-                $('#signup-button').prop('disabled',true);
-            }
+        if(checkEmail() && checkNames() && checkPassword()){
+            $('#signup-button').prop('disabled',false);
+        }
+        else{
+            $('#signup-button').prop('disabled',true);
         }
     }
 });

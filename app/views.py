@@ -91,12 +91,19 @@ def index():
 	"""
 	return render_template("login.html")
 
+"""
+puts user in User table for sql and creates folder path for personnel
 
+"""
 @app.route('/create-user', methods = ['POST'])
 def create_user():
     email_name = request.form["newEmail"]
     password = request.form["newPassword"]
-    db.session.add(User(email_name,password))
+    firstname = request.form["newFirstname"]
+    middlename = request.form["newMiddlename"]
+    lastname = request.form["newLastname"]
+    authority = request.form["authorityLevel"]
+    db.session.add(User(email_name,password,firstname,middlename,lastname,authority))
     db.session.commit()
     curr_dir = os.getcwd()
     curr_dir += '/app/static/user_data/' + str(email_name)
@@ -118,7 +125,7 @@ def login():
     else:
         if user.check_password(password):
             login_user(user, False)
-            return redirect(url_for("menu"))
+            return redirect(url_for("scheduler"))
         else:
             return redirect(url_for('index'))
 

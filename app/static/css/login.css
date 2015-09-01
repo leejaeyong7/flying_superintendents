@@ -1,4 +1,6 @@
 
+
+
 /**
  * General HTML
  */
@@ -21,9 +23,8 @@ body {
     
 }
 .video-container {
-    min-height: 250px;
+    min-height: 30px;
     padding-bottom: 50px;
-    margin-top: 50px;
     position: relative;
     overflow: hidden;
 }

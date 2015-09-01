@@ -3,21 +3,48 @@ from flask.ext.login import UserMixin
 from werkzeug import generate_password_hash, check_password_hash
 from app import app
 from datetime import datetime
+import sqlalchemy.types as types
 import os
 import os.path
 
 db = SQLAlchemy(app)
 
 
+
+####################################################
+#
+#    Custom type implementations
+#
+####################################################
+
+class ChoiceType (types.TypeDecorator):
+    impl = types.String
+    
+
+
+####################################################
+#
+#    Table implementations
+#
+####################################################
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)
-    email = db.Column(db.String(120), unique=True)
-    pwdhash = db.Column(db.String(160))
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    pwdhash = db.Column(db.String(160), nullable=False)
+    firstname = db.Column(db.String(120), nullable=False)
+    middlename = db.Column(db.String(120))
+    lastname = db.Column(db.String(120), nullable=False)
+    authority = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, email, password):
+    def __init__(self, email, password, firstname, middlename, lastname, authority):
         self.email = email.lower()
         self.set_password(password)
+        self.firstname = firstname
+        self.middlename = middlename
+        self.lastname = lastname
+        self.authority = authority
         db.session.commit()
 
     def set_password(self, password):
@@ -209,9 +236,9 @@ class Constraints(db.Model):
         self.relatedID = relatedID
         self.description = description
         self.responsibleIndividual = responsibleIndividual
-        self.initiateDate = initiateDate#datetime.fromtimestamp(initiateDate/1000.00)
-        self.promiseDate = promiseDate#datetime.fromtimestamp(promiseDate/1000.00)
-        self.completeDate = completeDate#datetime.fromtimestamp(completeDate/1000.00)
+        self.initiateDate = initiateDate
+        self.promiseDate = promiseDate
+        self.completeDate = completeDate
         self.revisePromiseCompletion = revisePromiseCompletion
         self.constraintVariance = constraintVariance
         db.session.commit()

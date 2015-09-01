@@ -64,27 +64,52 @@
 	      </video>
           <div class="container title">
             <div class="col-md-6">
-              <span class="name">Flying Superintendents</span>
-              <span class="summary">Quadrotor Construction Helper System</span>
+              <p><span class="name">Flying Superintendents</span></p>
+              <p><span class="summary">Quadrotor Construction Helper System</span></p>
             </div>
             <div class="col-md-6">
-              <span></span>
+             
             </div>
           </div>
         </section>
         <section class="container">
           <div class="col-md-6">
+            <h3 class="col-md-12">Lorem Ipsum</h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas suscipit orci metus, sed bibendum dolor accumsan at. Quisque et dui lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce ultrices venenatis ligula. Sed ut enim diam. Aenean dignissim augue lacus, eget imperdiet leo elementum at. Sed auctor aliquam turpis eu molestie. Nam a ultrices purus.
           </div>
           <div id="signup-form" class="col-md-6">
             <h3 class="col-md-12">Sign up now !</h3>
             <form action="/create-user" method="POST">
               <div class="form-group col-md-12">
+                <label for="signup-email">Email</label>
                 <input id="signup-email" type="text" placeholder="Email" class="form-control" name="newEmail" required>
               </div>
+              <div class="form-group col-md-5">
+                <label for="signup-firstname">First Name</label>
+                <input id="signup-firstname" type="text" placeholder="First name" class="form-control" name="newFirstname" required>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="signup-middlename">(Optional)</label>
+                <input id="signup-middlename" type="text" placeholder="M.I" class="form-control" name="newMiddlename">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="signup-lastname">Last Name</label>
+                <input id="signup-lastname" type="text" placeholder="Last name" class="form-control" name="newLastname" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="signup-authority">Account Type</label>
+                <select class="form-control" id="signup-authority" name="authorityLevel" required>
+                  <option value="1">Owner</option>
+                  <option value="2">Supervisor</option>
+                  <option value="3" selected="selected">Worker</option>
+                </select>
+              </div>
               <div class="form-group col-md-6">
+                <label for="default-password">Password</label>
                 <input id="default-password" type="password" placeholder="Password" class="form-control" name="newPassword" required>
               </div>
               <div class="form-group col-md-6">
+                <label for="confirm-password">Confirm Password</label>
                 <input id="confirm-password" type="password" placeholder="Confirm Password" class="form-control" required>
               </div>
               <div class="col-md-9 col-sm-9 col-xs-7" align="left">
