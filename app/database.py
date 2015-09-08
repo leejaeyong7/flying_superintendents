@@ -4,6 +4,7 @@ from werkzeug import generate_password_hash, check_password_hash
 from app import app
 from datetime import datetime
 import sqlalchemy.types as types
+from  sqlalchemy.sql import exists
 import os
 import os.path
 

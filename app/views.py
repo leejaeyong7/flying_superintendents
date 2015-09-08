@@ -192,6 +192,9 @@ def organization_name():
     else:
         return "failure"
 
+"""
+returns list of personnel in json form
+"""
 @app.route('/personnel-list')
 @login_required
 def personnel_list():
@@ -202,15 +205,61 @@ def personnel_list():
         return json.dumps(json_list)
     else:
         return "Failure"
-    
-        
 
-#---------------------------------------------------------------------
+################################################
 #
-#   
-#   menu/viewer
 #
-#---------------------------------------------------------------------
+#        personnel modal function calls
+#
+#
+################################################
+
+@app.route('/check-personnel-email', methods = ['POST'])
+@login_required
+def check_personnel_email():
+    if current_user.authority in [1,2]:
+        userEmail = request.form.get("email")
+        if db.session.query(Personnel).filter(Personnel.email==userEmail).count():
+            return 'exists'
+        else:
+            return 'none'
+
+
+
+"""
+checks user email in user and personnel and return name
+"""
+@app.route('/check-user-email', methods = ['POST'])
+@login_required
+def check_user_email():
+    if current_user.authority in [1,2]:
+        userEmail = request.form.get("email")
+        if db.session.query(User).filter(User.email==userEmail).count():
+            if db.session.query(Personnel).filter(Personnel.email==userEmail).count():
+                return 'exists'
+            else:
+                existingUser = db.session.query(User).filter(User.email==userEmail).first()
+                if existingUser.authority in [2,3]:
+                     userDict = {
+                         'firstname' : existingUser.firstname,
+                         'lastname' : existingUser.lastname,
+                         'middlename': existingUser.middlename
+                     }
+                     
+                     return json.dumps(userDict)
+                else:
+                     return "owner"
+        else:
+            return 'none'
+
+
+################################################
+#
+#
+#           main templates
+#
+#
+################################################
 """
 A function for handling requests to the menu page.
 """

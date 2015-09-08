@@ -95,25 +95,111 @@ function personnelStringObject(personnel){
     return str;
 }
 
+/**
+ *  regex checker for email input
+ *  @param: {string} email = email address to be tested
+ *  @return: {bool} if correct true, else false
+ */
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+
+
+$('#personnelModal').find('#personnel-email').keyup(function(e){
+    var userEmail = $('#personnelModal').find('#personnel-email').val();
+    if(validateEmail(userEmail))
+    {
+        var formData = new FormData();
+        formData.append("email",userEmail);
+
+        $.ajax({
+            type: 'POST',
+            url: '/check-personnel-email',
+            success:  function(e){
+                /*
+                  function called after success
+                */
+                if(e=='none')
+                {
+                    $('#signup-email').tooltip("destroy");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/check-user-email',
+                        success:  function(e){
+                            /*
+                              function called after success
+                            */
+                            if(["none","exists","owner"].indexOf(e) == -1 )
+                            {
+                                var userData = JSON.parse(e);
+                                $('#personnelModal').find('#personnel-firstname').val(userData.firstname);
+                                $('#personnelModal').find('#personnel-middlename').val(userData.middlename);
+                                $('#personnelModal').find('#personnel-lastname').val(userData.lastname);
+                            }
+                            else
+                            {
+                                $('#personnelModal').find('#personnel-firstname').val('');
+                                $('#personnelModal').find('#personnel-middlename').val('');
+                                $('#personnelModal').find('#personnel-lastname').val('');
+                            }
+                        },
+                        error:  function(e){
+                            /*
+                              function called on fail
+                            */
+                            console.log(e);
+                        },
+                        data: formData,
+                        contentType: false,
+                        cache: false,
+                        processData: false
+                    });
+                }
+                else{
+                    $('#personnel-email').tooltip({title:"email already exists!", placement: "top", trigger:"manual"}).tooltip('show');   
+                }
+            },
+            error:  function(e){
+                /*
+                  function called on fail
+                */
+            },
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false
+        });
+    }
+});
 
 
 
-/*
-<ul class="list-group" id="contact-list">
-<li class="list-group-item">
-<!--div class="col-xs-12 col-sm-3">
-<img src="http://api.randomuser.me/portraits/women/76.jpg" alt="Glenda Patterson" class="img-responsive img-circle" />
-</div-->
-<div class="col-xs-12 col-sm-12">
-<span class="name">Glenda Patterson</span><br/>
-<span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="5020 Poplar Dr"></span>
-<span class="visible-xs"> <span class="text-muted">5020 Poplar Dr</span><br/></span>
-<span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(538) 718-7548"></span>
-<span class="visible-xs"> <span class="text-muted">(538) 718-7548</span><br/></span>
-<span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="glenda.patterson@example.com"></span>
-<span class="visible-xs"> <span class="text-muted">glenda.patterson@example.com</span><br/></span>
-
-*/
+$('#personnelModal').find('.close-button').on('click', function(e){
+    var userEmail = $('#personnelModal').find('#personnel-email').val();
+    var formData = new FormData();
+    formData.append("email",userEmail);
+    $.ajax({
+        type: 'POST',
+        url: '/check-user-email',
+        success:  function(e){
+            /*
+              function called after success
+            */
+            console.log(e);
+        },
+        error:  function(e){
+            /*
+              function called on fail
+            */
+            console.log(e);
+        },
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false
+    });
+});
 
 $(document).ready(function(){
     getOrgname();
