@@ -39,3 +39,14 @@ img{
 	color: white;
 	border-color: white;
 }
+
+.modal-content{
+    background-color: #545454;
+}
+
+
+.modal-exit{
+    border: none;
+    background-color: transparent;
+    outline: none;
+}

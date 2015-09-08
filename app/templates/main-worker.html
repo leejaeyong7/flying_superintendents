@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+
+    <title>BIM Scheduler</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/commons.css" rel="stylesheet">
+
+    <link href="/static/css/scheduler.css" rel="stylesheet">
+
+    
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">Flying SuperIntendents</div>
+        </div>
+        <div id="navbar-menu" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="account">Account</a></li>
+              <li class="active"><a href="scheduler" >Scheduler</a></li>
+              <li><a href="menu">File Viewer</a></li>
+            </ul>
+        </div>
+        
+      </div>
+    </nav>
+    <div class="main">
+      <div class="jumbotron">
+        <section class="container">
+          <h2>Organization</h2>
+          <div id="organization-table">
+            <form action="">
+              <div class="form-group col-md-12">
+                <h3>Name</h3>
+                <h3>Address</h3>
+                <!--input id="Organization-name" class="form-control" name="name" type="text" value=""/-->
+              </div>
+            </form>
+          </div>
+        </section>
+        <div class="container">
+          <section class="col-md-6" id="personnel-section">        
+            <div class="row">
+              <div class="col-xs-12 col-sm-12">
+                <div class="panel">
+                  <div class="panel-heading c-list">
+                    <span class="title">Personnel</span>
+                    <ul class="pull-right c-controls">
+                      <li><a href="#cant-do-all-the-work-for-you" data-toggle="tooltip" data-placement="top" title="Add Contact"><i class="glyphicon glyphicon-plus"></i></a></li>
+                      <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Toggle Search"><i class="fa fa-ellipsis-v"></i></a></li>
+                    </ul>
+                  </div>
+                  
+                  <div class="row" style="display: none;">
+                    <div class="col-xs-12">
+                      <div class="input-group c-search">
+                        <input type="text" class="form-control" id="contact-list-search">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search text-muted"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <ul class="list-group" id="contact-list">
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/men/49.jpg" alt="Scott Stevens" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Scott Stevens</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="5842 Hillcrest Rd"></span>
+                        <span class="visible-xs"> <span class="text-muted">5842 Hillcrest Rd</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(870) 288-4149"></span>
+                        <span class="visible-xs"> <span class="text-muted">(870) 288-4149</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="scott.stevens@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">scott.stevens@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/men/97.jpg" alt="Seth Frazier" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Seth Frazier</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="7396 E North St"></span>
+                        <span class="visible-xs"> <span class="text-muted">7396 E North St</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(560) 180-4143"></span>
+                        <span class="visible-xs"> <span class="text-muted">(560) 180-4143</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="seth.frazier@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">seth.frazier@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/women/90.jpg" alt="Jean Myers" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Jean Myers</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="4949 W Dallas St"></span>
+                        <span class="visible-xs"> <span class="text-muted">4949 W Dallas St</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(477) 792-2822"></span>
+                        <span class="visible-xs"> <span class="text-muted">(477) 792-2822</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="jean.myers@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">jean.myers@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/men/24.jpg" alt="Todd Shelton" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Todd Shelton</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="5133 Pecan Acres Ln"></span>
+                        <span class="visible-xs"> <span class="text-muted">5133 Pecan Acres Ln</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(522) 991-3367"></span>
+                        <span class="visible-xs"> <span class="text-muted">(522) 991-3367</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="todd.shelton@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">todd.shelton@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/women/34.jpg" alt="Rosemary Porter" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Rosemary Porter</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="5267 Cackson St"></span>
+                        <span class="visible-xs"> <span class="text-muted">5267 Cackson St</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(497) 160-9776"></span>
+                        <span class="visible-xs"> <span class="text-muted">(497) 160-9776</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="rosemary.porter@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">rosemary.porter@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/women/56.jpg" alt="Debbie Schmidt" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Debbie Schmidt</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="3903 W Alexander Rd"></span>
+                        <span class="visible-xs"> <span class="text-muted">3903 W Alexander Rd</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(867) 322-1852"></span>
+                        <span class="visible-xs"> <span class="text-muted">(867) 322-1852</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="debbie.schmidt@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">debbie.schmidt@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="col-xs-12 col-sm-3">
+                        <img src="http://api.randomuser.me/portraits/women/76.jpg" alt="Glenda Patterson" class="img-responsive img-circle" />
+                      </div>
+                      <div class="col-xs-12 col-sm-9">
+                        <span class="name">Glenda Patterson</span><br/>
+                        <span class="glyphicon glyphicon-map-marker text-muted c-info" data-toggle="tooltip" title="5020 Poplar Dr"></span>
+                        <span class="visible-xs"> <span class="text-muted">5020 Poplar Dr</span><br/></span>
+                        <span class="glyphicon glyphicon-earphone text-muted c-info" data-toggle="tooltip" title="(538) 718-7548"></span>
+                        <span class="visible-xs"> <span class="text-muted">(538) 718-7548</span><br/></span>
+                        <span class="fa fa-comments text-muted c-info" data-toggle="tooltip" title="glenda.patterson@example.com"></span>
+                        <span class="visible-xs"> <span class="text-muted">glenda.patterson@example.com</span><br/></span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+	        </div>
+          </section>
+          
+          
+          <section class="col-md-6" id="project-section">
+            <h2>Project</h2>
+          </section>
+
+        </div>
+        
+        <div class="container">
+	      <h2>BIM Scheduler</h2>
+	      <div id="myScheduler">
+            <div class="col-md-11 col-sm-11 col-xs-11">
+              <button type="button" class="btn btn-default btn-sm create-table-button" data-toggle="modal" data-backdrop="static" data-target="#createTableModal">
+			    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+		      </button>
+              <button type="button" class="btn btn-default btn-sm update-table-button" data-toggle="modal" data-backdrop="static" data-target="#viewTableModal">
+			    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+		      </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>      
+    
+        <div class="modal fade" id="createTableModal"  role="dialog" aria-labelledby="createTableLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<div class="row">
+				  <div class="col-md-11">
+					<h4 class="modal-title" id="createTableTitle">Create Table</h4>
+                   
+				  </div>
+				  <div class="col-md-1">
+					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+					  <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+					</button>
+				  </div>
+				</div>
+			  </div>
+			  <div class="modal-body">
+                <div id = "scheduler-contents">
+		        </div>
+			  </div>
+			  <div class="modal-footer">
+                <button type="button" class="btn btn-default submit-button table-submit-button">Submit</button>
+				<button type="button" class="btn btn-default close-button" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+        
+        <div class="modal fade" id="viewTableModal"  role="dialog" aria-labelledby="viewTableLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<div class="row">
+				  <div class="col-md-11">
+					<h4 class="modal-title" id="viewTableTitle">View Table</h4>
+                    
+				  </div>
+				  <div class="col-md-1">
+					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+					  <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
+					</button>
+				  </div>
+				</div>
+			  </div>
+			  <div class="modal-body">
+                <div id = "viewtable-contents">
+		        </div>
+                <div id = "viewtable-db">
+                </div>
+                
+			  </div>
+			  <div class="modal-footer">
+                <button type="button" class="btn btn-default submit-button change-submit-button">Submit</button>
+				<button type="button" class="btn btn-default close-button" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+        <script src="/static/js/jquery.js"></script>
+        <!-- JavaScrip Search Plugin -->
+        <script src="//rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
+        <!--<script src="/static/js/modal.js"></script>-->
+        <!-- bootstrap-->
+        <script src="static/js/bootstrap.min.js"></script>
+        <script src="static/js/bootstrap-table.js"></script>
+        
+        <script src="/static/js/sidebar.js"></script>
+        <!--script src="http://cdn.alloyui.com/3.0.1/aui/aui-min.js"></script-->
+        <script src="/static/js/scheduler.js"></script>
+        <script src="/static/js/jquery.maskedinput.min.js"></script>
+        <script language="javascript" type="text/javascript" ></script>
+  </body>
+  
+</html>

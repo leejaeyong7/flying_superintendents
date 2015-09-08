@@ -8,12 +8,7 @@
  *
  *===============================================================================*/
 
-/*
-  TODO
-  1. checkemail function
-  2. signup-console
 
-*/
 
 /**
  *  checks whether email address is valid
@@ -58,7 +53,8 @@ function checkNames(){
  *  @return: none
  */
 $('#signup-form').keyup(function(e){
-    if(!e.enterKey){
+
+    if(!e.enterKey && !e.metaKey && !e.ctrlKey && !e.shiftKey){
         if(checkEmail() && checkNames() && checkPassword()){
             $('#signup-button').prop('disabled',false);
         }
@@ -67,6 +63,56 @@ $('#signup-form').keyup(function(e){
         }
     }
 });
+
+
+/**
+ *  checks email exists when in correct format
+ *  @param: none
+ *  @return: none
+ */
+$('#signup-email').on('input',function(e){
+    checkEmailExist();
+});
+
+
+
+/**
+ *  checks whether current email address exists
+ *  @param: none
+ *  @return: none
+ */
+function checkEmailExist(){
+    var curr_email = $('#signup-email').val();
+    
+    $.ajax({
+        type: 'POST',
+        url: '/check-user',
+        success:  function(e){
+            /*
+              function called after success
+            */
+
+            //email address already exists 
+            if(e == "exists"){
+                $('#signup-email').tooltip({title:"email already exists!", placement: "top", trigger:"manual"}).tooltip('show');
+            }
+            else{
+                $('#signup-email').tooltip("destroy");
+            }
+        },
+        error:  function(e){
+            /*
+              function called on fail
+            */
+            alert("email check failed...");
+        },
+        data: curr_email,
+        contentType: false,
+        cache: false,
+        processData: false
+    });
+}
+
 
 $(document).ready(function(){
     $('#signup-button').prop('disabled',true);

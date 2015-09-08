@@ -36,7 +36,6 @@ def event_stream():
     pubsub = red.pubsub()
     pubsub.subscribe("updates")
     for message in pubsub.listen():
-        print message
         yield 'data: %s\n\n' % message['data']
 
 @app.route('/stream')
@@ -103,17 +102,27 @@ def create_user():
     middlename = request.form["newMiddlename"]
     lastname = request.form["newLastname"]
     authority = request.form["authorityLevel"]
-    db.session.add(User(email_name,password,firstname,middlename,lastname,authority))
+    db.session.add(User(email_name,password,firstname,middlename,lastname,authority))    
     db.session.commit()
-    curr_dir = os.getcwd()
-    curr_dir += '/app/static/user_data/' + str(email_name)
-    os.makedirs(curr_dir)
-    file = open(curr_dir + '/user.dat', 'w+')
-    file.close()
-    curr_dir += '/data/'
-    os.makedirs(curr_dir)
+    if authority == "1":
+        ownerID =  db.session.query(User).filter(User.email == email_name).first().id
+        db.session.add(Organization("New Organization",None,None,None,None,None,None,None,ownerID,None,None))
+        db.session.commit()
     return render_template('request-sent.html')
 
+
+"""
+checks whether user exists or not in the database
+"""
+
+@app.route('/check-user', methods=['POST'])
+def check_user():
+    email_name = request.get_data()
+    if db.session.query(User).filter(User.email == email_name).count():
+        return "exists"
+    else:
+        return "false"
+        
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -125,7 +134,7 @@ def login():
     else:
         if user.check_password(password):
             login_user(user, False)
-            return redirect(url_for("scheduler"))
+            return redirect(url_for('main'))
         else:
             return redirect(url_for('index'))
 
@@ -164,6 +173,38 @@ def request_access():
     return render_template("request-sent.html")
 
 
+
+################################################
+#
+#
+#         main menu ajax function calls
+#
+#
+################################################
+"""
+returns organization name selectively to user authority level
+"""
+@app.route('/organization-name')
+@login_required        
+def organization_name():
+    if current_user.authority == 1:
+        return db.session.query(Organization).filter(Organization.ownerID == current_user.id).first().name
+    else:
+        return "failure"
+
+@app.route('/personnel-list')
+@login_required
+def personnel_list():
+    if current_user.authority == 1:
+        orgID =  db.session.query(Organization).filter(Organization.ownerID == current_user.id).first().id
+
+        json_list = map(lambda x:x.to_json(),db.session.query(Personnel).filter(Personnel.organizationID == orgID).all())
+        return json.dumps(json_list)
+    else:
+        return "Failure"
+    
+        
+
 #---------------------------------------------------------------------
 #
 #   
@@ -189,14 +230,6 @@ def viewer():
     else:
         return redirect(url_for('index'))
 
-@app.route('/main')
-@login_required
-def main():
-    if current_user.is_authenticated():
-        return render_template("main.html")
-    else:
-        return redirect(url_for('index'))
-
 
 @app.route('/account')
 @login_required
@@ -206,11 +239,17 @@ def account():
     else:
         return redirect(url_for('index'))
 
-@app.route('/scheduler')
+@app.route('/main')
 @login_required
-def scheduler():
+def main():
     if current_user.is_authenticated():
-        return render_template("scheduler.html")
+        options = {
+            0: "admin.html",
+            1: "main-owner.html",
+            2: "main-supervisor_html",
+            3: "main-worker.html"
+        }
+        return render_template(options[current_user.authority])
     else:
         return redirect(url_for('index'))
 
